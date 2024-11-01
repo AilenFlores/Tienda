@@ -138,22 +138,19 @@ INSERT INTO `menurol` (`idmenu`, `idrol`) VALUES
 --
 
 CREATE TABLE `producto` (
-  `idproducto` bigint(20) NOT NULL,
+  `idproducto` bigint(20) NOT NULL AUTO_INCREMENT,
   `pronombre` varchar(20) NOT NULL,
   `prodetalle` varchar(512) NOT NULL,
   `procantstock` int(11) NOT NULL,
-  `proimporte` int(5) NOT NULL
+  `proimporte` int(5) NOT NULL,
+  `prodeshabilitado` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`idproducto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
 -- Volcado de datos para la tabla `producto`
---
-
-INSERT INTO `producto` (`idproducto`, `pronombre`, `prodetalle`, `procantstock`, `proimporte`) VALUES
-(1, 'Producto', 'producto', 1, 2000),
-(2, 'Producto 2', 'Producto', 2, 2000);
-
--- --------------------------------------------------------
+INSERT INTO `producto` (`idproducto`, `pronombre`, `prodetalle`, `procantstock`, `proimporte`, `prodeshabilitado`) VALUES
+(1, 'Producto', 'producto', 1, 2000, NULL),
+(2, 'Producto 2', 'Producto', 2, 2000, NULL);
 
 --
 -- Estructura de tabla para la tabla `rol`

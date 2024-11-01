@@ -6,6 +6,7 @@ class Producto {
     private $prodetalle;
     private $procantstock;
     private $proimporte;
+    private $prodeshabilitado;
     private $mensajeoperacion;
     
     public function __construct(){
@@ -15,16 +16,18 @@ class Producto {
         $this->prodetalle="";
         $this->procantstock="";
         $this->proimporte="";
+        $this->prodeshabilitado="";
         $this->mensajeoperacion="";
         
     }
     
-    public function setear($idproducto, $pronombre, $prodetalle, $procantstock, $proimporte){
+    public function setear($idproducto, $pronombre, $prodetalle, $procantstock, $proimporte,$prodeshabilitado){
         $this->setIdproducto($idproducto);
         $this->setPronombre($pronombre);
         $this->setProdetalle($prodetalle);
         $this->setProcantstock($procantstock);
         $this->setProimporte($proimporte);
+        $this->setProdeshabilitado($prodeshabilitado);
         
     }
     
@@ -54,6 +57,10 @@ class Producto {
     public function getmensajeoperacion(){
         return $this->mensajeoperacion;
     }
+
+    public function getProdeshabilitado(){
+        return $this->prodeshabilitado;
+    }
     
     
     // METODOS DE ACCESO SET
@@ -78,6 +85,10 @@ class Producto {
     public function setProimporte($valor){
         $this->proimporte= $valor;
     }
+
+    public function setProdeshabilitado($valor){
+        $this->prodeshabilitado=$valor;
+    }
     
     public function setmensajeoperacion($valor){
         $this->mensajeoperacion = $valor;
@@ -97,7 +108,7 @@ class Producto {
             if($res>-1){
                 if($res>0){
                     $row = $base->Registro();
-                    $this->setear($row['idproducto'], $row['pronombre'], $row['prodetalle'], $row['procantstock'],$row['proimporte']);
+                    $this->setear($row['idproducto'], $row['pronombre'], $row['prodetalle'], $row['procantstock'],$row['proimporte'],$row["prodeshabilitado"]);
                     
                 }
             }
@@ -149,11 +160,15 @@ class Producto {
     }
     
     
-    
+
+
     public function eliminar(){
         $resp = false;
         $base=new bdcarritocompras();
-        $sql="DELETE FROM producto WHERE idproducto='". $this->getIdproducto()."'";
+        $param=date("Y-m-d H:i:s");
+        $this->setProdeshabilitado($param);
+        $sql="UPDATE producto SET prodeshabilitado ='". $this->getProdeshabilitado()."'";
+        $sql.= " WHERE idproducto='".$this->getIdproducto()."'";
         //echo $sql;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {
@@ -180,7 +195,7 @@ class Producto {
                 while ($row = $base->Registro()){
                     
                     $obj = new Producto();
-                    $obj->setear($row['idproducto'], $row['pronombre'], $row['prodetalle'], $row['procantstock'], $row['proimporte']);
+                    $obj->setear($row['idproducto'], $row['pronombre'], $row['prodetalle'], $row['procantstock'], $row['proimporte'],$row["prodeshabilitado"]);
                     array_push($arreglo, $obj);
                 }
             }

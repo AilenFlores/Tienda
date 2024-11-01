@@ -1,7 +1,6 @@
 <?php
 // Incluir el archivo de configuración una sola vez
 include_once("/xampp/htdocs/tienda/configuracion.php");
-//session_start(); 
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -25,8 +24,7 @@ include_once("/xampp/htdocs/tienda/configuracion.php");
     ?>
     </head>
 <?php
-$objTrans = new Session();
-$resp = $objTrans->validar();
+$resp = $session->validar();
 if(!$resp) {
     $mensaje ="Error, inicie sesion y vuelva a intentarlo";
    echo "<script>location.href = '".BASE_URL."/vista/publico/login/login.php?msg=".$mensaje."';</script>";

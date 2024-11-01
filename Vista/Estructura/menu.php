@@ -1,6 +1,5 @@
 <?php 
-session_start(); 
-$session = new Session();
+ob_start(); // 
 ?>
 <!-- Main Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -27,7 +26,9 @@ $session = new Session();
    
                 <!-- Menu Dinamico -->   
                 <li class="nav-item dropdown">
-                    <?php if ($session->validar()) { // Verificar si la sesión está iniciada ?>
+                    <?php 
+                    $session = new Session();
+                    if ($session->validar()) { // Verificar si la sesión está iniciada ?>
                         <a class="nav-link dropdown-toggle text-black" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <?= "Nombre de usuario: " . $_SESSION["usnombre"] ?>
                         </a> 
