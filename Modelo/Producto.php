@@ -16,7 +16,7 @@ class Producto {
         $this->prodetalle="";
         $this->procantstock="";
         $this->proimporte="";
-        $this->prodeshabilitado="";
+        $this->prodeshabilitado= NULL;
         $this->mensajeoperacion="";
         
     }
@@ -100,11 +100,8 @@ class Producto {
         $base=new bdcarritocompras();
         $sql="SELECT * FROM producto WHERE idproducto= ". $this->getIdproducto();
         //echo $sql;
-        
         if ($base->Iniciar()) {
-            
             $res = $base->Ejecutar($sql);
-            
             if($res>-1){
                 if($res>0){
                     $row = $base->Registro();
@@ -118,11 +115,18 @@ class Producto {
         return $resp;
     }
     
-    public function insertar(){
+    public function insertar() {
         $resp = false;
         $base = new bdcarritocompras();
-        $sql = "INSERT INTO producto (pronombre, prodetalle, procantstock, proimporte)  VALUES('" . $this->getProimporte(). "','" . $this->getProdetalle() . "','". $this->getProcantstock() . "','". $this->getProimporte() . "');";
-        // echo $sql;
+        $sql = "INSERT INTO producto (pronombre, prodetalle, procantstock, proimporte, prodeshabilitado)  
+                VALUES (
+                    '" . $this->getPronombre() . "', 
+                    '" . $this->getProdetalle() . "', 
+                    '" . $this->getProcantstock() . "', 
+                    '" . $this->getProimporte() . "', 
+                    NULL
+                );";
+    
         if ($base->Iniciar()) {
             if ($elid = $base->Ejecutar($sql)) {
                 $this->setIdProducto($elid);

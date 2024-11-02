@@ -6,18 +6,10 @@ class AbmMenu{
         $resp = false;
         if ($datos['accion'] == 'editar') {
             if ($this->modificacion($datos)) {
-                if (isset($datos['menurol'])) { // Verifica si se enviaron roles
-                    $roles = array_map('intval', (array) $datos['menurol']); //
-                    if ($this->actualizarRoles($datos, $roles)) {
-                        $resp = true;
-                    } else {
-                        $resp = false;
-                    }
-                }
-                $resp = true; // Esto sobrescribe el valor de $resp
-            }
+                $resp = true;
+                } else {$resp = false;}
+
         }
-        
         if ($datos['accion'] == 'borrar') {
             if ($this->baja($datos)) {
                 $resp = true;
@@ -25,10 +17,7 @@ class AbmMenu{
         }
         if ($datos['accion'] == 'nuevo') {
             if ($this->alta($datos)) {
-                $objMenu = convert_array($this->buscar(['menombre' => $datos['menombre']]));
-                if (isset($objMenu[0])) { 
-                    $resp = $this->agregarRoles($datos, $objMenu); // Agregar roles
-                }
+                $resp=true;
             }
         }
         return $resp;

@@ -1,93 +1,133 @@
 <?php 
 include_once("../../../Estructura/CabeceraSegura.php"); 
-$datos = data_submitted();
-$datos['accion'] = "listar";
-include_once("accion.php");
 
 ?>
-<main class="flex-fill bg-light">
-    <!-- Mensajes -->
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <?php 
-            if (isset($datos) && isset($datos['msg']) && $datos['msg'] != null) {
-                $alertType = 'info';
-                echo "<div class='alert alert-$alertType text-center' role='alert'>";
-                echo htmlspecialchars($datos['msg']);
-                echo "</div>";
-            }
-            ?>
-        </div>
-    </div>
-    
-    <!-- Lista de Personas -->
-    <div class="container my-4">
-        <div class="card shadow-sm" style="border: 1px solid #ced4da;">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0 text-primary">Lista de Personas:</h5>
-                    <a class="btn btn-success" role="button" href="editar.php?accion=nuevo">Agregar Persona Nueva</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover table-sm"> 
-                        <thead class="table-secondary"> 
-                            <tr>
-                                <th scope="col">ID usuario</th>
-                                <th scope="col">Nombre Usuario</th>
-                                <th scope="col">Correo Electrónico</th>
-                                <th scope="col">Roles</th> <!-- Columna para el rol -->
-                                <th scope="col" class="text-center">Estado</th>
-                                <th scope="col" class="text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if (isset($lista) && count($lista) > 0) {
-                                foreach ($lista as $personaObj) {
-                                    // Depuración de los valores de personaObj
-                                    $estado = $personaObj["usDeshabilitado"] === NULL ? "Activo" : "Deshabilitado";
-                                    $estadoClass = $estado === "Activo" ? "text-success" : "text-danger"; 
-                                    $objRol = new AbmRol();
-                                    $rolesExits = convert_array($objRol->buscar(null)); // Obtener todos los roles 
-                                    $roles = $personaObj["usRol"]; // Roles actuales del usuario
-                                    if (count($roles) > 0) { 
-                                        $rolesUsu = [];
-                                        foreach ($roles as $rol) {
-                                            foreach ($rolesExits as $roleData) {
-                                                if ($roleData['idRol'] == $rol) { // Si el rol actual del usuario coincide con el rol actual
-                                                    $rolesUsu[] = $roleData['roDescripcion']; 
-                                                }
-                                            }
-                                        }
-                                    }
-                                    
-                                    // Ahora $rolesUsu contiene las descripciones de los roles del usuario
+<title>Basic CRUD  - Usuarios </title>
+<link rel="stylesheet" type="text/css" href="../../../js/jquery-easyui-1.6.6/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../js/jquery-easyui-1.6.6/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../../../js/jquery-easyui-1.6.6/themes/color.css">
+<script type="text/javascript" src="../../../js/jquery-easyui-1.6.6/jquery.min.js"></script>
+<script type="text/javascript" src="../../../js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
 
-                                    ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($personaObj['idUsuario']); ?></td>
-                                        <td><?php echo htmlspecialchars($personaObj['usNombre']); ?></td>
-                                        <td><?php echo htmlspecialchars($personaObj['usMail']); ?></td>
-                                        <td><?php echo htmlspecialchars(implode(', ', $rolesUsu)); ?></td> 
-                                        <td class="text-center <?php echo $estadoClass; ?>"><?php echo $estado; ?></td>
-                                        <td class="text-center">
-                                            <?php if($estado == "Activo") { ?>
-                                                <a class="btn btn-info btn-sm" role="button" href="editar.php?accion=editar&idUsuario=<?php echo htmlspecialchars($personaObj['idUsuario']); ?>">Editar</a>
-                                                <a class="btn btn-danger btn-sm" role="button" href="accion.php?accion=borrar&idusuario=<?php echo htmlspecialchars($personaObj['idUsuario']); ?>" onclick="return confirm('¿Está seguro de que desea borrar esta persona?');">Borrar</a>
-                                            <?php } ?>
-                                        </td>
-                                    </tr>
-                            <?php 
-                                }
-                            } else {
-                                echo '<tr><td colspan="6" class="alert alert-info text-center">No se encontraron registros.</td></tr>';
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<h2 style="text-align: center; font-size: 24px; color: #333; margin-bottom: 20px; font-weight: bold;">Gestión - Usuarios</h2>
+<div class="container" style="display: flex; justify-content: center; margin-bottom: 20px;">
+    <table id="dg" title="Administrador de usuarios" class="easyui-datagrid" style="width:1200px;height:350px;"
+        url="accion/accionListar.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+            <tr>
+                <th field="idUsuario" width="50">ID</th>
+                <th field="usNombre" width="50">Nombre</th>
+                <th field="usMail" width="50">Correo</th>
+                <th field="usRol" width="50"> Roles </th>
+                <th field="usDeshabilitado" width="50">Estado</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="toolbar">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="nuevo()">Nuevo</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editar()">Editar</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="baja()">Baja</a>
+</div>
+
+<div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+    <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+        <h3>Información del Usuario</h3>
+        <input type="hidden" name="idUsuario" id="idUsuario">
+        
+        <div style="margin-bottom:10px">
+            <input name="usNombre" id="usNombre" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
         </div>
-    </div>
-</main>
-<?php include(STRUCTURE_PATH . "pie.php"); ?>
+        <div style="margin-bottom:10px">
+            <input name="usPass" id="usPass" class="easyui-textbox" required="true" label="Contraseña:" style="width:100%">
+        </div>
+        <div style="margin-bottom:10px">
+            <input name="usMail" id="usmail" class="easyui-textbox" required="true" label="Correo:" style="width:100%">
+        </div>
+        <div style="margin-bottom:10px">
+            <label>Roles:</label>
+            <div id="usRol"></div>
+        </div>
+    </form>
+</div>
+
+<div id="dlg-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveMenu()" style="width:90px">Aceptar</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
+</div>
+
+
+
+
+
+            
+    <script type="text/javascript">
+            var url;
+            function editar(){
+                var row = $('#dg').datagrid('getSelected');
+                if (row){
+                    $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
+                    $('#fm').form('load',row);
+                    url = 'accion/accionEditar.php';    
+                }
+            }
+
+            function nuevo(){
+                $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Usuario');
+                $('#fm').form('clear');
+                url = 'accion/accionAlta.php';
+            }
+
+            function saveMenu(){
+                $('#fm').form('submit',{
+                    url: url,
+                    onSubmit: function(){
+                        return $(this).form('validate');
+                    },
+                    success: function(result){
+                        var result = eval('('+result+')');
+                        alert("Accion Correcta");   
+                        if (!result.respuesta){
+                            $.messager.show({
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        } else {
+                            $('#dlg').dialog('close');        // close the dialog
+                            $('#dg').datagrid('reload');    // reload 
+                        }
+                    }
+                });
+            }
+
+           
+            function baja(){
+                var row = $('#dg').datagrid('getSelected');
+                if (row){
+                    $.messager.confirm('Confirm', '¿Seguro que desea eliminar?', function(r){
+                        if (r){
+                            $.post('accion/accionBaja.php', { idUsuario: row.idUsuario },
+                            function(result){
+                                if (result.respuesta){
+                                    $('#dg').datagrid('reload'); // recargar los datos
+                                    } else {
+                                        $.messager.show({ // mostrar mensaje de error
+                                            title: 'Error',
+                                             msg: result.errorMsg || 'Error al eliminar el usuario.'
+                                            });
+                                        }}, 'json'
+                                     ).fail(function(jqXHR, textStatus, errorThrown) {
+                                        console.log("Error en la solicitud:", textStatus, errorThrown);
+                                        $.messager.alert('Error', 'No se pudo conectar con el servidor.', 'error');
+                                    });
+                                }
+                            });
+                        } else {
+                            $.messager.alert('Advertencia', 'Seleccione un usuario primero.', 'warning');
+                        }
+                    }
+
+     </script>
+
+ <?php include(STRUCTURE_PATH . "pie.php"); ?>

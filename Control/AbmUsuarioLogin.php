@@ -3,29 +3,17 @@ class AbmUsuarioLogin {
 
     public function abm($datos){
         $resp = false;
-        // Accion editar
         if ($datos['accion'] == 'editar') {
-            $resp = true; 
-            $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idusuario']]));
-            if ($objUsuario) {
-                $this->modificacion($datos);
-                $_SESSION["usnombre"] = $datos["usnombre"]; // Actualizar el nombre de usuario en la sesión 
-                if (isset($datos['usrol'])) { // Verifica si se trata de una edicion donde se enviaron roles
-                    $roles = array_map('intval', (array) $datos['usrol']);  // Convertir a entero los roles
-                    if ($this->actualizarRoles($datos, $roles)) {
-                        $resp = true; } }
-            } else {
-                // Manejo de error si el usuario no existe
-                $resp = false; 
-            }
+            if ($this->modificacion($datos)) {
+                $resp = true;
+            } 
         }
-        
        // Accion nuevo
         if ($datos['accion'] == 'nuevo') {
-            $objUsuario = convert_array($this->buscar(['usnombre' => $datos['usnombre']]));
+            $objUsuario = convert_array($this->buscar(['usnombre' => $datos['usNombre']]));
             if (!$objUsuario){ // Verifica si el usuario no existe, si existe no se registra
                 if ($this->alta($datos)) {
-                    $objUsuario = convert_array($this->buscar(['usnombre' => $datos['usnombre']]));
+                    $objUsuario = convert_array($this->buscar(['usnombre' => $datos['usNombre']]));
                     if (isset($objUsuario[0])) {
                         $resp=$this->agregarRoles($datos,$objUsuario); // Agregar roles al usuario
                     }
@@ -96,13 +84,13 @@ class AbmUsuarioLogin {
     private function cargarObjeto($param) {
         $obj = null;
         // Verifica si las claves necesarias están presentes
-        if (array_key_exists('usnombre', $param) &&
-            array_key_exists('uspass', $param) &&
-            array_key_exists('usmail', $param)) {
+        if (array_key_exists('usNombre', $param) &&
+            array_key_exists('usPass', $param) &&
+            array_key_exists('usMail', $param)) {
             $obj = new Usuario();
             // Si 'idusuario' está presente, lo usa; de lo contrario, se establece como NULL
-            $idusuario = array_key_exists('idusuario', $param) ? $param['idusuario'] : NULL;
-            $obj->setear($idusuario, $param['usnombre'], $param['uspass'], $param['usmail'], NULL);
+            $idusuario = array_key_exists('idUsuario', $param) ? $param['idUsuario'] : NULL;
+            $obj->setear($idusuario, $param['usNombre'], $param['usPass'], $param['usMail'], NULL);
         }
         return $obj;
     }
@@ -115,9 +103,9 @@ class AbmUsuarioLogin {
      */
     private function cargarObjetoConClave($param){
         $obj = null;
-        if( isset($param['idusuario']) ){
+        if( isset($param['idUsuario']) ){
             $obj = new Usuario();
-            $obj->setear($param['idusuario'], null, null, null, null);
+            $obj->setear($param['idUsuario'], null, null, null, null);
         }
         return $obj;
     }
@@ -130,7 +118,7 @@ class AbmUsuarioLogin {
     
     private function seteadosCamposClaves($param){
         $resp = false;
-        if (isset($param['idusuario']))
+        if (isset($param['idUsuario']))
             $resp = true;
         return $resp;
     }

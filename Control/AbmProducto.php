@@ -33,7 +33,7 @@ class AbmProducto {
         if(array_key_exists('pronombre',$param) && array_key_exists('prodetalle',$param) && array_key_exists('procantstock',$param) && array_key_exists('proimporte', $param)){
             $obj = new Producto();
             $param["idproducto"] = array_key_exists('idproducto', $param) ? $param['idproducto'] : NULL;
-            $obj-> setear($param['idproducto'],$param['pronombre'], $param['prodetalle'], $param['procantstock'], $param['proimporte'],NULL);
+            $obj->setear($param['idproducto'],$param['pronombre'], $param['prodetalle'], $param['procantstock'], $param['proimporte'], NULL);
         }
         return $obj;
     }
