@@ -68,8 +68,7 @@ class MenuRol{
     public function insertar(){
         $resp = false;
         $base=new bdcarritocompras();
-        print_r($this->getObjmenu());
-        $sql="INSERT INTO menurol(idmenu, idrol)VALUES(".$this->getObjmenu().",".$this->getObjrol().");";
+        $sql="INSERT INTO menurol (idmenu, idrol) VALUES ('".$this->getObjmenu()."','".$this->getObjrol()."');";
         //echo $sql;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {
@@ -87,7 +86,7 @@ class MenuRol{
         $resp = false;
         $base=new bdcarritocompras();
         $sql=" UPDATE menurol SET ";
-        $sql.=" idrol = ".$param['idrolNuevo'];
+        $sql.=" idrol = ".$param['idrol'];
         $sql.=" WHERE idmenu =".$this->getObjmenu()." AND idrol =".$this->getObjrol();
         echo $sql;
         if ($base->Iniciar()) {

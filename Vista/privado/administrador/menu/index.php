@@ -1,5 +1,7 @@
 <?php 
-include_once("../../../Estructura/CabeceraSegura.php"); 
+include_once("../../../Estructura/CabeceraSegura.php");
+$objRol = new AbmRol();
+$roles = convert_array($objRol->buscar([])); 
 ?>
 <title>Basic CRUD  - Usuarios </title>
 <link rel="stylesheet" type="text/css" href="../../../js/jquery-easyui-1.6.6/themes/default/easyui.css">
@@ -17,7 +19,8 @@ include_once("../../../Estructura/CabeceraSegura.php");
                 <th field="idmenu" width="50">ID Menu</th>
                 <th field="menombre" width="50">Nombre Menu</th>
                 <th field="medescripcion" width="50">URL</th>
-                <th field="objpadre" width="50">Padre</th>
+                <th field="idpadre" width="50">Padre</th>
+                <th field="meRol" width="50"> Roles </th>
                 <th field="medeshabilitado" width="50">Estado</th>
             </tr>
         </thead>
@@ -34,6 +37,8 @@ include_once("../../../Estructura/CabeceraSegura.php");
     <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
         <h3>Información del Menu</h3>
         <input type="hidden" name="idmenu" id="idmenu">
+
+        <input type="hidden" name="idpadre" id="idpadre">
     
         <div style="margin-bottom:10px">
             <input name="menombre" id="menombre" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
@@ -43,7 +48,13 @@ include_once("../../../Estructura/CabeceraSegura.php");
             <input name="medescripcion" id="medescripcion" class="easyui-textbox" required="true" label="URL:" style="width:100%">
         </div>
         <div style="margin-bottom:10px">
-            <input name="objpadre" id="objpadre" class="easyui-textbox" required="true" label="objpadre:" style="width:100%">
+            <h4>Roles:</h4>
+            <?php foreach ($roles as $rol): ?>
+                <div>
+                    <input type="checkbox" name="meRol[]" id="rol_<?php echo $rol['idRol']; ?>" value="<?php echo $rol['idRol']; ?>">
+                    <label for="rol_<?php echo $rol['idRol']; ?>"><?php echo $rol['roDescripcion']; ?></label>
+                </div>
+            <?php endforeach; ?>
         </div>
     
     </form>
@@ -64,14 +75,21 @@ include_once("../../../Estructura/CabeceraSegura.php");
             function editar(){
                 var row = $('#dg').datagrid('getSelected');
                 if (row){
-                    $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Rol');
+                    $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Menu');
                     $('#fm').form('load',row);
-                    url = 'accion/accionEditar.php';    
+                    url = 'accion/accionEditar.php'; 
+                     // Limpiar la selección previa de checkboxes
+                     $('input[name="meRol[]"]').prop('checked', false); // Desmarcar todos los checkboxes
+                     if (row.idRol && Array.isArray(row.idRol)) {
+                        // Iterar sobre cada rol y marcar el checkbox correspondiente
+                        row.idRol.forEach(function(rolId) {
+                            $('#rol_' + rolId).prop('checked', true);});
+                        }   
                 }
             }
 
             function nuevo(){
-                $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Rol');
+                $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Menu');
                 $('#fm').form('clear');
                 url = 'accion/accionAlta.php';
             }
@@ -83,6 +101,7 @@ include_once("../../../Estructura/CabeceraSegura.php");
                         return $(this).form('validate');
                     },
                     success: function(result){
+                        console.log("Respuesta del servidor:", result);
                         var result = eval('('+result+')');
                         alert("Accion Correcta");   
                         if (!result.respuesta){
@@ -104,7 +123,7 @@ include_once("../../../Estructura/CabeceraSegura.php");
                 if (row){
                     $.messager.confirm('Confirm', '¿Seguro que desea eliminar?', function(r){
                         if (r){
-                            $.post('accion/accionBaja.php', { idRol: row.idRol },
+                            $.post('accion/accionBaja.php', { idmenu: row.idmenu },
                             function(result){
                                 if (result.respuesta){
                                     $('#dg').datagrid('reload'); // recargar los datos

@@ -14,13 +14,11 @@ foreach ($list as $key => $personaObj) {
         $rolActual = convert_array($objRol->buscar(["idRol" => $rol["idRol"]]));
         if (!empty($rolActual)) { // Verificar si se encontró el rol
             $list[$key]['usRol'][] = $rolActual[0]["roDescripcion"]; // Agregar la descripción del rol
-            $list[$key]['idRol'][] = $rolActual[0]["idRol"]; // Agregar la descripción del rol
         }
     }
 }
 
 echo json_encode($list);
-
 
 ?>
 

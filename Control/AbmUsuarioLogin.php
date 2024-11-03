@@ -4,10 +4,14 @@ class AbmUsuarioLogin {
     public function abm($datos){
         $resp = false;
         if ($datos['accion'] == 'editar') {
-            if ($this->modificacion($datos)) {
-                $resp = true;
-            } 
+            $this->modificacion($datos);
+                if (isset($datos['usRol'])) { // Verifica si se enviaron roles
+                $resp = $this->actualizarRoles($datos); // Actualizar roles del usuario
+            } else {
+                $resp = false; // Fallo en la modificación de los datos del usuario
+            }
         }
+        
        // Accion nuevo
         if ($datos['accion'] == 'nuevo') {
             $objUsuario = convert_array($this->buscar(['usnombre' => $datos['usNombre']]));
@@ -31,7 +35,8 @@ class AbmUsuarioLogin {
 
     public function agregarRoles($datos,$objUsuario){
         $usuarioRol = new AbmUsuarioRol(); 
-        $roles = $datos["usrol"] ?? []; 
+        $roles = $datos["usRol"] ?? []; 
+        $resp = false;
         // Si no hay roles, asignar el rol de cliente
         if (empty($roles)) {
             $roles[] = 1; }
@@ -46,31 +51,34 @@ class AbmUsuarioLogin {
             return $resp;
         }
 
-    public function actualizarRoles($datos,$roles){
-        $resp = false;
-        $usuarioRol = new AbmUsuarioRol();
-        $rolActual =convert_array( $usuarioRol->buscar(['idusuario' => $datos['idusuario']]));
-        // Eliminar roles que ya no están seleccionados en `$roles`
-        foreach ($rolActual as $rolActualId) {
-            if (!in_array($rolActualId, $roles)) {
-                $param = [
-                    'idrol' => (int)$rolActualId, 
-                    'idusuario' => (int)$datos['idusuario']];
-                    $usuarioRol->baja($param);
-                }
-            }
-            // Agregar roles nuevos que no estén en `$rolActual`
-            foreach ($roles as $rol) {
-                if (!in_array($rol, $rolActual)) { 
+        public function actualizarRoles($datos){
+            $resp = false;
+            $usuarioRol = new AbmUsuarioRol();
+            $roles = $datos["usRol"] ?? []; 
+            $rolActual =convert_array( $usuarioRol->buscar(['idusuario' => $datos['idUsuario']]));
+            // Eliminar roles que ya no están seleccionados en `$roles`
+            foreach ($rolActual as $rolActualId) {
+                if (!in_array($rolActualId, $roles)) {
                     $param = [
-                        'idrol' => (int)$rol,
-                        'idusuario' => (int)$datos['idusuario']];
-                        $usuarioRol->alta($param);
-                        $resp=true;
+                        'idrol' => (int)$rolActualId, 
+                        'idusuario' => (int)$datos['idUsuario']];
+                        $usuarioRol->baja($param);
                     }
                 }
-                return $resp;
-            }
+                // Agregar roles nuevos que no estén en `$rolActual`
+                foreach ($roles as $rol) {
+                    if (!in_array($rol, $rolActual)) { 
+                        $param = [
+                            'idrol' => (int)$rol,
+                            'idusuario' => (int)$datos['idUsuario']];
+                            $usuarioRol->alta($param);
+                            $resp=true;
+                        }
+                    }
+                    return $resp;
+                }
+    
+        
 
 
 

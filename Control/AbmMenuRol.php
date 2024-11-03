@@ -70,7 +70,7 @@ class AbmMenuRol {
      */
     public function alta($param){
         $resp = false;
-        $objMenuRol = $this->cargarObjeto($param);
+        $objMenuRol = $this->cargarObjeto($param);  
         if ($objMenuRol!=null and $objMenuRol->insertar()){
             $resp = true;
         }

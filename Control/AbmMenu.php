@@ -5,123 +5,122 @@ class AbmMenu{
     public function abm($datos) {
         $resp = false;
         if ($datos['accion'] == 'editar') {
-            if ($this->modificacion($datos)) {
-                $resp = true;
-                } else {$resp = false;}
-
-        }
+            $this->modificacion($datos);
+                if (isset($datos['meRol'])) { // Verifica si se enviaron roles
+                    $resp= $this->actualizarRoles($datos);
+                    } else {
+                        $resp = false;
+                    }
+                }
+            
         if ($datos['accion'] == 'borrar') {
             if ($this->baja($datos)) {
                 $resp = true;
             }
         }
         if ($datos['accion'] == 'nuevo') {
-            if ($this->alta($datos)) {
-                $resp=true;
-            }
+            $ultimoId= $this->alta($datos);
+            $objMenu = convert_array($this->buscar(['idmenu' => $ultimoId])); // Obtener el objeto recién creado
+                if (isset($objMenu)) { 
+                    $resp = $this->agregarRoles($datos, $objMenu); // Agregar roles
+                }
+        
         }
         return $resp;
     }
 
-    public function actualizarRoles($datos, $roles) {
+    public function agregarRoles($datos,$objUsuario){
+        $usuarioRol = new AbmMenuRol(); 
+        $roles = $datos["meRol"] ?? []; 
         $resp = false;
-        $menuRol = new AbmMenuRol();
-        $rolActual = convert_array($menuRol->buscar(['idmenu' => $datos['idmenu']]));
-        // Eliminar roles que ya no están seleccionados en `$roles`
-        foreach ($rolActual as $rolActualId) {
-            $idRolActual = $rolActualId["objrol"]->getIdRol(); // Obtener ID del rol actual
-            if (!in_array($idRolActual, $roles)) {
-                $param = [
-                    'idrol' => (int)$idRolActual, 
-                    'idmenu' => (int)$datos['idmenu']
-                ];
-                $menuRol->baja($param); // Eliminar el rol
-            }
-        }
-    
-        // Agregar roles nuevos que no estén en `$rolActual`
-        foreach ($roles as $rol) {
-            // Comprobar si ya existe el rol en el menú
-            $existeRolMenu = $menuRol->buscar(['idrol' => $rol, 'idmenu' => $datos['idmenu']]);
-            if (empty($existeRolMenu)) { // Solo añadir si no existe
-                $param = [
-                    'idrol' => (int)$rol, // Asegúrate de que aquí sea solo el ID del rol
-                    'idmenu' => (int)$datos['idmenu']
-                ];
-                $menuRol->alta($param); // Agregar el nuevo rol
-                $resp = true; // Marcamos que se ha hecho al menos una alta
-            }
-        }
-    
-        return $resp; // Devolvemos el estado final
-    }
-    
-    
-
-
-    public function agregarRoles($datos, $objMenu) {
-        $menuRol = new AbmMenuRol();
-        $roles = $datos["menurol"] ?? [];
-        $resp = false; 
         // Iterar sobre los roles y crear la relación
         foreach ($roles as $rol) {
-            $param = [
-                'idrol' => $rol, // Asignar el rol para usuarios 
-                'idmenu' => $objMenu[0]["idmenu"]
-            ];
-            if ($menuRol->alta($param)) {
+            $param = [ 'idrol' => $rol, // Asignar el rol para usuarios 
+                        'idmenu' => $objUsuario[0]["idmenu"]];
+            if ($usuarioRol->alta($param)) {
                 $resp = true; // Establecer a true si se añade el rol
+                }
             }
+            return $resp;
+        }
+    
+
+        public function actualizarRoles($datos) {
+            $resp = false;
+            $menuRol = new AbmMenuRol();
+            $roles = $datos["meRol"] ?? [];
+            $rolActual = convert_array($menuRol->buscar(['idmenu' => $datos['idmenu']]));
+            // Extraer solo los IDs de los roles actuales
+            $rolActualIds = array_column($rolActual, 'objrol'); // Cambia 'objrol' si es necesario
+            // Eliminar roles que ya no están seleccionados en `$roles`
+            foreach ($rolActualIds as $rolActualId) {
+                if (!in_array($rolActualId, $roles)) {
+                    $param = [
+                        'idrol' => (int)$rolActualId, 
+                        'idmenu' => (int)$datos['idmenu']
+                    ];
+                    $menuRol->baja($param);
+                    $resp = true; 
+                }
+            }
+            // Agregar roles nuevo
+            foreach ($roles as $rol) {
+                if (!in_array($rol, $rolActualIds)) { 
+                    $param = [
+                        'idrol' => (int)$rol,
+                        'idmenu' => (int)$datos['idmenu']
+                    ];
+                    $menuRol->alta($param);
+                    $resp = true;
+                }
+            }
+        
+            return $resp; 
         }
         
-        return $resp; // Retornar el estado de la operación
-    }
     
-    /**
+    
+
+
+    
+    
+  /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
      * @param array $param
-     * @return object
+     * @return Tabla
      */
-    private function cargarObjeto($param) {
+    private function cargarObjeto($param){
         $obj = null;
-    
-        // Verificar que todas las claves necesarias están presentes en el array $param
-        if (array_key_exists('menombre', $param) &&
-            array_key_exists('medescripcion', $param) &&
-            array_key_exists('objmenu', $param)) {
-            // Crear el objeto principal Menu
+        if( array_key_exists('idmenu',$param) and array_key_exists('menombre',$param)){
             $obj = new Menu();
-            $idmenu = array_key_exists('idmenu', $param) ? $param['idmenu'] : NULL;
-            if ($param["objmenu"] == NULL) {
-                // Llamar a setear con los parámetros adecuados sin menú padre
-                $obj->setear($idmenu, $param['menombre'], $param['medescripcion'], NULL, NULL);
-            } else {
-                // Crear el objeto para el menú padre y cargarlo
-                $objMenuPadre = new Menu();
-                $objMenuPadre->setIdmenu($param["objmenu"]);
-                $objMenuPadre->cargar();
-                // Llamar a setear con los parámetros adecuados con menú padre
-                $obj->setear($idmenu, $param['menombre'], $param['medescripcion'], $objMenuPadre, NULL);
+            $objmenu = null;
+            if (isset($param['idpadre'])){
+                $objmenu = new Menu();
+                $objmenu->setIdmenu($param['idpadre']);
+                $objmenu->cargar();
+                
             }
+            if(!isset($param['medeshabilitado'])){
+                $param['medeshabilitado']=null;
+            }else{
+                $param['medeshabilitado']= date("Y-m-d H:i:s");
+            }
+            $obj->setear($param['idmenu'], $param['menombre'],$param['medescripcion'],$objmenu,$param['medeshabilitado']); 
         }
-        // Retornar el objeto creado o null si no se cumplió la condición
         return $obj;
     }
-    
-    
-    
-    
     
     /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto que son claves
      * @param array $param
-     * @return object
+     * @return Tabla
      */
     private function cargarObjetoConClave($param){
         $obj = null;
+        
         if( isset($param['idmenu']) ){
             $obj = new Menu();
-            $obj->setIdmenu($param['idmenu'], null, null, null, null);
+            $obj->setIdmenu($param['idmenu']);
         }
         return $obj;
     }
@@ -132,6 +131,7 @@ class AbmMenu{
      * @param array $param
      * @return boolean
      */
+    
     private function seteadosCamposClaves($param){
         $resp = false;
         if (isset($param['idmenu']))
@@ -145,13 +145,16 @@ class AbmMenu{
      */
     public function alta($param){
         $resp = false;
+        $param['idmenu'] =null;
+        $param['medeshabilitado'] = null;
         $elObjtTabla = $this->cargarObjeto($param);
-        if ($elObjtTabla!=null and $elObjtTabla->insertar()){
-            $resp = true;
+//        verEstructura($elObjtTabla);
+        if ($elObjtTabla!=null ){
+            $resp = $elObjtTabla->insertar();
         }
-        return $resp;
+      return $resp;
+     
     }
-
     /**
      * permite eliminar un objeto 
      * @param array $param
@@ -159,6 +162,7 @@ class AbmMenu{
      */
     public function baja($param){
         $resp = false;
+      
         if ($this->seteadosCamposClaves($param)){
             $elObjtTabla = $this->cargarObjetoConClave($param);
             if ($elObjtTabla!=null and $elObjtTabla->eliminar()){
@@ -175,6 +179,7 @@ class AbmMenu{
      * @return boolean
      */
     public function modificacion($param){
+       
         $resp = false;
         if ($this->seteadosCamposClaves($param)){
             $elObjtMenu = $this->cargarObjeto($param);
@@ -195,19 +200,16 @@ class AbmMenu{
         if ($param<>NULL){
             if  (isset($param['idmenu']))
                 $where.=" and idmenu =".$param['idmenu'];
-            if  (isset($param['menombre']))
-                 $where.=" and menombre='".$param['menombre']."'";
-                 if  (isset($param['medescripcion']))
-                     $where.=" and medescripcion =".$param['medescripcion'];
-                     if  (isset($param['idpadre']))
-                         $where.=" and idpadre =".$param['idpadre'];
-                         if (isset($param['padrenull']))
-                             $where.=" and idpadre IS " . $param['padrenull'];
-                         if  (isset($param['medeshabilitado']))
-                             $where.=" and medeshabilitado=".$param['medeshabilitado'];
+            if  (isset($param['descrip']))
+                 $where.=" and medescripcion ='".$param['medescripcion']."'";
         }
-        $arreglo = Menu::listar($where); 
+        $arreglo = Menu::listar($where);  
         return $arreglo;
+            
+            
+      
+        
     }
+   
 }
 ?>
