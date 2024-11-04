@@ -23,7 +23,7 @@ $roles = convert_array($objRol->buscar([]));
 <div id="toolbar">
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="nuevoUsuarios()">Nuevo</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editarUsuarios()">Editar</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="bajaUsuarios()">Baja</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="bajaUsuarios()">Habilitar/Deshabilitar</a>
 </div>
 
 <div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
@@ -40,6 +40,7 @@ $roles = convert_array($objRol->buscar([]));
         <div style="margin-bottom:10px">
             <input name="usMail" id="usmail" class="easyui-textbox" required="true" label="Correo:" style="width:100%">
         </div>
+        <input type="hidden" name="usDeshabilitado" id="usDeshabilitado">
         <div style="margin-bottom:10px">
             <h4>Roles:</h4>
             <?php foreach ($roles as $rol): ?>

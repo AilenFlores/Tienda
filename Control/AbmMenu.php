@@ -26,6 +26,10 @@ class AbmMenu{
                 }
         
         }
+        if ($datos['accion'] == 'habilitar') {
+            $this->habilitar($datos) ;
+            $resp = true;
+        }
         return $resp;
     }
 
@@ -81,7 +85,22 @@ class AbmMenu{
     
     
 
-
+   /**
+     * permite habilitar un objeto 
+     * @param array $param
+     * @return boolean
+     */
+    public function habilitar($param){
+        $resp = false;
+        if ($this->seteadosCamposClaves($param)){
+            $elObjtTabla = $this->cargarObjetoConClave($param);
+            if ($elObjtTabla!=null and $elObjtTabla->habilitar()){
+                $resp = true;
+            }
+        }
+        
+        return $resp;
+    }
     
     
   /**

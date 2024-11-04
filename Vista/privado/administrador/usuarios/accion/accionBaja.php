@@ -5,11 +5,13 @@ $retorno = ['respuesta' => false]; // Inicializa la respuesta como false por def
 
 if (isset($data['idUsuario'])) {
     $objC = new AbmUsuarioLogin();
-    $data["accion"]="borrar";
+    $usuario=convert_array($objC->buscar(['idusuario' => $data['idUsuario']]));
+    $data["usDeshabilitado"] = $usuario[0]["usDeshabilitado"];
+    $data["accion"] = ($data['usDeshabilitado'] != NULL) ? "habilitar" : "borrar";
     $respuesta = $objC->abm($data);
     $retorno['respuesta'] = $respuesta;
     if (!$respuesta) {
-        $retorno['errorMsg'] = "La acción ELIMINACIÓN no pudo concretarse";
+        $retorno['errorMsg'] = "La acción no pudo concretarse";
     }
 } else {
     $retorno['errorMsg'] = "ID de usuario no especificado";

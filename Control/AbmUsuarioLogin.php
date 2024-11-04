@@ -48,6 +48,12 @@ class AbmUsuarioLogin {
                 $resp =true;
             }
         }
+
+        if ($datos['accion'] == 'habilitar') {
+            $this->habilitar($datos) ;
+            $resp = true;
+        }
+        
         return $resp;
     }
 
@@ -179,6 +185,22 @@ class AbmUsuarioLogin {
         return $resp;
     }
 
+       /**
+     * permite habilitar un objeto 
+     * @param array $param
+     * @return boolean
+     */
+    public function habilitar($param){
+        $resp = false;
+        if ($this->seteadosCamposClaves($param)){
+            $elObjtTabla = $this->cargarObjetoConClave($param);
+            if ($elObjtTabla!=null and $elObjtTabla->habilitar()){
+                $resp = true;
+            }
+        }
+        
+        return $resp;
+    }
     /**
      * permite modificar un objeto
      * @param array $param

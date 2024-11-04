@@ -121,7 +121,27 @@ class Menu {
         $this->setObjMenu($ObjMenu);
         $this->setMedeshabilitado($medeshabilitado);
     }
-    
+
+    public function habilitar(){
+        $resp = false;
+        $base=new bdcarritocompras();
+        $param="";
+        $this->setMedeshabilitado($param);
+        $sql = "UPDATE menu SET medeshabilitado = NULL"; // Asegúrate de usar NULL sin comillas
+        $sql.= " WHERE idmenu='".$this->getIdmenu()."'";
+        //echo $sql;
+        if ($base->Iniciar()) {
+            if ($base->Ejecutar($sql)) {
+                $resp = true;
+            } else {
+                $this->setmensajeoperacion("usuario->eliminar: ".$base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion("usuario->eliminar: ".$base->getError());
+        }
+        return $resp;
+    }
+
     
     public function cargar(){
         $resp = false;

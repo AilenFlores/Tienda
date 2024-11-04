@@ -5,7 +5,10 @@ $retorno = ['respuesta' => false]; // Inicializa la respuesta como false por def
 
 if (isset($data['idmenu'])) {
     $objC = new AbmMenu();
-    $data["accion"]="borrar";
+    $menu=convert_array($objC->buscar(['idmenu' => $data['idmenu']]));
+    $data["medeshabilitado"] = $menu[0]["medeshabilitado"];
+    $data["accion"] = ($data['medeshabilitado'] != NULL) ? "habilitar" : "borrar";
+   // $data["accion"]="borrar";
     $respuesta = $objC->abm($data);
     $retorno['respuesta'] = $respuesta;
     if (!$respuesta) {

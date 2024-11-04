@@ -152,6 +152,26 @@ class Usuario {
         }
         return $resp;
     }
+    
+    public function habilitar(){
+        $resp = false;
+        $base=new bdcarritocompras();
+        $param="";
+        $this->setUsDeshabilitado($param);
+        $sql = "UPDATE usuario SET usdeshabilitado = NULL"; // Asegúrate de usar NULL sin comillas
+        $sql.= " WHERE idusuario='".$this->getIdUsuario()."'";
+        //echo $sql;
+        if ($base->Iniciar()) {
+            if ($base->Ejecutar($sql)) {
+                $resp = true;
+            } else {
+                $this->setmensajeoperacion("usuario->eliminar: ".$base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion("usuario->eliminar: ".$base->getError());
+        }
+        return $resp;
+    }
 
     public static function listar($parametro=""){
         $arreglo = array();
