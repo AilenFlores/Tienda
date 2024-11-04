@@ -22,7 +22,7 @@ $datos = data_submitted();
             <div class="card-body">
                 <h5 class="card-title text-center">Login</h5>
                 <br>
-                <form method="post" action="accion.php" id="usLogin" name="usLogin" onsubmit="return formSubmit()" novalidate>
+                <form method="post" action="accion.php" id="usLogin" name="usLogin" onsubmit="return formLogin()" novalidate>
                     <input id="accion" name="accion" value="login" type="hidden">
                     <!-- Fila para usuario -->
                     <div class="form-group">
@@ -77,17 +77,15 @@ $datos = data_submitted();
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script>
-function formSubmit() {
+function formLogin() {
     var password = document.getElementById("uspass").value;
-    
     // Verifica si la contraseña está vacía
     if (password === "") {
         alert("Por favor, ingrese una contraseña.");
         return false;
     }
-
     // Hash de la contraseña
-    var passhash = CryptoJS.MD5(password).toString();
+    var passhash = CryptoJS.SHA256(password).toString();
     document.getElementById("uspass").value = passhash;
 
     // Permite el envío del formulario

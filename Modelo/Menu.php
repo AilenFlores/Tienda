@@ -182,15 +182,13 @@ class Menu {
     public function modificar(){
         $resp = false;
         $base=new bdcarritocompras();
-        $sql="UPDATE menu SET menombre='".$this->getMenombre()."',medescripcion='".$this->getMedescripcion()."'";
+        $sql="UPDATE menu SET 
+        menombre='".$this->getMenombre()."',
+        medescripcion='".$this->getMedescripcion()."'";
         if ($this->getObjMenu()!= null)
             $sql.=",idpadre= ".$this->getObjMenu()->getIdmenu();
          else
             $sql.=",idpadre= null";
-         if ($this->getMedeshabilitado()!=null)
-             $sql.= ",medeshabilitado='".$this->getMedeshabilitado()."'";
-         else
-              $sql.=" ,medeshabilitado=null";
         $sql.= " WHERE idmenu = ".$this->getIdmenu();
         // echo $sql;
         if ($base->Iniciar()) {

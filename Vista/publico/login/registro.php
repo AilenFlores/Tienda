@@ -8,28 +8,28 @@
                 <a href="index.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
             </div>
             <div class="card-body">
-                <form action="accion.php" method="post" id="formUsuario" name="formUsuario" novalidate>
+                <form action="accion.php" method="post" id="formUsuario" name="formUsuario" novalidate onsubmit="formRegistro()">
                     <input id="accion" name="accion" value="nuevo" type="hidden">
 
                     <div class="mb-3">
-                        <label for="usnombre" class="form-label text-secondary"><strong>Nombre:</strong></label>
-                        <input type="text" class="form-control" id="usnombre" name="usnombre" required>
+                        <label for="usNombre" class="form-label text-secondary"><strong>Nombre:</strong></label>
+                        <input type="text" class="form-control" id="usNombre" name="usNombre" required>
                         <div class="invalid-feedback">
                             Ingrese un nombre válido.
                         </div>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="uspass" class="form-label text-secondary"><strong>Contraseña:</strong></label>
-                        <input type="password" class="form-control" id="uspass" name="uspass" required>
+                        <label for="usPass" class="form-label text-secondary"><strong>Contraseña:</strong></label>
+                        <input type="password" class="form-control" id="usPass" name="usPass" required>
                         <div class="invalid-feedback">
                             Ingrese una contraseña válida. Debe tener al menos 8 caracteres.
                         </div>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="usmail" class="form-label text-secondary"><strong>Correo electrónico:</strong></label>
-                        <input type="email" class="form-control" id="usmail" name="usmail" required>
+                        <label for="usMail" class="form-label text-secondary"><strong>Correo electrónico:</strong></label>
+                        <input type="email" class="form-control" id="usMail" name="usMail" required>
                         <div class="invalid-feedback">
                             Ingrese un correo electrónico válido.
                         </div>
@@ -48,16 +48,12 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script>
-function formSubmit()
-{
-    var password =  document.getElementById("uspass").value;
-    //console.log(password);
-    var passhash = CryptoJS.MD5(password).toString();
-    //console.log(passhash);
-    document.getElementById("uspass").value = passhash;
-
+function formRegistro(){
+    var password =  document.getElementById("usPass").value;
+    var passhash = CryptoJS.SHA256(password).toString();
+    document.getElementById("usPass").value = passhash;
     setTimeout(function(){ 
-        document.getElementById("formulario").submit();
+        document.getElementById("formUsuario").submit();
 
 	}, 500);
 }

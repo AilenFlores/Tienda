@@ -44,7 +44,7 @@ ob_start(); //
                             }  
                     ?>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="/Tienda/Vista/privado/usuarios/accion.php?accion=logout">Cerrar Sesión</a></li>
+                    <li><a class="dropdown-item" href="/Tienda/Vista/privado/sesion/logout.php">Cerrar Sesión</a></li>
                 </ul>
                 <?php }
                  else { // Si la sesión no está iniciada ?>

@@ -13,3 +13,11 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
+<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>/Vista/js/jquery-easyui-1.6.6/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>/Vista/js/jquery-easyui-1.6.6/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>/Vista/js/jquery-easyui-1.6.6/themes/color.css">
+<script type="text/javascript" src="<?php echo BASE_URL; ?>/vista/js/jquery-easyui-1.6.6/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo BASE_URL; ?>/vista/js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
+
+<script src="<?php echo BASE_URL; ?>/Vista/js/validator.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>

@@ -4,14 +4,32 @@ class AbmUsuarioLogin {
     public function abm($datos){
         $resp = false;
         if ($datos['accion'] == 'editar') {
-            $this->modificacion($datos);
+            $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
+            if($datos['usPass'] === $objUsuario[0]["usPass"]){ // Verifica si la contraseña es la misma
+                $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
+            } else {
+                $datos["usPass"] = hash('sha256', $datos["usPass"]); // Encripta la nueva contraseña
+            }
+                $this->modificacion($datos);
+                $resp = true;
                 if (isset($datos['usRol'])) { // Verifica si se enviaron roles
                 $resp = $this->actualizarRoles($datos); // Actualizar roles del usuario
-            } else {
-                $resp = false; // Fallo en la modificación de los datos del usuario
-            }
+            } 
         }
         
+        if ($datos['accion'] == 'editarActual') {
+            session_start();
+            $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
+            if($datos['usPass'] === $objUsuario[0]["usPass"]){ // Verifica si la contraseña es la misma
+                $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
+            } else {
+                $datos["usPass"] = hash('sha256', $datos["usPass"]); // Encripta la nueva contraseña
+            }
+                $this->modificacion($datos);
+                $resp = true;
+                
+        }
+
        // Accion nuevo
         if ($datos['accion'] == 'nuevo') {
             $objUsuario = convert_array($this->buscar(['usnombre' => $datos['usNombre']]));
