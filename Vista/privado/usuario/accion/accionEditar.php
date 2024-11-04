@@ -12,7 +12,6 @@ if (isset($data['idUsuario'])){
     }else $respuesta =true;
     
 }
-$_SESSION['usnombre'] = $data['usNombre']; // Actualiza el nombre de usuario en la sesión
 $retorno['respuesta'] = $respuesta;
 if (isset($mensaje)){
      $retorno['errorMsg']=$sms_error;   

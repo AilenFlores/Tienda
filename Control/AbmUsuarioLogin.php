@@ -18,7 +18,6 @@ class AbmUsuarioLogin {
         }
         
         if ($datos['accion'] == 'editarActual') {
-            session_start();
             $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
             if($datos['usPass'] === $objUsuario[0]["usPass"]){ // Verifica si la contraseña es la misma
                 $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
@@ -27,7 +26,8 @@ class AbmUsuarioLogin {
             }
                 $this->modificacion($datos);
                 $resp = true;
-                
+                session_start();
+                $_SESSION['usnombre'] = $datos['usNombre'];
         }
 
        // Accion nuevo
