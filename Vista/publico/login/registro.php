@@ -1,5 +1,15 @@
 <?php include ("../../Estructura/Cabecera.php"); ?>
-
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <?php 
+        if (isset($datos) && isset($datos['msg']) && $datos['msg'] != null) {
+            $alertType = 'info';
+            echo "<div class='alert alert-$alertType text-center' role='alert'>";
+            echo htmlspecialchars($datos['msg']);
+            echo "</div>";
+        }
+        ?>
+    </div>
 <main class="flex-fill bg-light">
     <div class="container my-4">
         <div class="card shadow-sm" style="max-width: 420px; margin: auto; border: solid #ced4da ">
