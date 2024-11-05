@@ -20,18 +20,18 @@ include_once("../../../Estructura/CabeceraSegura.php");
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editarRol()">Editar</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="bajaRol()">Baja</a>
 </div>
-
-<div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+<div id="dlg" class="easyui-dialog" style="width:700px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
     <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
-        <h3>Información del Usuario</h3>
         <input type="hidden" name="idRol" id="idRol">
-    
-        <div style="margin-bottom:10px">
-            <input name="roDescripcion" id="usNombre" class="easyui-textbox" required="true" label="Nombre Rol:" style="width:100%">
+        <div style="margin-bottom:10px; display: flex; align-items: center;">
+            <label for="usNombre" style="margin-right: 10px;">Nombre Rol:</label>
+            <input name="roDescripcion" id="usNombre" class="easyui-textbox" required="true" style="width:200px;"> <!-- Ajusta el ancho aquí -->
         </div>
     
     </form>
 </div>
+
+
 
 <div id="dlg-buttons">
     <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveRol()" style="width:90px">Aceptar</a>

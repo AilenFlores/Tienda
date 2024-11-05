@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-11-2024 a las 19:30:47
+-- Tiempo de generación: 05-11-2024 a las 01:41:01
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -101,7 +101,7 @@ CREATE TABLE `menu` (
 --
 
 INSERT INTO `menu` (`idmenu`, `menombre`, `medescripcion`, `idpadre`, `medeshabilitado`) VALUES
-(1, 'Editar Cuenta', 'privado/usuarios/editar.php', NULL, NULL),
+(1, 'Editar Cuenta', 'privado/usuario/index.php', NULL, NULL),
 (2, 'Gestionar Usuarios', 'privado/administrador/usuarios/index.php', NULL, NULL),
 (3, 'Gestionar Menus', 'privado/administrador/menu/index.php\r\n', NULL, NULL),
 (4, 'Gestionar Roles', 'privado/administrador/rol/index.php\r\n', NULL, NULL),
@@ -138,19 +138,17 @@ INSERT INTO `menurol` (`idmenu`, `idrol`) VALUES
 --
 
 CREATE TABLE `producto` (
-  `idproducto` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idproducto` bigint(20) NOT NULL AUTO_INCREMENT,  -- Clave primaria y auto-incremental
   `pronombre` varchar(20) NOT NULL,
   `prodetalle` varchar(512) NOT NULL,
   `procantstock` int(11) NOT NULL,
   `proimporte` int(5) NOT NULL,
+  `proimg` varchar(100) NOT NULL,
   `prodeshabilitado` timestamp NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`idproducto`)
+  PRIMARY KEY (`idproducto`)  -- Definición de la clave primaria
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcado de datos para la tabla `producto`
-INSERT INTO `producto` (`idproducto`, `pronombre`, `prodetalle`, `procantstock`, `proimporte`, `prodeshabilitado`) VALUES
-(1, 'Producto', 'producto', 1, 2000, NULL),
-(2, 'Producto 2', 'Producto', 2, 2000, NULL);
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `rol`
@@ -179,7 +177,7 @@ INSERT INTO `rol` (`idrol`, `rodescripcion`) VALUES
 CREATE TABLE `usuario` (
   `idusuario` bigint(20) NOT NULL,
   `usnombre` varchar(50) NOT NULL,
-  `uspass` varchar(50) NOT NULL,
+  `uspass` varchar(100) NOT NULL,
   `usmail` varchar(50) NOT NULL,
   `usdeshabilitado` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -189,9 +187,9 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idusuario`, `usnombre`, `uspass`, `usmail`, `usdeshabilitado`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin@mail.com', NULL),
-(2, 'usuario', 'f8032d5cae3de20fcec887f395ec9a6a', 'usuario@mail.com', NULL),
-(3, 'deposito', 'caaf856169610904e4f188e6ee23e88c', 'deposito@mail.com', NULL);
+(1, 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin@mail.com', NULL),
+(2, 'usuario', '9250e222c4c71f0c58d4c54b50a880a312e9f9fed55d5c3aa0b0e860ded99165', 'usuario@mail.com', NULL),
+(3, 'deposito', 'a489c5d82afb5c94924ec6e04a107deaf02e6ef9b6dc12fbb8294f44f3bfa437', 'deposito@mail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -211,6 +209,7 @@ CREATE TABLE `usuariorol` (
 INSERT INTO `usuariorol` (`idusuario`, `idrol`) VALUES
 (1, 2),
 (2, 1),
+(2, 2),
 (3, 3);
 
 --
@@ -268,8 +267,7 @@ ALTER TABLE `menurol`
 -- Indices de la tabla `producto`
 --
 ALTER TABLE `producto`
-  ADD PRIMARY KEY (`idproducto`),
-  ADD UNIQUE KEY `idproducto` (`idproducto`);
+  ADD PRIMARY KEY (`idproducto`);
 
 --
 -- Indices de la tabla `rol`
@@ -319,25 +317,25 @@ ALTER TABLE `compraitem`
 -- AUTO_INCREMENT de la tabla `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `idmenu` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `idmenu` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `idproducto` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idproducto` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
 --
 ALTER TABLE `rol`
-  MODIFY `idrol` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idrol` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idusuario` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
+  MODIFY `idusuario` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
@@ -355,13 +353,6 @@ ALTER TABLE `compra`
 ALTER TABLE `compraestado`
   ADD CONSTRAINT `fkcompraestado_1` FOREIGN KEY (`idcompra`) REFERENCES `compra` (`idcompra`) ON UPDATE CASCADE,
   ADD CONSTRAINT `fkcompraestado_2` FOREIGN KEY (`idcompraestadotipo`) REFERENCES `compraestadotipo` (`idcompraestadotipo`) ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `compraitem`
---
-ALTER TABLE `compraitem`
-  ADD CONSTRAINT `fkcompraitem_1` FOREIGN KEY (`idcompra`) REFERENCES `compra` (`idcompra`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `fkcompraitem_2` FOREIGN KEY (`idproducto`) REFERENCES `producto` (`idproducto`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `menu`

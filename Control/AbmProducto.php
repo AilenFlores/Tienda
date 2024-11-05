@@ -6,9 +6,8 @@ class AbmProducto {
     public function abm($datos){
         $resp = false;
         if($datos['accion']=='editar'){
-            if($this->modificacion($datos)){
+            $this->modificacion($datos);
                 $resp = true;
-            }
         }
         if($datos['accion']=='borrar'){
             if($this->baja($datos)){
@@ -19,8 +18,31 @@ class AbmProducto {
              if($this->alta($datos)){
             $resp =true;}
         }
+        if ($datos['accion'] == 'habilitar') {
+            $this->habilitar($datos) ;
+            $resp = true;
+        }
         return $resp;
     } 
+    
+
+        /**
+     * permite habilitar un objeto 
+     * @param array $param
+     * @return boolean
+     */
+    public function habilitar($param){
+        $resp = false;
+        if ($this->seteadosCamposClaves($param)){
+            $elObjtTabla = $this->cargarObjetoConClave($param);
+            if ($elObjtTabla!=null and $elObjtTabla->habilitar()){
+                $resp = true;
+            }
+        }
+        
+        return $resp;
+    }
+
     
     /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
@@ -30,10 +52,10 @@ class AbmProducto {
     
     public function cargarObjeto($param){
         $obj = null;
-        if(array_key_exists('pronombre',$param) && array_key_exists('prodetalle',$param) && array_key_exists('procantstock',$param) && array_key_exists('proimporte', $param)){
+        if(array_key_exists('pronombre',$param) && array_key_exists('prodetalle',$param) && array_key_exists('procantstock',$param) && array_key_exists('proimporte', $param) && array_key_exists('proimg', $param)){
             $obj = new Producto();
             $param["idproducto"] = array_key_exists('idproducto', $param) ? $param['idproducto'] : NULL;
-            $obj->setear($param['idproducto'],$param['pronombre'], $param['prodetalle'], $param['procantstock'], $param['proimporte'], NULL);
+            $obj->setear($param['idproducto'],$param['pronombre'], $param['prodetalle'], $param['procantstock'], $param['proimporte'],$param["proimg"], NULL);
         }
         return $obj;
     }
@@ -47,7 +69,7 @@ class AbmProducto {
         $obj = null;
         if( isset($param['idproducto']) ){
             $obj = new Producto();
-            $obj->setear($param['idproducto'],null, null, null, null,null);
+            $obj->setear($param['idproducto'],null, null, null, null,null, null);
             
         }
         return $obj;
@@ -131,8 +153,8 @@ class AbmProducto {
             $where.=" and prodetalle ='".$param['prodetalle']."'";
             if  (isset($param['procantstock']))
             $where.=" and procantstock ='".$param['procantstock']."'";
-            if  (isset($param['proimagen']))
-            $where.=" and proimagen ='".$param['proimagen']."'";
+            if  (isset($param['proimg']))
+            $where.=" and proimg ='".$param['proimg']."'";
             if  (isset($param['proimporte']))
             $where.=" and proimporte ='".$param['proimporte']."'";
             if  (isset($param['prodeshabilitado']))

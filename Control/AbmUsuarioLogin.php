@@ -19,27 +19,29 @@ class AbmUsuarioLogin {
         
         if ($datos['accion'] == 'editarActual') {
             $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
-            if($datos['usPass'] === $objUsuario[0]["usPass"]){ // Verifica si la contraseña es la misma
-                $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
+            // Verifica si la contraseña es la misma
+            if ($datos['usPass'] === $objUsuario[0]["usPass"]) {
+                unset($datos["usPass"]); // Elimina el campo de contraseña para evitar que se modifique
             } else {
-                $datos["usPass"] = hash('sha256', $datos["usPass"]); // Encripta la nueva contraseña
+                // Encripta la nueva contraseña
+                $datos["usPass"] = hash('sha256', $datos["usPass"]);
             }
-                $this->modificacion($datos);
-                $resp = true;
-                session_start();
-                $_SESSION['usnombre'] = $datos['usNombre'];
+            $this->modificacion($datos);
+            $resp = true;
+            session_start();
+            $_SESSION['usnombre'] = $datos['usNombre'];
         }
+        
 
        // Accion nuevo
         if ($datos['accion'] == 'nuevo') {
             $objUsuario = convert_array($this->buscar(['usnombre' => $datos['usNombre']]));
             if (!$objUsuario){ // Verifica si el usuario no existe, si existe no se registra
-                if ($this->alta($datos)) {
+                    $this->alta($datos);
                     $objUsuario = convert_array($this->buscar(['usnombre' => $datos['usNombre']]));
                     if (isset($objUsuario[0])) {
                         $resp=$this->agregarRoles($datos,$objUsuario); // Agregar roles al usuario
                     }
-                }
             }
         }
         // Accion Borrado logico
@@ -68,9 +70,8 @@ class AbmUsuarioLogin {
         foreach ($roles as $rol) {
             $param = [ 'idrol' => $rol, // Asignar el rol para usuarios 
                         'idusuario' => $objUsuario[0]["idUsuario"]];
-            if ($usuarioRol->alta($param)) {
-                $resp = true; // Establecer a true si se añade el rol
-                }
+            $usuarioRol->alta($param);
+            $resp = true; // Establecer a true si se añade el rol
             }
             return $resp;
         }

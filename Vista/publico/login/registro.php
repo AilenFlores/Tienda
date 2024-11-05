@@ -8,7 +8,7 @@
                 <a href="index.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
             </div>
             <div class="card-body">
-                <form action="accion.php" method="post" id="formUsuario" name="formUsuario" novalidate onsubmit="formRegistro()">
+                <form action="accion.php" method="post" id="formRegistro" name="formRegistro" novalidate >
                     <input id="accion" name="accion" value="nuevo" type="hidden">
 
                     <div class="mb-3">
@@ -38,7 +38,7 @@
                     <!-- Botones "Borrar" y "Enviar" juntos -->
                     <div class="d-flex justify-content-end gap-2 mt-4">
                         <button type="reset" class="btn btn-outline-danger">Borrar</button>
-                        <button type="submit" class="btn btn-primary" onclick="formSubmit()">Registrar</button>
+                        <button type="submit" class="btn btn-primary" >Registrar</button>
                     </div>
                 </form>
             </div>
@@ -46,17 +46,5 @@
     </div>
 </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-<script>
-function formRegistro(){
-    var password =  document.getElementById("usPass").value;
-    var passhash = CryptoJS.SHA256(password).toString();
-    document.getElementById("usPass").value = passhash;
-    setTimeout(function(){ 
-        document.getElementById("formUsuario").submit();
-
-	}, 500);
-}
-</script>
 
 <?php include (STRUCTURE_PATH."pie.php"); ?>

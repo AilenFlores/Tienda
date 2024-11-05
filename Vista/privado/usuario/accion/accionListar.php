@@ -1,6 +1,5 @@
 <?php 
 include_once "../../../../configuracion.php";
-session_start();
 $data = data_submitted();
 $objControl = new AbmUsuarioLogin();
 $list = convert_array($objControl->buscar(["idusuario"=>$_SESSION['idusuario']]));

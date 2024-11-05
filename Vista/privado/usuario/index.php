@@ -1,52 +1,60 @@
 <?php 
 include_once("../../Estructura/CabeceraSegura.php"); 
 ?>
-<title>Basic CRUD - Usuario</title>
-<h2 style="text-align: center; font-size: 24px; color: #333; margin-bottom: 20px; font-weight: bold;">Gestión - Usuario</h2>
-<div style="display: flex; justify-content: center; margin-bottom: 20px;">
-    <table id="dg" title="Administrador de Usuario" class="easyui-datagrid" style="width:800px;height:200px;"
-        url="accion/accionListar.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
-        <thead>
-            <tr>
-                <th field="idUsuario" width="50">ID </th>
-                <th field="usNombre" width="50">Nombre </th>
-                <th field="usMail" width="50">Mail </th>
-            </tr>
-        </thead>
-    </table>
-</div>
+<main class="flex-fill bg-light">
+    <div class="container my-4">
+        <div class="card shadow-sm" style="max-width: 420px; margin: auto;">
+            <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center"> 
+                <h6 class="mb-0 text-black"> Editar usuario</h6>
+                <a href="../index.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
+            </div>
 
-<div id="toolbar">
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editarUsuario()">Editar</a>
-</div>
+            <div class="card-body">
+                <form  method="post" id="formUsuario" name="formUsuario" novalidate>
+                    <div class="mb-3">
+                        <label for="idusuario" class="form-label"><strong>ID Usuario:</strong></label>
+                        <input type="text" class="form-control bg-light" id="idUsuario" name="idUsuario" readonly>
+                    </div>
+             
 
-<div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
-<form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
-    <h3>Información del Usuario</h3>
-    <input type="hidden" name="idUsuario" id="idUsuario">
-    
-    <div style="margin-bottom:10px">
-        <input name="usNombre" id="usNombre" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
+                    <div class="mb-3">
+                        <label for="usnombre" class="form-label text-secondary"><strong>Nombre:</strong></label>
+                        <input type="text" class="form-control" id="usNombre" name="usNombre" required>
+                        <div class="invalid-feedback">
+                            Ingrese un nombre válido.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="uspass" class="form-label text-secondary"><strong>Contraseña:</strong></label>
+                        <input type="password" class="form-control" id="usPass" name="usPass" required>
+                        <div class="invalid-feedback">
+                            Ingrese una contraseña válida. Debe tener al menos 8 caracteres.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="usmail" class="form-label text-secondary"><strong>Correo electrónico:</strong></label>
+                        <input type="email" class="form-control" id="usMail" name="usMail" required>
+                        <div class="invalid-feedback">
+                            Ingrese un correo electrónico válido.
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="reset" class="btn btn-outline-danger">Borrar</button>
+                        <button type="button" class="btn btn-primary" onclick="saveUsuario()">Aceptar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    
-    <div style="margin-bottom:10px">
-        <input name="usPass" id="usPass" class="easyui-textbox" label="Contraseña:" style="width:100%" type="password">
-    </div>
+</main>
 
-    <div style="margin-bottom:10px">
-        <input name="usMail" id="usMail" class="easyui-textbox" required="true" label="Mail:" style="width:100%" autocomplete="email">
-    </div>
-</form>
+<script>
+    $(document).ready(function() {
+        cargarDatosUsuario(); // Llama a la función para cargar los datos del usuario
+    });
+</script>
 
-</div>
-
-<div id="dlg-buttons">
-    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUsuario()" style="width:90px">Aceptar</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
-</div>
-
-
-
-
-
-<?php include (STRUCTURE_PATH."pie.php"); ?>
+<?php include(STRUCTURE_PATH . "pie.php"); ?>

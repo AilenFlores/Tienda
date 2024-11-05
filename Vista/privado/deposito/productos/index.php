@@ -13,6 +13,7 @@ include_once("../../../Estructura/CabeceraSegura.php");
                 <th field="prodetalle" width="80">Detalle</th>
                 <th field="procantstock" width="20">Stock</th>
                 <th field="proimporte" width="30">Importe</th>
+                <th field="proimg" width="30">URL imagen</th>
                 <th field="prodeshabilitado" width="50">Estado</th>
             </tr>
         </thead>
@@ -22,28 +23,35 @@ include_once("../../../Estructura/CabeceraSegura.php");
 <div id="toolbar">
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="nuevoProductos()">Nuevo</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editarProductos()">Editar</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="bajaProductos()">Baja</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="bajaProductos()">Habilitar/Deshabilitar</a>
 </div>
 
 <div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
-    <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
-        <h3>Información del Producto</h3>
-        <input type="hidden" name="idproducto" id="idproducto">
-        
-        <div style="margin-bottom:10px">
-            <input name="pronombre" id="pronombre" class="easyui-textbox" required="true" label="Nombre:" style="width:80%">
-        </div>
-        <div style="margin-bottom:10px">
-            <input name="prodetalle" id="prodetalle" class="easyui-textbox" required="true" label="Detalle:" style="width:100%">
-        </div>
-        <div style="margin-bottom:10px">
-            <input name="procantstock" id="procantstock" class="easyui-textbox" required="true" label="Stock:" style="width:50%">
-        </div>
-        <div style="margin-bottom:10px">
-            <input name="proimporte" id="proimporte" class="easyui-textbox" required="true" label="Importe:" style="width:50%">
-        </div>
-        
-    </form>
+<form id="fm" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 50px">
+    <h3>Información del Producto</h3>
+    <input type="hidden" name="idproducto" id="idproducto">
+    
+    <input type="hidden" name="proimg" id="proimg">
+    
+    <div style="margin-bottom:10px">
+        <input name="pronombre" id="pronombre" class="easyui-textbox" required="true" label="Nombre:" style="width:80%">
+    </div>
+    <div style="margin-bottom:10px">
+        <input name="prodetalle" id="prodetalle" class="easyui-textbox" required="true" label="Detalle:" style="width:100%">
+    </div>
+    <div style="margin-bottom:10px">
+        <input name="procantstock" id="procantstock" class="easyui-textbox" required="true" label="Stock:" style="width:50%">
+    </div>
+    <div style="margin-bottom:10px">
+        <input name="proimporte" id="proimporte" class="easyui-textbox" required="true" label="Importe:" style="width:50%">
+    </div>
+    <!-- Campo para cargar la foto -->
+    <div style="margin-bottom:10px">
+        <input type="file" name="proimg" id="proimg" accept="image/*" label="Foto:"  style="width:100%">
+    </div>
+
+</form>
+
 </div>
 
 <div id="dlg-buttons">
