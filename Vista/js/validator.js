@@ -32,7 +32,7 @@ $(document).ready(function() {
             
             if (isValid) {
                 // Hash de la contraseña antes de enviar
-                var passhash = CryptoJS.SHA256(password).toString();
+                var passhash = CryptoJS.SHA256(password).toString(CryptoJS.enc.Base64);
                 $('#uspass').val(passhash);
                 form.submit(); // Envía el formulario solo si es válido
             }
@@ -95,9 +95,8 @@ $(document).ready(function() {
             // Si todo es válido, enviar el formulario
             if (isValid) {
                 // Opcional: encriptar la contraseña antes de enviarla
-                var passhash = CryptoJS.SHA256(password).toString();
+                var passhash = CryptoJS.SHA256(password).toString(CryptoJS.enc.Base64);
                 $('#usPass').val(passhash);
-                
                 this.submit(); // Ahora que el formulario es válido, lo enviamos
             }
         });
@@ -108,3 +107,5 @@ $(document).ready(function() {
         $(this).removeClass('is-invalid');
     });
 });
+
+////////////////////////////MODIFICAR USUARIO/////////////////////////////////////

@@ -21,13 +21,10 @@ class AbmUsuarioLogin {
             $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
             // Verifica si la contraseña ingresada coincide con la almacenada
             if ($datos['usPass'] === $objUsuario[0]["usPass"]) {
-                // Si es la misma, no necesitas modificar la contraseña en la base de datos
-                unset($datos["usPass"]);
+                $datos["usPass"] = $objUsuario[0]["usPass"];
             } else {
-                $nuevaContra=trim($datos["usPass"]);
-                // Encripta la nueva contraseña antes de guardarla
-                $datos["usPass"] = hash('sha256', $nuevaContra);
-            } 
+                $datos["usPass"] = base64_encode(hash('sha256', $datos["usPass"], true));
+            }
             $this->modificacion($datos);
             $resp = true;
             session_start();
