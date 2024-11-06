@@ -7,6 +7,9 @@ function editarProductos(){
         $('#fm').form('load',row);
         url = 'accion/accionEditar.php';    
     }
+    else {
+        $.messager.alert('Advertencia', 'Seleccione un producto primero.', 'warning');
+    }
 }
 
 function nuevoProductos(){
@@ -60,7 +63,7 @@ function bajaProductos(){
                     }
                 });
             } else {
-                $.messager.alert('Advertencia', 'Seleccione un usuario primero.', 'warning');
+                $.messager.alert('Advertencia', 'Seleccione un producto primero.', 'warning');
             }
         }
 
@@ -72,6 +75,9 @@ function editarRol(){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Rol');
         $('#fm').form('load',row);
         url = 'accion/accionEditar.php';    
+    }
+    else {
+        $.messager.alert('Advertencia', 'Seleccione un rol primero.', 'warning');
     }
 }
 
@@ -126,7 +132,7 @@ function bajaRol(){
                     }
                 });
             } else {
-                $.messager.alert('Advertencia', 'Seleccione un usuario primero.', 'warning');
+                $.messager.alert('Advertencia', 'Seleccione un rol primero.', 'warning');
             }
         }
 
@@ -145,6 +151,9 @@ function editarUsuarios(){
             row.idRol.forEach(function(rolId) {
             $('#rol_' + rolId).prop('checked', true);});
         }
+    }
+    else {
+        $.messager.alert('Advertencia', 'Seleccione un usuario primero.', 'warning');
     }
 }
 
@@ -242,8 +251,8 @@ function saveMenu(){
                     msg: result.errorMsg
                 });
             } else {
-                $('#dlg').dialog('close');        // close the dialog
-                $('#dg').datagrid('reload');    // reload 
+                $('#dlg').dialog('close');     
+                $('#dg').datagrid('reload');  
             }
         }
     });
@@ -301,17 +310,15 @@ $(document).ready(function() {
 
 function cargarDatosUsuario() {
     $.ajax({
-        url: 'accion/accionListar.php', // Cambia esto a la ruta correcta
+        url: 'accion/accionListar.php',
         method: 'POST',
         dataType: 'json',
         success: function(data) {
-
             if (data && data.length > 0) {
                 $('#idUsuario').val(data[0].idUsuario);
                 $('#usNombre').val(data[0].usNombre);
                 $('#usPass').val(data[0].usPass);   
                 $('#usMail').val(data[0].usMail);
-                // No se debe establecer la contraseña aquí por razones de seguridad
             } else {
                 console.log("No se encontraron datos.");
             }

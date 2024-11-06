@@ -1,7 +1,7 @@
 <?php
 include_once "../../../../../configuracion.php";
 $data = data_submitted();
-$retorno = ['respuesta' => false]; // Inicializa la respuesta como false por defecto
+$retorno = ['respuesta' => false]; 
 
 if (isset($data['idRol'])) {
     $objC = new AbmRol();

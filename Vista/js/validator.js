@@ -4,7 +4,6 @@ $(document).ready(function() {
     if (form) {
         $('#usLogin').on('submit', function(event) {
             event.preventDefault(); // Evita el envío del formulario inicialmente
-            
             let isValid = true;
             // Validar el campo "usuario"
             let usuario = $('#usnombre').val().trim();
@@ -83,7 +82,7 @@ $(document).ready(function() {
 
             // Validar el correo electrónico
             var email = $("#usMail").val().trim();
-            var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/; // Expresión regular para validar correo
+            var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/; // Expresión regular para validar correo con @ y .com
             
             if (email === "" || !regexEmail.test(email)) {
                 $("#usMail").addClass('is-invalid');

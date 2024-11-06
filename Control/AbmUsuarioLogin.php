@@ -8,7 +8,7 @@ class AbmUsuarioLogin {
             if($datos['usPass'] === $objUsuario[0]["usPass"]){ // Verifica si la contraseña es la misma
                 $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
             } else {
-                $datos["usPass"] = hash('sha256', $datos["usPass"]); // Encripta la nueva contraseña
+                $datos["usPass"] = base64_encode(hash('sha256', $datos["usPass"], true)); // Encripta la nueva contraseña
             }
                 $this->modificacion($datos);
                 $resp = true;
@@ -28,7 +28,7 @@ class AbmUsuarioLogin {
             $this->modificacion($datos);
             $resp = true;
             session_start();
-            $_SESSION['usnombre'] = $datos['usNombre'];
+            $_SESSION['usnombre'] = $datos['usNombre']; // Actualizar nombre de usuario en la sesión
         }
         
 
@@ -43,13 +43,13 @@ class AbmUsuarioLogin {
                     }
             }
         }
-        // Accion Borrado logico
+        // Accion Deshabilitar 
         if($datos['accion']=='borrar'){
             if($this->baja($datos)){
                 $resp =true;
             }
         }
-
+        //Accion Habilitar
         if ($datos['accion'] == 'habilitar') {
             $this->habilitar($datos) ;
             $resp = true;
