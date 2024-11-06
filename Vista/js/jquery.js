@@ -277,10 +277,7 @@ function bajaMenu(){
         }
 
 ///Usuario
-
-
 function saveUsuario() {
-    //console.log('Enviando formulario:', $('#formUsuario').serialize());
     // Envío del formulario con AJAX
     $.ajax({
         url: "accion/accionEditar.php",
@@ -288,10 +285,19 @@ function saveUsuario() {
         data: $('#formUsuario').serialize(), // Serializa los datos del formulario
         success: function(result){
         var result = eval('('+result+')');
-        alert("Cambios Realizados");   
+        if (result){
+            alert("Cambios Realizados");  
+            location.reload(); // Recarga la página después de la actualización 
+        }
+
     }
     });
 }
+
+// Cargar los datos del usuario al cargar la página
+$(document).ready(function() {
+    cargarDatosUsuario(); // Llama a la función para cargar los datos del usuario al cargar la página
+});
 
 function cargarDatosUsuario() {
     $.ajax({
@@ -299,11 +305,13 @@ function cargarDatosUsuario() {
         method: 'POST',
         dataType: 'json',
         success: function(data) {
-            if (data.length > 0) {
+
+            if (data && data.length > 0) {
                 $('#idUsuario').val(data[0].idUsuario);
                 $('#usNombre').val(data[0].usNombre);
-                $('#usPass').val(data[0].usPass);
+                $('#usPass').val(data[0].usPass);   
                 $('#usMail').val(data[0].usMail);
+                // No se debe establecer la contraseña aquí por razones de seguridad
             } else {
                 console.log("No se encontraron datos.");
             }

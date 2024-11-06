@@ -10,12 +10,11 @@ include_once("../../Estructura/CabeceraSegura.php");
             </div>
 
             <div class="card-body">
-                <form  method="post" id="formUsuario" name="formUsuario" novalidate>
+                <form method="post" id="formUsuario" name="formUsuario" novalidate>
                     <div class="mb-3">
-                        <label for="idusuario" class="form-label"><strong>ID Usuario:</strong></label>
+                        <label for="idUsuario" class="form-label"><strong>ID Usuario:</strong></label>
                         <input type="text" class="form-control bg-light" id="idUsuario" name="idUsuario" readonly>
                     </div>
-             
 
                     <div class="mb-3">
                         <label for="usnombre" class="form-label text-secondary"><strong>Nombre:</strong></label>
@@ -50,11 +49,5 @@ include_once("../../Estructura/CabeceraSegura.php");
         </div>
     </div>
 </main>
-
-<script>
-    $(document).ready(function() {
-        cargarDatosUsuario(); // Llama a la función para cargar los datos del usuario
-    });
-</script>
 
 <?php include(STRUCTURE_PATH . "pie.php"); ?>

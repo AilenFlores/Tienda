@@ -10,6 +10,8 @@ if (!isset($datos)) {
 if (isset($datos['accion'])) {
     // Manejo de la acción de login
     if ($datos['accion'] === 'login') {
+        var_dump($datos);
+        exit;
         $session = new Session();
         $resp = $session->iniciar($datos["usnombre"], $datos["uspass"]);      
         if ($resp && $session->validar()) {

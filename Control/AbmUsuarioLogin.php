@@ -19,13 +19,15 @@ class AbmUsuarioLogin {
         
         if ($datos['accion'] == 'editarActual') {
             $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
-            // Verifica si la contraseña es la misma
+            // Verifica si la contraseña ingresada coincide con la almacenada
             if ($datos['usPass'] === $objUsuario[0]["usPass"]) {
-                unset($datos["usPass"]); // Elimina el campo de contraseña para evitar que se modifique
+                // Si es la misma, no necesitas modificar la contraseña en la base de datos
+                unset($datos["usPass"]);
             } else {
-                // Encripta la nueva contraseña
-                $datos["usPass"] = hash('sha256', $datos["usPass"]);
-            }
+                $nuevaContra=trim($datos["usPass"]);
+                // Encripta la nueva contraseña antes de guardarla
+                $datos["usPass"] = hash('sha256', $nuevaContra);
+            } 
             $this->modificacion($datos);
             $resp = true;
             session_start();
