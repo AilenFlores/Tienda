@@ -19,7 +19,7 @@ $datos = data_submitted();
 <div class="container-fluid text-center mb-5">
     <div class="mt-5">
         <div class="container">
-            <h1 class="display-4 fuente-monts">Pagina Segura Provisoria</h1>
+            <h1 class="display-4 fuente-monts">Pagina Segura</h1>
         </div>
     </div>
 </div>
