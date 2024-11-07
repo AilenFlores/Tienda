@@ -132,11 +132,11 @@ class AbmMenuRol {
         return $arreglo;
         
     }
+
     
     
-    public function menuesByIdRol($objRol) {
+    public function menuesByIdRol($rol) {
         $menues = []; // Lista de menús final a devolver
-        foreach ($objRol as $rol) {
             $param['idrol'] = $rol;
             // Buscar menús asociados al rol
             $objMenuObjRol = convert_array($this->buscar(['idrol' => $param['idrol']]));
@@ -156,7 +156,6 @@ class AbmMenuRol {
                     }
                 }
             }
-        }
         return $menues; // Retorna array con todos menús asociados al rol
     }
     

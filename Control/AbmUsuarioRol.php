@@ -21,6 +21,16 @@ class AbmUsuarioRol{
         }
         return $resp;
     }
+
+    
+    public function buscarRol($roles) {
+        $abmRol = new abmRol();  
+        foreach ($roles as $rol) {
+            $objRolArray[] = convert_array($abmRol->buscar(['idRol' => $rol]));
+        }
+        return $objRolArray;
+    }
+    
     
     /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
