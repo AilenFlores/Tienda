@@ -5,15 +5,11 @@ class AbmUsuarioLogin {
         $resp = false;
         if ($datos['accion'] == 'editar') {
             $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
-            if($datos['usPass'] === $objUsuario[0]["usPass"]){ // Verifica si la contraseña es la misma
-                $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
-            } else {
-                $datos["usPass"] = base64_encode(hash('sha256', $datos["usPass"], true)); // Encripta la nueva contraseña
-            }
-                $this->modificacion($datos);
-                $resp = true;
-                if (isset($datos['usRol'])) { // Verifica si se enviaron roles
-                $resp = $this->actualizarRoles($datos); // Actualizar roles del usuario
+            $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
+            $this->modificacion($datos);
+            $resp = true;
+             if (isset($datos['usRol'])) { // Verifica si se enviaron roles
+            $resp = $this->actualizarRoles($datos); // Actualizar roles del usuario
             } 
         }
         
@@ -27,7 +23,7 @@ class AbmUsuarioLogin {
         }
 
         if($datos['accion']=='editarPass'){
-            $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
+            $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuarioPass']]));
             $objUsuario[0]["usPass"] = $datos["passNew"]; // Encripta la nueva contraseña
             $this->modificacion($objUsuario[0]);
             $resp = true;

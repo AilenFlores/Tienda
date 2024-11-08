@@ -137,12 +137,63 @@ function bajaRol(){
         }
 
 //////////////// Usuarios
+    // Abre el diálogo de cambio de contraseña
+    function cambiarContraseña() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $('#dlgPass').dialog('open').dialog('setTitle', 'Cambiar Contraseña');
+            $('#fmPass').form('clear');
+            $('#idUsuarioPass').val(row.idUsuario);
+        } else {
+            $.messager.alert('Advertencia', 'Seleccione un usuario primero.', 'warning');
+        }
+    }
+
+    
+function savePassword() {
+    var pass = $('#passNew').val().trim();
+    if (pass === '' || pass.length < 8) {
+        alert('Por favor, ingrese una contraseña valida.');
+        return; // Sale de la función si la contraseña está vacía
+    }
+
+    var encryptedPassword = CryptoJS.SHA256(pass).toString();
+    var formData = $('#fmPass').serializeArray(); 
+    formData = formData.map(function(field) {
+        if (field.name === 'passNew') {
+            field.value = encryptedPassword;  // Reemplazamos el valor de passNew con el cifrado
+        }
+        return field;
+    });
+
+    // Realiza la solicitud AJAX para enviar los datos
+    $.ajax({
+        url: "accion/accionPass.php",
+        method: "POST",
+        data: $.param(formData), // Enviamos los datos serializados (ahora con la contraseña cifrada)
+        success: function(result) {
+            var result = eval('(' + result + ')');
+            if (result) {
+                // Cierra el cuadro de diálogo
+                $('#dlgPass').dialog('close');
+                // Recarga la tabla de datos
+                $('#dg').datagrid('reload');
+                alert("Cambios Realizados");
+            }
+        }
+    });
+}
+
 
 function editarUsuarios(){
     var row = $('#dg').datagrid('getSelected');   
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
         $('#fm').form('load',row);
+
+         // Ocultar el campo de la contraseña
+         $('#fm').find('input[name="usPass"]').closest('div').hide();
+         
         url = 'accion/accionEditar.php';
          // Limpiar la selección previa de checkboxes
         $('input[name="usRol[]"]').prop('checked', false); // Desmarcar todos los checkboxes
@@ -160,6 +211,9 @@ function editarUsuarios(){
 function nuevoUsuarios(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Agregar Nuevo Usuario');
     $('#fm').form('clear');
+    // Mostrar el campo de la contraseña
+    $('#fm').find('input[name="usPass"]').closest('div').show();
+
     url = 'accion/accionAlta.php';}
 
 function saveUsuarios(){

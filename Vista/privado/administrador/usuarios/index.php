@@ -22,6 +22,7 @@ include_once("../../../Estructura/CabeceraSegura.php");
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="nuevoUsuarios()">Nuevo</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editarUsuarios()">Editar</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="bajaUsuarios()">Habilitar/Deshabilitar</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-lock" plain="true" onclick="cambiarContraseña()">Cambiar Contraseña</a>
 </div>
 
 <div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
@@ -54,9 +55,28 @@ include_once("../../../Estructura/CabeceraSegura.php");
     </form>
 </div>
 
+<div id="dlgPass" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-pass-buttons'">
+<form id="fmPass" method="post" novalidate style="margin:0;padding:20px 50px">
+
+    <input type="hidden" name="idUsuarioPass" id="idUsuarioPass">
+
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <label for="passNew" style="width: 150px; margin-right: 10px;">Nueva Contraseña:</label>
+        <input name="passNew" id="passNew" class="easyui-textbox" required="true" style="flex-grow: 1; width: auto;" type="password">
+    </div>
+</form>
+</div>
+
+
+<div id="dlg-pass-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="savePassword()" style="width:90px">Aceptar</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlgPass').dialog('close')" style="width:90px">Cancelar</a>
+</div>
+
 <div id="dlg-buttons">
     <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUsuarios()" style="width:90px">Aceptar</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
 </div>
+
 
  <?php include(STRUCTURE_PATH . "pie.php"); ?>
