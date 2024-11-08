@@ -19,16 +19,18 @@ class AbmUsuarioLogin {
         
         if ($datos['accion'] == 'editarActual') {
             $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
-            // Verifica si la contraseña ingresada coincide con la almacenada
-            if ($datos['usPass'] === $objUsuario[0]["usPass"]) {
-                $datos["usPass"] = $objUsuario[0]["usPass"];
-            } else {
-                $datos["usPass"] = base64_encode(hash('sha256', $datos["usPass"], true));
-            }
+            $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
             $this->modificacion($datos);
             $resp = true;
             session_start();
             $_SESSION['usnombre'] = $datos['usNombre']; // Actualizar nombre de usuario en la sesión
+        }
+
+        if($datos['accion']=='editarPass'){
+            $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
+            $objUsuario[0]["usPass"] = $datos["passNew"]; // Encripta la nueva contraseña
+            $this->modificacion($objUsuario[0]);
+            $resp = true;
         }
         
 

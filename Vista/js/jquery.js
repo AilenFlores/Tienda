@@ -285,24 +285,35 @@ function bajaMenu(){
             }
         }
 
-///Usuario
-function saveUsuario() {
-    // Envío del formulario con AJAX
-    $.ajax({
-        url: "accion/accionEditar.php",
-        method: "POST",
-        data: $('#formUsuario').serialize(), // Serializa los datos del formulario
-        success: function(result){
-        var result = eval('('+result+')');
-        if (result){
-            alert("Cambios Realizados");  
-            location.reload(); // Recarga la página después de la actualización 
-        }
 
+
+
+$(document).ready(function() {
+    if ($('#formUsuario').length) {
+        cargarDatosUsuario(); // Llamar a la función cargarDatosUsuario() cuando el formulario esté presente
     }
+});
+
+function cargarDatosUsuario() {
+    $.ajax({
+        url: 'accion/accionListar.php',
+        method: 'POST',
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);  // Verifica la respuesta
+            if (data) {
+                $('#idUsuario').val(data[0].idUsuario);
+                $('#usNombre').val(data[0].usNombre);
+                $('#usMail').val(data[0].usMail);
+            } else {
+                console.log("Datos incompletos o nulos.");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log("Error en la petición AJAX: " + error);
+        }
     });
 }
-
 
 
 
