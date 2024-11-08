@@ -1,9 +1,12 @@
+
 ////////////////////////////LOGIN/////////////////////////////////////
 $(document).ready(function() {
     var form = document.getElementById("usLogin");
+    
     if (form) {
         $('#usLogin').on('submit', function(event) {
             event.preventDefault(); // Evita el envío del formulario inicialmente
+            
             let isValid = true;
             // Validar el campo "usuario"
             let usuario = $('#usnombre').val().trim();
@@ -16,9 +19,8 @@ $(document).ready(function() {
             
             // Validar el campo "password"
             let password = $('#uspass').val().trim();
-            var regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // Expresión regular para validar que contenga al menos una letra y un número
             
-            if (password === '' || !regex.test(password)) {
+            if (password === '' ) {
                 $('#uspass').addClass('is-invalid');
                 isValid = false;
             } else {
@@ -33,7 +35,9 @@ $(document).ready(function() {
                 // Hash de la contraseña antes de enviar
                 var passhash = CryptoJS.SHA256(password).toString(CryptoJS.enc.Base64);
                 $('#uspass').val(passhash);
-                form.submit(); // Envía el formulario solo si es válido
+
+                // Llamar a la función AJAX de envío
+                enviarLogin();
             }
         });
     }
@@ -43,6 +47,39 @@ $(document).ready(function() {
         $(this).removeClass('is-invalid');
     });
 });
+
+// Función de envío AJAX
+function enviarLogin() {
+    $.ajax({
+        url: 'accion/accionAlta.php',
+        type: 'POST',
+        data: $('#usLogin').serialize(),
+        success: function(result) {
+            try {
+                var resultJson = JSON.parse(result.trim()); // Intenta parsear el JSON de la respuesta
+                if (resultJson.respuesta) {
+                    // Si la respuesta es exitosa (login correcto)
+                    window.location.href = "../../privado/index.php"; // Redirige al usuario a la página privada
+                } else {
+                    // Si la respuesta es falsa (login incorrecto)
+                    $.messager.show({
+                        title: 'Error',
+                        msg: resultJson.msg  // Muestra el mensaje de error
+                    });
+                     // Limpiar el campo de contraseña
+                     $('#uspass').val('');
+                }
+            } catch (e) {
+                $.messager.show({
+                    title: 'Error',
+                    msg: 'Respuesta del servidor no válida. Por favor, revisa la URL o el servidor.'
+                });
+            }
+        },
+    });
+}
+
+
 
 ////////////////////////////REGISTRO/////////////////////////////////////
 $(document).ready(function() {

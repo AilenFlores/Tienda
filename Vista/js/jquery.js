@@ -1,5 +1,5 @@
 // Productos
-var url;
+
 function editarProductos(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
@@ -68,7 +68,7 @@ function bajaProductos(){
         }
 
 /////////////////////////// Roles
-var url;
+
 function editarRol(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
@@ -137,7 +137,7 @@ function bajaRol(){
         }
 
 //////////////// Usuarios
-var url;
+
 function editarUsuarios(){
     var row = $('#dg').datagrid('getSelected');   
     if (row){
@@ -213,7 +213,7 @@ function saveUsuarios(){
                         }
                     }
 //////Menu
-var url;
+
 function editarMenu(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
@@ -303,30 +303,8 @@ function saveUsuario() {
     });
 }
 
-// Cargar los datos del usuario al cargar la página
-$(document).ready(function() {
-    cargarDatosUsuario(); // Llama a la función para cargar los datos del usuario al cargar la página
-});
 
-function cargarDatosUsuario() {
-    $.ajax({
-        url: 'accion/accionListar.php',
-        method: 'POST',
-        dataType: 'json',
-        success: function(data) {
-            if (data && data.length > 0) {
-                $('#idUsuario').val(data[0].idUsuario);
-                $('#usNombre').val(data[0].usNombre);
-                $('#usPass').val(data[0].usPass);   
-                $('#usMail').val(data[0].usMail);
-            } else {
-                console.log("No se encontraron datos.");
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error al obtener los datos del usuario:', textStatus, errorThrown);
-        }
-    });
-}
+
+
 
 

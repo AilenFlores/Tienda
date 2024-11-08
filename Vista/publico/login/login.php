@@ -1,29 +1,15 @@
 <?php 
 include_once("../../Estructura/Cabecera.php"); 
-$datos = data_submitted();
 ?>
 <main class="flex-fill bg-light">
-<!--  Mensajes -->
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <?php 
-        if (isset($datos) && isset($datos['msg']) && $datos['msg'] != null) {
-            $alertType = 'info';
-            echo "<div class='alert alert-$alertType text-center' role='alert'>";
-            echo htmlspecialchars($datos['msg']);
-            echo "</div>";
-        }
-        ?>
-    </div>
-</div>
 <!--  Formulario de login -->
     <div class="container my-4">
         <div class="card mx-auto" style="max-width: 400px;">
             <div class="card-body">
                 <h5 class="card-title text-center">Login</h5>
                 <br>
-                <form method="post" action="accion.php" id="usLogin" name="usLogin" novalidate>
-                    <input id="accion" name="accion" value="login" type="hidden">
+                <form method="post" id="usLogin" name="usLogin" novalidate>
+
                     <!-- Fila para usuario -->
                     <div class="form-group">
                         <div class="input-group mb-3">
@@ -60,13 +46,13 @@ $datos = data_submitted();
                     <!-- Fila para Botones -->
                     <div class="row">
                         <div class="col-sm-8 offset-sm-2">
-                            <button type="submit" class="btn btn-success w-100">Enviar</button>
+                            <button type="submit" class="btn btn-success w-100" onsubmit="return enviarLogin()">Enviar</button>
                         </div>
                     </div>
                     <!-- Fila para enlace de registro -->
                      <div class="row mt-3">
                         <div class="col text-center">
-                            <p>¿No tienes una cuenta? <a href="registro.php?accion=nuevo">Regístrate aquí</a></p>
+                            <p>¿No tienes una cuenta? <a href="registro.php?">Regístrate aquí</a></p>
                         </div>
                     </div>
                 </form>
@@ -74,5 +60,6 @@ $datos = data_submitted();
         </div>
     </div>
 </main>
+
 
 <?php include(STRUCTURE_PATH . "pie.php"); ?>

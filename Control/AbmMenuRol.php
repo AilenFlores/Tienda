@@ -134,9 +134,9 @@ class AbmMenuRol {
     }
 
     
-    
     public function menuesByIdRol($rol) {
         $menues = []; // Lista de menús final a devolver
+        foreach ($rol as $rol) {
             $param['idrol'] = $rol;
             // Buscar menús asociados al rol
             $objMenuObjRol = convert_array($this->buscar(['idrol' => $param['idrol']]));
@@ -145,7 +145,6 @@ class AbmMenuRol {
                 foreach ($objMenuObjRol as $objMenuRol) {
                     $objMenu = new AbmMenu();
                     $menu = convert_array($objMenu->buscar(['idmenu' => $objMenuRol['objmenu']]));
-                    // Asegúrate de que $menu no esté vacío antes de recorrer
                     if (!empty($menu)) {
                         foreach ($menu as $itemMenu) {
                             // Verificar si se encontró el menú y si su nombre no está ya en el array de menús
@@ -156,8 +155,10 @@ class AbmMenuRol {
                     }
                 }
             }
+        }
         return $menues; // Retorna array con todos menús asociados al rol
     }
+    
     
     
 
