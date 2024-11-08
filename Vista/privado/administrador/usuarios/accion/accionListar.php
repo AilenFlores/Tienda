@@ -4,7 +4,6 @@ $data = data_submitted();
 $objControl = new AbmUsuarioLogin();
 $objUsuarioRol = new AbmUsuarioRol();
 $objRol = new AbmRol(); // Instanciar solo una vez
-
 $list = convert_array($objControl->buscar($data));
 
 foreach ($list as $key => $personaObj) {
@@ -19,9 +18,8 @@ foreach ($list as $key => $personaObj) {
     }
 }
 
+
 echo json_encode($list);
-
-
 ?>
 
 

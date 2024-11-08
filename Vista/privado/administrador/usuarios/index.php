@@ -42,7 +42,7 @@ include_once("../../../Estructura/CabeceraSegura.php");
         <input type="hidden" name="usDeshabilitado" id="usDeshabilitado">
 
         <div style="margin-bottom:10px">
-            <h4>Roles:</h4>
+            <h6>Asignar Roles:</h6>
             <div style="display: flex; flex-wrap: wrap; gap: 15px;"> 
                 <?php foreach ($roles as $rol): ?>
                     <div style="display: flex; align-items: center;">

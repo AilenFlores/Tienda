@@ -190,10 +190,8 @@ function editarUsuarios(){
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
         $('#fm').form('load',row);
-
          // Ocultar el campo de la contraseña
          $('#fm').find('input[name="usPass"]').closest('div').hide();
-         
         url = 'accion/accionEditar.php';
          // Limpiar la selección previa de checkboxes
         $('input[name="usRol[]"]').prop('checked', false); // Desmarcar todos los checkboxes
@@ -217,12 +215,6 @@ function nuevoUsuarios(){
     url = 'accion/accionAlta.php';}
 
 function saveUsuarios(){
-    let passwordField = $('#usPass'); 
-    let password = passwordField.val();
-    if (password) {
-        password = CryptoJS.MD5(password).toString();
-        passwordField.val(password);
-    }
     $('#fm').form('submit',{
     url: url,
     onSubmit: function(){
