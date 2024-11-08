@@ -53,6 +53,9 @@ include_once("../../Estructura/CabeceraSegura.php");
                             <div class="mb-3">
                                 <label for="passNew" class="form-label"><strong>Cambiar Contraseña:</strong></label>
                                 <input type="password" class="form-control bg-light" id="passNew" name="passNew">
+                                <div class="invalid-feedback">
+                                    Ingrese una contraseña de 8 caracteres.
+                                </div>
                             </div>
 
                             <div class="d-flex justify-content-end gap-2 mt-4">
