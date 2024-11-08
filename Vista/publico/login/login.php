@@ -1,6 +1,7 @@
 <?php 
 include_once("../../Estructura/Cabecera.php"); 
 ?>
+
 <main class="flex-fill bg-light">
 <!--  Formulario de login -->
     <div class="container my-4">
@@ -46,7 +47,7 @@ include_once("../../Estructura/Cabecera.php");
                     <!-- Fila para Botones -->
                     <div class="row">
                         <div class="col-sm-8 offset-sm-2">
-                            <button type="submit" class="btn btn-success w-100" onsubmit="return enviarLogin()">Enviar</button>
+                            <button type="submit" class="btn btn-success w-100">Enviar</button>
                         </div>
                     </div>
                     <!-- Fila para enlace de registro -->

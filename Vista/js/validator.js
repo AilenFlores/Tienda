@@ -133,7 +133,8 @@ $(document).ready(function() {
                 // Opcional: encriptar la contraseña antes de enviarla
                 var passhash = CryptoJS.SHA256(password).toString(CryptoJS.enc.Base64);
                 $('#usPass').val(passhash);
-                this.submit(); // Ahora que el formulario es válido, lo enviamos
+                // Llamar a la función AJAX de envío
+                EnviarRegistro();
             }
         });
     }
@@ -143,5 +144,39 @@ $(document).ready(function() {
         $(this).removeClass('is-invalid');
     });
 });
+
+
+// Función de envío AJAX
+function EnviarRegistro() {
+    $.ajax({
+        url: 'accion/accionRegistro.php',
+        type: 'POST',
+        data: $('#formRegistro').serialize(),
+        success: function(result) {
+            try {
+                var resultJson = JSON.parse(result.trim()); // Intenta parsear el JSON de la respuesta
+                if (resultJson.respuesta) {
+                    // Si la respuesta es exitosa (login correcto)
+                    alert("Usuario registrado correctamente");
+                    window.location.href = "../../publico/login/login.php"; // Redirige al usuario a la página privada
+                } else {
+                    // Si la respuesta es falsa (login incorrecto)
+                    $.messager.show({
+                        title: 'Error',
+                        msg: resultJson.msg  // Muestra el mensaje de error
+                    });
+                     // Limpiar el campo de contraseña
+                     $('#uspass').val('');
+                }
+            } catch (e) {
+                $.messager.show({
+                    title: 'Error',
+                    msg: 'Respuesta del servidor no válida. Por favor, revisa la URL o el servidor.'
+                });
+            }
+        },
+    });
+}
+
 
 ////////////////////////////MODIFICAR USUARIO/////////////////////////////////////
