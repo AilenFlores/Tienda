@@ -153,24 +153,25 @@ function bajaRol(){
 function savePassword() {
     var pass = $('#passNew').val().trim();
     if (pass === '' || pass.length < 8) {
-        alert('Por favor, ingrese una contraseña valida.');
-        return; // Sale de la función si la contraseña está vacía
+        $.messager.show({
+            title: 'Error',
+            msg: 'Por favor, ingrese una contraseña válida (mínimo 8 caracteres).',
+            showType: 'show'
+        });
+        return false; 
     }
-
     var encryptedPassword = CryptoJS.SHA256(pass).toString();
     var formData = $('#fmPass').serializeArray(); 
     formData = formData.map(function(field) {
         if (field.name === 'passNew') {
-            field.value = encryptedPassword;  // Reemplazamos el valor de passNew con el cifrado
+            field.value = encryptedPassword;  
         }
         return field;
     });
-
-    // Realiza la solicitud AJAX para enviar los datos
     $.ajax({
         url: "accion/accionPass.php",
         method: "POST",
-        data: $.param(formData), // Enviamos los datos serializados (ahora con la contraseña cifrada)
+        data: $.param(formData), 
         success: function(result) {
             var result = eval('(' + result + ')');
             if (result) {
@@ -217,13 +218,40 @@ function nuevoUsuarios(){
 
 
     function saveUsuarios() {
+        var nombre = $('#usNombre').val().trim();
+        if (nombre === '') {
+            $.messager.show({
+                title: 'Error',
+                msg: 'Por favor, ingrese un nombre.',
+                showType: 'show'
+            });
+            return false; // Prevenir el envío del formulario si el nombre está vacío
+        }
+    
+        var mail = $('#usMail').val().trim();
+        if (mail === '' || !mail.includes('@')) {
+            $.messager.show({
+                title: 'Error',
+                msg: 'Por favor, ingrese un correo electrónico válido.',
+                showType: 'show'
+            });
+            return false; // Prevenir el envío del formulario si el correo electrónico no es válido
+        }
+    
         var pass = $('#usPass').val().trim();
         if (pass === '' || pass.length < 8) {
-            alert('Por favor, ingrese una contraseña válida.');
+            $.messager.show({
+                title: 'Error',
+                msg: 'Por favor, ingrese una contraseña válida (mínimo 8 caracteres).',
+                showType: 'show'
+            });
             return false; // Prevenir el envío del formulario si la contraseña no es válida
         }
+
+        // Encriptación de la contraseña
         var encryptedPassword = CryptoJS.SHA256(pass).toString();
         var formData = $('#fm').serializeArray();
+        
         // Reemplazar la contraseña plana con la cifrada
         formData = formData.map(function(field) {
             if (field.name === 'usPass') {
@@ -232,29 +260,41 @@ function nuevoUsuarios(){
             return field;
         });
         
+        // Enviar los datos con AJAX
         $.ajax({
             url: url, 
             type: 'POST',
             data: formData, 
             success: function(result) {
                 var result = JSON.parse(result);
-                alert("Acción correcta");
-                if (!result.respuesta) {
+                if (result.respuesta) {
                     $.messager.show({
-                        title: 'Error',
-                        msg: result.errorMsg
+                        title: 'Éxito',
+                        msg: 'Los datos se han guardado correctamente.',
+                        showType: 'show'
                     });
-                } else {
                     $('#dlg').dialog('close'); // Cerrar el diálogo
                     $('#dg').datagrid('reload'); // Recargar la datagrid
+                } else {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg,
+                        showType: 'show'
+                    });
                 }
             },
             error: function(xhr, status, error) {
-                alert('Hubo un error al enviar los datos: ' + error);
+                $.messager.show({
+                    title: 'Error',
+                    msg: 'Hubo un error al enviar los datos: ' + error,
+                    showType: 'show'
+                });
             }
         });
+        
         return false; // Prevenir el envío del formulario de manera tradicional
     }
+    
     
 
            
