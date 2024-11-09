@@ -27,7 +27,6 @@ ob_start(); //
                     <?php 
                     $session = new Session();
                     if ($session->validar()) { // Verificar si la sesión está iniciada
-                        $roles = $session->getRol(); // Obtener roles de la sesión
                         ?>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo BASE_URL; ?>/Vista/privado/usuario/tienda.php">Tienda</a>
@@ -36,23 +35,16 @@ ob_start(); //
                         <div class="dropdown">
                             <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <?= "Usuario: " . $_SESSION["usnombre"] ?>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                    <?php 
-                                    $objMenuRol = new AbmMenuRol();
-                                    $menues = $objMenuRol->menuesByIdRol($roles); 
-                                    foreach ($menues as $objMenu) {
-                                        if ($objMenu["medeshabilitado"] == NULL) {
-                                            echo '<li class="nav-item"><a href="' . BASE_URL . "/vista/" . $objMenu["medescripcion"] . '" class="dropdown-item">' . $objMenu["menombre"] . '</a></li>';
-                                        }
-                                    }  
-                         ?>
-                    
+                            </button>
 
-                        <li><hr class="dropdown-divider"></li>
+                               <!-- EMPIEZO A TRABAJAR CON ESTO -->
+                            <ul class="dropdown-menu" id="menuDinamico" aria-labelledby="userDropdown">
+                                 <div id="menuItems">    <!-- Aquí se cargarán los elementos del menú dinámico --> </div>
+                                 <li><hr class="dropdown-divider"></li>
+                                 <li><a class="dropdown-item" href="/Tienda/Vista/privado/sesion/logout.php">Cerrar Sesión</a></li>
+                            </ul>
 
-                        <li><a class="dropdown-item" href="/Tienda/Vista/privado/sesion/logout.php">Cerrar Sesión</a></li>
-                    </ul>
+                       <!-- EMPIEZO A TRABAJAR CON ESTO -->
                 </div>
                 <?php } else { // Si la sesión no está iniciada ?>
                 <a class="nav-link dropdown-toggle text-black" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,3 +62,40 @@ ob_start(); //
 </nav>
 <!-- Divider Line -->
 <hr class="my-0 border-secondary">
+
+<script>
+ $(document).ready(function() {
+    $.ajax({
+        url: '<?= BASE_URL ?>/vista/estructura/accion/accionListarMenu.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Limpiar el menú antes de agregar nuevos elementos
+            $('#menuItems').empty();
+
+            // Verificar si se recibió algún dato
+            if (data && data.length > 0) {
+                let menuHtml = '';
+                // Crear los elementos del menú
+                data.forEach(function(item) {
+                    // Esto depende de los datos que devuelves desde el backend
+                    if (!$('#menuItems').find('a[href="'+item.url+'"]').length) {
+                        menuHtml += '<li><a href="' + item.url + '" class="dropdown-item">' + item.nombre + '</a></li>';
+                    }
+                });
+                // Insertar los elementos generados en el contenedor del menú
+                $('#menuItems').html(menuHtml);
+            } else {
+                console.error("No se encontraron menús.");
+                $('#menuItems').html('<li class="dropdown-item">No hay menús disponibles</li>');
+            }
+        },
+        error: function(xhr, status, error) {
+            // Manejo de errores más detallado
+            console.error("Error al cargar el menú dinámico: " + error);
+            $('#menuItems').html('<li class="dropdown-item">Error al cargar el menú</li>');
+        }
+    });
+});
+
+</script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-11-2024 a las 01:41:01
+-- Tiempo de generación: 09-11-2024 a las 17:41:58
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -125,11 +125,10 @@ CREATE TABLE `menurol` (
 INSERT INTO `menurol` (`idmenu`, `idrol`) VALUES
 (1, 1),
 (1, 2),
-(1, 3),
 (2, 2),
 (3, 2),
 (4, 2),
-(5, 3);
+(5, 2);
 
 -- --------------------------------------------------------
 
@@ -138,25 +137,14 @@ INSERT INTO `menurol` (`idmenu`, `idrol`) VALUES
 --
 
 CREATE TABLE `producto` (
-  `idproducto` bigint(20) NOT NULL AUTO_INCREMENT,  -- Clave primaria y auto-incremental
+  `idproducto` bigint(20) NOT NULL,
   `pronombre` varchar(20) NOT NULL,
   `prodetalle` varchar(512) NOT NULL,
   `procantstock` int(11) NOT NULL,
   `proimporte` int(5) NOT NULL,
   `proimg` varchar(100) NOT NULL,
-  `prodeshabilitado` timestamp NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`idproducto`)  -- Definición de la clave primaria
+  `prodeshabilitado` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Volcado de datos para la tabla `producto`
---
-
-INSERT INTO `producto` (`idproducto`, `pronombre`, `prodetalle`, `proimporte`, `prodeshabilitado`, `procantstock`) VALUES
-(1, 'Casco de Seguridad', '...', 15000, NULL, 62),
-(2, 'Mameluco', '...', 20000, NULL, 13),
-(3, 'Botas de Seguridad', '...', 25000, NULL, 28),
-(4, 'Camisa', '...', 30000, NULL, 6);
 
 -- --------------------------------------------------------
 
@@ -175,8 +163,7 @@ CREATE TABLE `rol` (
 
 INSERT INTO `rol` (`idrol`, `rodescripcion`) VALUES
 (1, 'cliente'),
-(2, 'administrador'),
-(3, 'deposito');
+(2, 'administrador');
 
 -- --------------------------------------------------------
 
@@ -197,9 +184,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idusuario`, `usnombre`, `uspass`, `usmail`, `usdeshabilitado`) VALUES
-(1, 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin@mail.com', NULL),
-(2, 'usuario', '9250e222c4c71f0c58d4c54b50a880a312e9f9fed55d5c3aa0b0e860ded99165', 'usuario@mail.com', NULL),
-(3, 'deposito', 'a489c5d82afb5c94924ec6e04a107deaf02e6ef9b6dc12fbb8294f44f3bfa437', 'deposito@mail.com', NULL);
+(1, 'admin', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'admin@mail.com', NULL),
+(2, 'usuario', 'dfa7a2273567dcd1efffb9a46308e91c20fa13c44c3441bc69cd6a7869b3f7fd', 'usuario@mail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -218,9 +204,7 @@ CREATE TABLE `usuariorol` (
 
 INSERT INTO `usuariorol` (`idusuario`, `idrol`) VALUES
 (1, 2),
-(2, 1),
-(2, 2),
-(3, 3);
+(2, 1);
 
 --
 -- Índices para tablas volcadas
@@ -339,13 +323,13 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `rol`
 --
 ALTER TABLE `rol`
-  MODIFY `idrol` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idrol` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idusuario` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idusuario` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas

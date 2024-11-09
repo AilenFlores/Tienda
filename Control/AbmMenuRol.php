@@ -136,28 +136,34 @@ class AbmMenuRol {
     
     public function menuesByIdRol($rol) {
         $menues = []; // Lista de menús final a devolver
-        foreach ($rol as $rol) {
-            $param['idrol'] = $rol;
-            // Buscar menús asociados al rol
-            $objMenuObjRol = convert_array($this->buscar(['idrol' => $param['idrol']]));
-            // Verifica si los resultados no son nulos y recorre el resultado
-            if (!empty($objMenuObjRol)) {
-                foreach ($objMenuObjRol as $objMenuRol) {
-                    $objMenu = new AbmMenu();
-                    $menu = convert_array($objMenu->buscar(['idmenu' => $objMenuRol['objmenu']]));
-                    if (!empty($menu)) {
-                        foreach ($menu as $itemMenu) {
-                            // Verificar si se encontró el menú y si su nombre no está ya en el array de menús
-                            if (!in_array($itemMenu["menombre"], array_column($menues, 'menombre'))) {
-                                $menues[] = $itemMenu; // Agregar solo el menú que no está incluido
-                            }
+        $param['idrol'] = $rol;
+    
+        // Buscar menús asociados al rol
+        $objMenuObjRol = convert_array($this->buscar(['idrol' => $param['idrol']]));
+    
+        // Verifica si los resultados no son nulos y recorre el resultado
+        if (!empty($objMenuObjRol)) {
+            foreach ($objMenuObjRol as $objMenuRol) {
+                $objMenu = new AbmMenu();
+                $menu = convert_array($objMenu->buscar(['idmenu' => $objMenuRol['objmenu']]));
+    
+                if (!empty($menu)) {
+                    foreach ($menu as $itemMenu) {
+                        // Verificar si el menú no está ya en el array de menús por su ID
+                        if (!in_array($itemMenu["idmenu"], array_column($menues, 'idmenu'))) {
+                            $menues[] = $itemMenu; // Agregar solo el menú que no está incluido
                         }
                     }
                 }
             }
         }
-        return $menues; // Retorna array con todos menús asociados al rol
+    
+        return $menues; // Retorna array con todos los menús asociados al rol
     }
+    
+    
+    
+    
     
     
     
