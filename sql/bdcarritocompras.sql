@@ -105,7 +105,10 @@ INSERT INTO `menu` (`idmenu`, `menombre`, `medescripcion`, `idpadre`, `medeshabi
 (2, 'Gestionar Usuarios', 'privado/administrador/usuarios/index.php', NULL, NULL),
 (3, 'Gestionar Menus', 'privado/administrador/menu/index.php\r\n', NULL, NULL),
 (4, 'Gestionar Roles', 'privado/administrador/rol/index.php\r\n', NULL, NULL),
-(5, 'Gestionar Productos', 'privado/deposito/productos/index.php\r\n', NULL, NULL);
+(5, 'Gestionar Productos', 'privado/deposito/productos/index.php\r\n', NULL, NULL),
+(6, 'Tienda', 'privado/usuario/tienda.php\r\n', NULL, NULL),
+(7, 'Carrito', 'privado/usuario/carrito.php\r\n', NULL, NULL),
+(8, 'Mis compras', 'privado/usuario/misCompras.php\r\n', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -128,7 +131,11 @@ INSERT INTO `menurol` (`idmenu`, `idrol`) VALUES
 (2, 2),
 (3, 2),
 (4, 2),
-(5, 2);
+(5, 2),
+(6, 1),
+(7, 1),
+(8, 1);
+
 
 -- --------------------------------------------------------
 
