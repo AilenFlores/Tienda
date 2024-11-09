@@ -214,27 +214,49 @@ function nuevoUsuarios(){
 
     url = 'accion/accionAlta.php';}
 
-function saveUsuarios(){
-    $('#fm').form('submit',{
-    url: url,
-    onSubmit: function(){
-        return $(this).form('validate');
-        },
-        success: function(result){
-            var result = eval('('+result+')');
-            alert("Accion Correcta");   
-            if (!result.respuesta){
-                $.messager.show({
-                title: 'Error',
-                msg: result.errorMsg
-            });
-        } else {
-                $('#dlg').dialog('close');        // close the dialog
-                $('#dg').datagrid('reload');    // reload 
+
+
+    function saveUsuarios() {
+        var pass = $('#usPass').val().trim();
+        if (pass === '' || pass.length < 8) {
+            alert('Por favor, ingrese una contraseña válida.');
+            return false; // Prevenir el envío del formulario si la contraseña no es válida
+        }
+        var encryptedPassword = CryptoJS.SHA256(pass).toString();
+        var formData = $('#fm').serializeArray();
+        // Reemplazar la contraseña plana con la cifrada
+        formData = formData.map(function(field) {
+            if (field.name === 'usPass') {
+                field.value = encryptedPassword;
+            }
+            return field;
+        });
+        
+        $.ajax({
+            url: url, 
+            type: 'POST',
+            data: formData, 
+            success: function(result) {
+                var result = JSON.parse(result);
+                alert("Acción correcta");
+                if (!result.respuesta) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close'); // Cerrar el diálogo
+                    $('#dg').datagrid('reload'); // Recargar la datagrid
                 }
+            },
+            error: function(xhr, status, error) {
+                alert('Hubo un error al enviar los datos: ' + error);
             }
         });
+        return false; // Prevenir el envío del formulario de manera tradicional
     }
+    
+
            
  function bajaUsuarios(){
     var row = $('#dg').datagrid('getSelected');

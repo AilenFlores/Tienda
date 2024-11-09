@@ -4,6 +4,7 @@ $data = data_submitted();
 $respuesta = false;
 if (isset($data['usNombre'])){
         $objC = new AbmUsuarioLogin();
+        var_dump($data);
         $data["accion"]="nuevo";
         $respuesta = $objC->abm($data);
         if (!$respuesta){
