@@ -148,6 +148,16 @@ CREATE TABLE `producto` (
   PRIMARY KEY (`idproducto`)  -- Definición de la clave primaria
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`idproducto`, `pronombre`, `prodetalle`, `proimporte`, `prodeshabilitado`, `procantstock`) VALUES
+(1, 'Casco de Seguridad', '...', 15000, NULL, 62),
+(2, 'Mameluco', '...', 20000, NULL, 13),
+(3, 'Botas de Seguridad', '...', 25000, NULL, 28),
+(4, 'Camisa', '...', 30000, NULL, 6);
+
 -- --------------------------------------------------------
 
 --
