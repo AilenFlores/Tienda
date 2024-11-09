@@ -29,8 +29,6 @@ if(!$resp) {
     $mensaje ="Error, inicie sesion y vuelva a intentarlo";
    echo "<script>location.href = '".BASE_URL."/vista/publico/login/login.php?msg=".$mensaje."';</script>";
 }
-$objRol = new AbmRol();
-$roles = convert_array($objRol->buscar([]));
 ?>
 </header>
 

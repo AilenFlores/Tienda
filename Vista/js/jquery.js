@@ -1,4 +1,4 @@
-// Productos
+//////////////////////////////////////////////////////////////////////////////////////// Productos
 
 function editarProductos(){
     var row = $('#dg').datagrid('getSelected');
@@ -67,7 +67,7 @@ function bajaProductos(){
             }
         }
 
-/////////////////////////// Roles
+///////////////////////////////////////////////////////////////////////////////////////////// Roles
 
 function editarRol(){
     var row = $('#dg').datagrid('getSelected');
@@ -136,7 +136,7 @@ function bajaRol(){
             }
         }
 
-//////////////// Usuarios
+////////////////////////////////////////////////////////////////////////////////////////////// Usuarios Admin
     // Abre el diálogo de cambio de contraseña
     function cambiarContraseña() {
         var row = $('#dg').datagrid('getSelected');
@@ -185,25 +185,68 @@ function savePassword() {
     });
 }
 
+function cargarRolesUsuarios(callback) {
+    $.ajax({
+        url: 'accion/accionRolesExist.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(roles) {
+            // Llenar los roles en el formulario
+            var rolesContainer = $('div[style="display: flex; flex-wrap: wrap; gap: 15px;"]');
+            rolesContainer.empty();  // Limpiar los roles previos
 
-function editarUsuarios(){
-    var row = $('#dg').datagrid('getSelected');   
-    if (row){
-        $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
-        $('#fm').form('load',row);
-         // Ocultar el campo de la contraseña
-         $('#fm').find('input[name="usPass"]').closest('div').hide();
-        url = 'accion/accionEditar.php';
-         // Limpiar la selección previa de checkboxes
-        $('input[name="usRol[]"]').prop('checked', false); // Desmarcar todos los checkboxes
-            if (row.idRol && Array.isArray(row.idRol)) {
-           // Iterar sobre cada rol y marcar el checkbox correspondiente
-            row.idRol.forEach(function(rolId) {
-            $('#rol_' + rolId).prop('checked', true);});
+            // Iterar sobre los roles y agregarlos al formulario
+            roles.forEach(function(rol) {
+                var checkbox = $('<div>', {style: 'display: flex; align-items: center;'});
+                var input = $('<input>', {
+                    type: 'checkbox',
+                    name: 'usRol[]',
+                    id: 'rol_' + rol.idRol,
+                    value: rol.idRol,
+                    style: 'margin-right: 5px;'
+                });
+                var label = $('<label>', {
+                    for: 'rol_' + rol.idRol,
+                    text: rol.roDescripcion
+                });
+
+                checkbox.append(input).append(label);
+                rolesContainer.append(checkbox);
+            });
+
+            // Llamamos al callback una vez que los roles estén cargados
+            if (callback) callback(roles);
+        },
+        error: function() {
+            alert('Error al cargar los roles');
         }
+    });
+}
+
+// Función para marcar los roles seleccionados en el formulario
+function marcarRolesSeleccionados(row) {
+    if (row && row.idRol && Array.isArray(row.idRol)) {
+        // Limpiar la selección previa de checkboxes
+        $('input[name="usRol[]"]').prop('checked', false); // Desmarcar todos los checkboxes
+
+        // Iterar sobre cada rol y marcar el checkbox correspondiente
+        row.idRol.forEach(function(rolId) {
+            $('#rol_' + rolId).prop('checked', true);
+        });
     }
-    else {
-        $.messager.alert('Advertencia', 'Seleccione un usuario primero.', 'warning');
+}
+
+function editarUsuarios() {
+    var row = $('#dg').datagrid('getSelected');
+    if (row) {
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Editar Menu');
+        $('#fm').form('load', row);
+        url = 'accion/accionEditar.php'; 
+        
+        // Cargar los roles y luego marcar los seleccionados
+        cargarRolesUsuarios(function(roles) {
+            marcarRolesSeleccionados(row); // Marcar los roles seleccionados después de cargar los roles
+        });
     }
 }
 
@@ -212,8 +255,8 @@ function nuevoUsuarios(){
     $('#fm').form('clear');
     // Mostrar el campo de la contraseña
     $('#fm').find('input[name="usPass"]').closest('div').show();
-
-    url = 'accion/accionAlta.php';}
+    url = 'accion/accionAlta.php';
+    cargarRolesUsuarios(); }
 
 
 
@@ -320,29 +363,83 @@ function nuevoUsuarios(){
                             $.messager.alert('Advertencia', 'Seleccione un usuario primero.', 'warning');
                         }
                     }
-//////Menu
+////////////////////////////////////////////////////////////////////////////////Menu
 
-function editarMenu(){
-    var row = $('#dg').datagrid('getSelected');
-    if (row){
-        $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Menu');
-        $('#fm').form('load',row);
-        url = 'accion/accionEditar.php'; 
-         // Limpiar la selección previa de checkboxes
-         $('input[name="meRol[]"]').prop('checked', false); // Desmarcar todos los checkboxes
-         if (row.idRol && Array.isArray(row.idRol)) {
-            // Iterar sobre cada rol y marcar el checkbox correspondiente
-            row.idRol.forEach(function(rolId) {
-                $('#rol_' + rolId).prop('checked', true);});
-            }   
+function cargarRolesMenu(callback) {
+    $.ajax({
+        url: 'accion/accionRolesExist.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(roles) {
+            // Llenar los roles en el formulario
+            var rolesContainer = $('div[style="display: flex; flex-wrap: wrap; gap: 15px;"]');
+            rolesContainer.empty();  // Limpiar los roles previos
+
+            // Iterar sobre los roles y agregarlos al formulario
+            roles.forEach(function(rol) {
+                var checkbox = $('<div>', {style: 'display: flex; align-items: center;'});
+                var input = $('<input>', {
+                    type: 'checkbox',
+                    name: 'meRol[]',
+                    id: 'rol_' + rol.idRol,
+                    value: rol.idRol,
+                    style: 'margin-right: 5px;'
+                });
+                var label = $('<label>', {
+                    for: 'rol_' + rol.idRol,
+                    text: rol.roDescripcion
+                });
+
+                checkbox.append(input).append(label);
+                rolesContainer.append(checkbox);
+            });
+
+            // Llamamos al callback una vez que los roles estén cargados
+            if (callback) callback(roles);
+        },
+        error: function() {
+            alert('Error al cargar los roles');
+        }
+    });
+}
+
+// Función para marcar los roles seleccionados en el formulario
+function marcarRolesSeleccionados(row) {
+    if (row && row.idRol && Array.isArray(row.idRol)) {
+        // Limpiar la selección previa de checkboxes
+        $('input[name="meRol[]"]').prop('checked', false); // Desmarcar todos los checkboxes
+
+        // Iterar sobre cada rol y marcar el checkbox correspondiente
+        row.idRol.forEach(function(rolId) {
+            $('#rol_' + rolId).prop('checked', true);
+        });
     }
 }
 
-function nuevoMenu(){
-    $('#dlg').dialog('open').dialog('center').dialog('setTitle','Agregar Nuevo Menu');
-    $('#fm').form('clear');
-    url = 'accion/accionAlta.php';
+function editarMenu() {
+    var row = $('#dg').datagrid('getSelected');
+    if (row) {
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Editar Menu');
+        $('#fm').form('load', row);
+        url = 'accion/accionEditar.php'; 
+        
+        // Cargar los roles y luego marcar los seleccionados
+        cargarRolesMenu(function(roles) {
+            marcarRolesSeleccionados(row); // Marcar los roles seleccionados después de cargar los roles
+        });
+    }
 }
+
+function nuevoMenu() {
+    // Abrir el diálogo para nuevo menú
+    $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Nuevo Menu');
+    $('#fm').form('clear');
+    url = 'accion/accionAlta.php'; 
+
+    // Cargar los roles sin marcar ninguno (para nuevo menú)
+    cargarRolesMenu();
+}
+
 
 function saveMenu(){
     $('#fm').form('submit',{
@@ -394,7 +491,7 @@ function bajaMenu(){
         }
 
 
-
+//////////////////////////////////////Editar Usuario Perfil
 
 $(document).ready(function() {
     if ($('#formUsuario').length) {

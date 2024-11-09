@@ -44,12 +44,10 @@ include_once("../../../Estructura/CabeceraSegura.php");
         <div style="margin-bottom:10px">
             <h6>Asignar Roles:</h6>
             <div style="display: flex; flex-wrap: wrap; gap: 15px;"> 
-                <?php foreach ($roles as $rol): ?>
                     <div style="display: flex; align-items: center;">
                         <input type="checkbox" name="usRol[]" id="rol_<?php echo $rol['idRol']; ?>" value="<?php echo $rol['idRol']; ?>" style="margin-right: 5px;">
                         <label for="rol_<?php echo $rol['idRol']; ?>"><?php echo $rol['roDescripcion']; ?></label>
                     </div>
-                <?php endforeach; ?>
             </div>
         </div>
     </form>
@@ -79,4 +77,7 @@ include_once("../../../Estructura/CabeceraSegura.php");
 </div>
 
 
+
  <?php include(STRUCTURE_PATH . "pie.php"); ?>
+
+

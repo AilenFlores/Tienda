@@ -18,10 +18,7 @@ foreach ($list as $key => $personaObj) {
     }
 }
 
-
 echo json_encode($list);
-
-
 ?>
 
 
