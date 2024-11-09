@@ -50,7 +50,7 @@
 
         public function cargar() {
             $respuesta = false;
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             $sql = "SELECT * FROM compraestadotipo WHERE idcompraestadotipo = " . $this->getIdcompraestadotipo();
             if ($base -> Iniciar()) {
                 $res = $base -> Ejecutar($sql);
@@ -69,7 +69,7 @@
 
         public function insertar() {
             $respuesta = false;
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             $sql = "INSERT INTO compraestadotipo (idcompraestadotipo, cetdescripcion, cetdetalle) 
             VALUES (" . $this -> getIdcompraestadotipo() .
                 ",'" . $this -> getCetdescripcion() . 
@@ -89,7 +89,7 @@
 
         public function modificar() {
             $respuesta = false;
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             $sql = "UPDATE compraestadotipo 
             SET cetdescripcion = '" . $this -> getCetdescripcion() . 
             "', cetdetalle = '" . $this -> getCetdetalle() .
@@ -108,7 +108,7 @@
 
         public function eliminar() {
             $respuesta = false;
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             $sql = "DELETE FROM compraestadotipo WHERE idcompraestadotipo = " . $this -> getIdcompraestadotipo();
             if ($base -> Iniciar()){
                 if ($base -> Ejecutar($sql)){
@@ -124,7 +124,7 @@
 
         public function listar($parametro = "") {
             $arreglo = array();
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             $sql = "SELECT * FROM compraestadotipo ";
             if ($parametro != ""){
                 $sql .= "WHERE " . $parametro;

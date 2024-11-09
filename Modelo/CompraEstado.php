@@ -70,7 +70,7 @@
 
         public function cargar() {
             $respuesta = false;
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             $sql = "SELECT * FROM compraestado WHERE idcompraestado = " . $this->getIdcompraestado();
             if ($base -> Iniciar()) {
                 $res = $base -> Ejecutar($sql);
@@ -95,7 +95,7 @@
 
         public function insertar() {
             $respuesta = false;
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             if ($this -> getCefechaini() == null) {
                 $ceFechaIni = " NULL, ";
             } else {
@@ -125,7 +125,7 @@
 
         public function modificar() {
             $respuesta = false;
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             if ($this -> getCefechaini() == null) {
                 $ceFechaIni = " cefechaini = NULL";
             } else {
@@ -155,7 +155,7 @@
 
         public function eliminar() {
             $respuesta = false;
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             $sql = "DELETE FROM compraestado WHERE idcompraestado = " . $this -> getIdcompraestado();
             if ($base -> Iniciar()){
                 if ($base -> Ejecutar($sql)){
@@ -171,7 +171,7 @@
 
         public function listar($parametro = "") {
             $arreglo = array();
-            $base = new BaseDatos();
+            $base = new bdcarritocompras();
             $sql = "SELECT * FROM compraestado ";
             if ($parametro != ""){
                 $sql .= "WHERE " . $parametro;
