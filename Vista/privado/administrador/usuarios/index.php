@@ -42,20 +42,16 @@ include_once("../../../Estructura/CabeceraSegura.php");
         <input type="hidden" name="usDeshabilitado" id="usDeshabilitado">
 
         <div style="margin-bottom:10px">
-    <h6>Asignar Roles:</h6>
-    <div style="display: flex; flex-wrap: wrap; gap: 15px;"> 
-        <?php foreach ($rolesExist as $rol): ?>
-            <div style="display: flex; align-items: center;">
-                <!-- Comprobamos si el rol está asignado al usuario -->
-                <input type="checkbox" name="usRol[]" id="rol_<?php echo $rol['idRol']; ?>" value="<?php echo $rol['idRol']; ?>"
-                       <?php echo (in_array($rol['idRol'], array_column($rolesAsignados, 'idRol'))) ? 'checked' : ''; ?> 
-                       style="margin-right: 5px;">
-                <label for="rol_<?php echo $rol['idRol']; ?>"><?php echo $rol['roDescripcion']; ?></label>
+            <h6>Asignar Roles:</h6>
+            <div style="display: flex; flex-wrap: wrap; gap: 15px;"> 
+                <?php foreach ($roles as $rol): ?>
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" name="usRol[]" id="rol_<?php echo $rol['idRol']; ?>" value="<?php echo $rol['idRol']; ?>" style="margin-right: 5px;">
+                        <label for="rol_<?php echo $rol['idRol']; ?>"><?php echo $rol['roDescripcion']; ?></label>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
-    </div>
-</div>
-
+        </div>
     </form>
 </div>
 
