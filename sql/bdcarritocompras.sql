@@ -105,7 +105,10 @@ INSERT INTO `menu` (`idmenu`, `menombre`, `medescripcion`, `idpadre`, `medeshabi
 (2, 'Gestionar Usuarios', 'privado/administrador/usuarios/index.php', NULL, NULL),
 (3, 'Gestionar Menus', 'privado/administrador/menu/index.php\r\n', NULL, NULL),
 (4, 'Gestionar Roles', 'privado/administrador/rol/index.php\r\n', NULL, NULL),
-(5, 'Gestionar Productos', 'privado/deposito/productos/index.php\r\n', NULL, NULL);
+(5, 'Gestionar Productos', 'privado/deposito/productos/index.php\r\n', NULL, NULL),
+(6, 'Tienda', 'privado/usuario/tienda.php\r\n', NULL, NULL),
+(7, 'Carrito', 'privado/usuario/carrito.php\r\n', NULL, NULL),
+(8, 'Mis compras', 'privado/usuario/misCompras.php\r\n', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -128,7 +131,11 @@ INSERT INTO `menurol` (`idmenu`, `idrol`) VALUES
 (2, 2),
 (3, 2),
 (4, 2),
-(5, 2);
+(5, 2),
+(6, 1),
+(7, 1),
+(8, 1);
+
 
 -- --------------------------------------------------------
 
@@ -146,7 +153,19 @@ CREATE TABLE `producto` (
   `prodeshabilitado` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`idproducto`, `pronombre`, `prodetalle`, `proimporte`, `prodeshabilitado`, `procantstock`) VALUES
+(1, 'Casco de Seguridad', '...', 15000, NULL, 62),
+(2, 'Mameluco', '...', 20000, NULL, 13),
+(3, 'Botas de Seguridad', '...', 25000, NULL, 28),
+(4, 'Camisa', '...', 30000, NULL, 6);
+
 -- --------------------------------------------------------
+
+--
 
 --
 -- Estructura de tabla para la tabla `rol`
