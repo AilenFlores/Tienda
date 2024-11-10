@@ -5,9 +5,8 @@ class abmRol{
        public function abm($datos){
         $resp = false;
         if($datos['accion']=='editar'){
-            if($this->modificacion($datos)){
-                $resp = true;
-            }
+            $this->modificacion($datos);
+            $resp = true;
         }
         if($datos['accion']=='borrar'){ //falta ver si ese rol tiene asociados menus o usuarios, no se puede borrar
             if($this->baja($datos)){

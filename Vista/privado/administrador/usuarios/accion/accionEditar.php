@@ -5,7 +5,7 @@ $data = data_submitted();
 $respuesta = false;
 $data["accion"]="editar";
 if (isset($data['idUsuario'])){
-    $data["idUsuario"] = intval($data["idUsuario"]); // Convertir a número entero
+    $data["idUsuario"] = intval($data["idUsuario"]); 
     $objC = new AbmUsuarioLogin();
     $respuesta = $objC->abm($data);
     if (!$respuesta){

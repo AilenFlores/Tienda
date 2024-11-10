@@ -1,16 +1,14 @@
 <?php
 class AbmMenu{
-    //Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
 
     public function abm($datos) {
         $resp = false;
         if ($datos['accion'] == 'editar') {
             $this->modificacion($datos);
-                if (isset($datos['meRol'])) { // Verifica si se enviaron roles
-                    $resp= $this->actualizarRoles($datos);
-                    } else {
-                        $resp = false;
-                    }
+                if (isset($datos['meRol'])) { 
+                     $this->actualizarRoles($datos);
+                     $resp = true;
+                    } 
                 }
             
         if ($datos['accion'] == 'borrar') {
@@ -20,9 +18,9 @@ class AbmMenu{
         }
         if ($datos['accion'] == 'nuevo') {
             $ultimoId= $this->alta($datos);
-            $objMenu = convert_array($this->buscar(['idmenu' => $ultimoId])); // Obtener el objeto recién creado
+            $objMenu = convert_array($this->buscar(['idmenu' => $ultimoId])); 
                 if (isset($objMenu)) { 
-                    $resp = $this->agregarRoles($datos, $objMenu); // Agregar roles
+                    $resp = $this->agregarRoles($datos, $objMenu); 
                 }
         
         }
@@ -55,7 +53,7 @@ class AbmMenu{
             $roles = $datos["meRol"] ?? [];
             $rolActual = convert_array($menuRol->buscar(['idmenu' => $datos['idmenu']]));
             // Extraer solo los IDs de los roles actuales
-            $rolActualIds = array_column($rolActual, 'objrol'); // Cambia 'objrol' si es necesario
+            $rolActualIds = array_column($rolActual, 'objrol'); 
             // Eliminar roles que ya no están seleccionados en `$roles`
             foreach ($rolActualIds as $rolActualId) {
                 if (!in_array($rolActualId, $roles)) {
