@@ -1,139 +1,146 @@
 <?php
 class AbmMenuRol {
-    //Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
+    // Este método principal ejecuta una acción de alta, baja o modificación dependiendo del valor de 'accion' en $datos.
     
     public function abm($datos) {
         $resp = false;
         if ($datos['accion'] == 'editar') {
+            // Llama a la función de modificación si la acción es 'editar'.
             if ($this->modificacion($datos)) {
                 $resp = true;
-                } else {$resp = false;}
-
+            } else {
+                $resp = false;
+            }
         }
         if ($datos['accion'] == 'borrar') {
+            // Llama a la función de baja si la acción es 'borrar'.
             if ($this->baja($datos)) {
                 $resp = true;
             }
         }
         if ($datos['accion'] == 'nuevo') {
+            // Llama a la función de alta si la acción es 'nuevo'.
             if ($this->alta($datos)) {
-                $resp=true;
+                $resp = true;
             }
         }
         return $resp;
     }
+
     /**
-     * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
-     * @param array $param
-     * @return object
+     * Crea un objeto menuRol y lo carga con los valores de $param si contiene las claves necesarias.
+     * @param array $param Arreglo asociativo con los datos para crear el objeto.
+     * @return object|null Devuelve el objeto menuRol o null si no se carga correctamente.
      */
-    
-     private function cargarObjeto($param){
+    private function cargarObjeto($param){
         $obj = null;
-        if( array_key_exists('idmenu',$param) and array_key_exists('idrol',$param)){
+        if (array_key_exists('idmenu', $param) && array_key_exists('idrol', $param)) {
             $obj = new menuRol();
             $obj->setear($param['idmenu'], $param['idrol']);
         }
         return $obj;
     }
+
     /**
-     * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto que son claves
-     * @param array $param
-     * @return object
+     * Crea un objeto menuRol utilizando las claves primarias en $param.
+     * @param array $param Arreglo con las claves necesarias para el objeto menuRol.
+     * @return object|null Devuelve el objeto menuRol o null si no se carga correctamente.
      */
     private function cargarObjetoConClave($param){
         $obj = null;
-        if( isset($param['idmenu']) and isset($param['idrol']) ){
+        if (isset($param['idmenu']) && isset($param['idrol'])) {
             $obj = new menuRol();
             $obj->setear($param['idmenu'], $param['idrol']);
         }
         return $obj;
     }
     
-    
     /**
-     * Corrobora que dentro del arreglo asociativo estan seteados los campos claves
-     * @param array $param
-     * @return boolean
+     * Verifica que los campos clave ('idmenu' y 'idrol') están presentes en $param.
+     * @param array $param Arreglo a verificar.
+     * @return boolean Devuelve true si los campos clave están presentes, false en caso contrario.
      */
-    
     private function seteadosCamposClaves($param){
         $resp = false;
-        if (isset($param['idmenu']) && isset($param['idrol']));
-        $resp = true;
-        return $resp;
-    }
-    
-    /**
-     *
-     * @param array $param
-     */
-    public function alta($param){
-        $resp = false;
-        $objMenuRol = $this->cargarObjeto($param);  
-        if ($objMenuRol!=null and $objMenuRol->insertar()){
+        if (isset($param['idmenu']) && isset($param['idrol'])) {
             $resp = true;
         }
         return $resp;
     }
-    
+
     /**
-     * permite eliminar un objeto
-     * @param array $param
-     * @return boolean
+     * Inserta un nuevo registro de menuRol en la base de datos.
+     * @param array $param Datos necesarios para crear el registro.
+     * @return boolean Devuelve true si la inserción fue exitosa, false en caso contrario.
      */
-    
+    public function alta($param){
+        $resp = false;
+        $objMenuRol = $this->cargarObjeto($param);
+        if ($objMenuRol != null && $objMenuRol->insertar()) {
+            $resp = true;
+        }
+        return $resp;
+    }
+
+    /**
+     * Elimina un registro de menuRol en la base de datos.
+     * @param array $param Datos necesarios para identificar el registro a eliminar.
+     * @return boolean Devuelve true si la eliminación fue exitosa, false en caso contrario.
+     */
     public function baja($param){
         $resp = false;
-        if ($this->seteadosCamposClaves($param)){
+        if ($this->seteadosCamposClaves($param)) {
             $objMenuRol = $this->cargarObjeto($param);
-            if ($objMenuRol !=null and $objMenuRol->eliminar()){
+            if ($objMenuRol != null && $objMenuRol->eliminar()) {
                 $resp = true;
             }
         }
         return $resp;
     }
-    
+
     /**
-     * permite modificar un objeto
-     * @param array $param
-     * @return boolean
+     * Modifica un registro de menuRol en la base de datos.
+     * @param array $param Datos necesarios para identificar y modificar el registro.
+     * @return boolean Devuelve true si la modificación fue exitosa, false en caso contrario.
      */
     public function modificacion($param){
         $resp = false;
-        if ($this->seteadosCamposClaves($param)){
+        if ($this->seteadosCamposClaves($param)) {
             $objMenuRol = $this->cargarObjeto($param);
-            if($objMenuRol !=null and $objMenuRol->modificar($param)){
+            if ($objMenuRol != null && $objMenuRol->modificar($param)) {
                 $resp = true;
             }
         }
         return $resp;
     }
-    
-    
+
     /**
-     * permite buscar un objeto
-     * @param array $param
-     * @return boolean
+     * Busca y devuelve registros de menuRol que cumplan con las condiciones en $param.
+     * @param array $param Arreglo de condiciones para la búsqueda.
+     * @return array Arreglo de resultados de menuRol.
      */
-    
     public function buscar($param){
-       // verEstructura($param);
         $where = " true ";
-        if ($param<>NULL){
-            if  (isset($param['idmenu']))
-                $where.=" and menu.idmenu='".$param['idmenu']."'";
-                if  (isset($param['idrol']))
-                    $where.=" and menurol.idrol ='".$param['idrol']."'";
-                    if  (isset($param['idpadre']))
-                        $where.=" and idpadre ='".$param['idpadre']."'";
+        if ($param != NULL) {
+            if (isset($param['idmenu'])) {
+                $where .= " and menu.idmenu='" . $param['idmenu'] . "'";
+            }
+            if (isset($param['idrol'])) {
+                $where .= " and menurol.idrol ='" . $param['idrol'] . "'";
+            }
+            if (isset($param['idpadre'])) {
+                $where .= " and idpadre ='" . $param['idpadre'] . "'";
+            }
         }
         $arreglo = MenuRol::listar($where);
         return $arreglo;
-        
     }
 
-    
+    /**
+     * Obtiene una lista de menús asociados a un rol específico.
+     * @param int $rol ID del rol para el que se buscan los menús.
+     * @return array Lista de menús asociados al rol.
+     */
     public function menuesByIdRol($rol) {
         $menues = []; // Lista de menús final a devolver
         $param['idrol'] = $rol;
@@ -160,13 +167,5 @@ class AbmMenuRol {
     
         return $menues; // Retorna array con todos los menús asociados al rol
     }
-    
-    
-    
-    
-    
-    
-    
-
 }
 ?>

@@ -104,7 +104,7 @@ class AbmMenu{
   /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
      * @param array $param
-     * @return Tabla
+     * @return Objeto
      */
     private function cargarObjeto($param){
         $obj = null;
@@ -125,11 +125,10 @@ class AbmMenu{
     /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto que son claves
      * @param array $param
-     * @return Tabla
+     * @return Objeto
      */
     private function cargarObjetoConClave($param){
         $obj = null;
-        
         if( isset($param['idmenu']) ){
             $obj = new Menu();
             $obj->setIdmenu($param['idmenu']);
@@ -152,15 +151,15 @@ class AbmMenu{
     }
     
     /**
-     * 
+     * Permite cargar un objeto
      * @param array $param
+     * @return boolean
      */
     public function alta($param){
         $resp = false;
         $param['idmenu'] =null;
         $param['medeshabilitado'] = null;
         $elObjtTabla = $this->cargarObjeto($param);
-//        verEstructura($elObjtTabla);
         if ($elObjtTabla!=null ){
             $resp = $elObjtTabla->insertar();
         }
@@ -174,14 +173,12 @@ class AbmMenu{
      */
     public function baja($param){
         $resp = false;
-      
         if ($this->seteadosCamposClaves($param)){
             $elObjtTabla = $this->cargarObjetoConClave($param);
             if ($elObjtTabla!=null and $elObjtTabla->eliminar()){
                 $resp = true;
             }
         }
-        
         return $resp;
     }
     
@@ -217,10 +214,6 @@ class AbmMenu{
         }
         $arreglo = Menu::listar($where);  
         return $arreglo;
-            
-            
-      
-        
     }
    
 }

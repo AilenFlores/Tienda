@@ -249,10 +249,9 @@ $(document).ready(function() {
     if (form) {
         $('#formPass').on('submit', function(event) {
             event.preventDefault(); // Evita el envío del formulario inicialmente
-            
             let isValid = true;
             
-            // Validar el campo "usuario"
+            // Validar el campo "pass"
             let pass = $('#passNew').val().trim();
             if (pass === '' || pass.length < 8) {
                 $('#passNew').addClass('is-invalid');
@@ -273,7 +272,7 @@ $(document).ready(function() {
     }
     
     // Limpiar validación al escribir en los campos
-    $('#usNombre, #usMail').on('input', function() {
+    $('#passNew').on('input', function() {
         $(this).removeClass('is-invalid');
     });
 });
