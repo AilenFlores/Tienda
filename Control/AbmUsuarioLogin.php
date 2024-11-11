@@ -8,6 +8,7 @@ class AbmUsuarioLogin {
      */
     public function abm($datos){
         $resp = false;
+        /* Edita el usuario desde el ABM de administrador */
         if ($datos['accion'] == 'editar') {
             $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
             $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
