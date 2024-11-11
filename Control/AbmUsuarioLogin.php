@@ -19,6 +19,7 @@ class AbmUsuarioLogin {
             } 
         }
         
+        /* Edita el usuario desde el perfil del usuario */
         if ($datos['accion'] == 'editarActual') {
         $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
         $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
@@ -29,7 +30,7 @@ class AbmUsuarioLogin {
         $_SESSION['usnombre'] = $datos['usNombre']; // Actualizar nombre de usuario en la sesión
          return $resp; }
         
-
+        /* Edita el contraseña ya sea desde el usuario o desde el abm de administrador */
         if($datos['accion']=='editarPass'){
             if(isset($datos["idUsuarioPass"])){
                 $idUsuario=$datos["idUsuarioPass"];
@@ -43,6 +44,7 @@ class AbmUsuarioLogin {
             $resp = true;
         }
 
+        /* Registra un nuevo usuario verificando que no existe un usuario con el mismo nombre */
         if ($datos['accion'] == 'nuevo') {
             $objUsuario = convert_array($this->buscar(['usnombre' => $datos['usNombre']]));
             if (!$objUsuario) { // Verifica si el usuario no existe, si existe no se registra
@@ -53,13 +55,14 @@ class AbmUsuarioLogin {
                 }
             }
         }
-        
+        /* Cambia el estado de habilitado a deshabilitado */    
         if($datos['accion']=='borrar'){
             if($this->baja($datos)){
                 $resp = true;
             }
         }
 
+        /* Cambia el estado de deshabilitado a habilitado */
         if ($datos['accion'] == 'habilitar') {
             $this->habilitar($datos);
             $resp = true;
