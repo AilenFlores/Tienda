@@ -3,11 +3,16 @@ include_once("../../Estructura/Cabecera.php");
 ?>
 
 <main class="flex-fill bg-light">
+
+<div id="alerta-error" class="alert alert-danger d-none text-center" role="alert">
+  <!-- se mostrará el mensaje de error -->
+</div>
+
 <!--  Formulario de login -->
     <div class="container my-4">
         <div class="card mx-auto" style="max-width: 400px;">
             <div class="card-body">
-                <h5 class="card-title text-center">Login</h5>
+                <h5 class="card-title text-center">INICIO SESION</h5>
                 <br>
                 <form method="post" id="usLogin" name="usLogin" novalidate>
 
@@ -61,6 +66,5 @@ include_once("../../Estructura/Cabecera.php");
         </div>
     </div>
 </main>
-
 
 <?php include(STRUCTURE_PATH . "pie.php"); ?>

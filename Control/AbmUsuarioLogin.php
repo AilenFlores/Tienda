@@ -19,14 +19,15 @@ class AbmUsuarioLogin {
         }
         
         if ($datos['accion'] == 'editarActual') {
-            $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
-            $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
-            $this->modificacion($datos);
-            $resp = true;
-            // Actualizar nombre de usuario en la sesión
-            session_start();
-            $_SESSION['usnombre'] = $datos['usNombre']; // Actualizar nombre de usuario en la sesión
-        }
+        $objUsuario = convert_array($this->buscar(['idusuario' => $datos['idUsuario']]));
+        $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
+        $this->modificacion($datos);  // Realiza la modificación
+        $resp = true;
+        // Actualizar nombre de usuario en la sesión
+        session_start();
+        $_SESSION['usnombre'] = $datos['usNombre']; // Actualizar nombre de usuario en la sesión
+         return $resp; }
+        
 
         if($datos['accion']=='editarPass'){
             if(isset($datos["idUsuarioPass"])){

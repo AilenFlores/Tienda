@@ -6,7 +6,6 @@ $(document).ready(function() {
     if (form) {
         $('#usLogin').on('submit', function(event) {
             event.preventDefault(); // Evita el envío del formulario inicialmente
-            
             let isValid = true;
             // Validar el campo "usuario"
             let usuario = $('#usnombre').val().trim();
@@ -16,10 +15,8 @@ $(document).ready(function() {
             } else {
                 $('#usnombre').removeClass('is-invalid');
             }
-            
             // Validar el campo "password"
             let password = $('#uspass').val().trim();
-            
             if (password === '' ) {
                 $('#uspass').addClass('is-invalid');
                 isValid = false;
@@ -30,7 +27,6 @@ $(document).ready(function() {
                     isValid = false;
                 }
             }
-            
             if (isValid) {
                 // Hash de la contraseña antes de enviar
                 var passhash = CryptoJS.SHA256(password).toString();
@@ -41,8 +37,7 @@ $(document).ready(function() {
             }
         });
     }
-    
-    // Limpiar validación al escribir en los campos
+
     $('#usnombre, #uspass').on('input', function() {
         $(this).removeClass('is-invalid');
     });
@@ -56,16 +51,21 @@ function enviarLogin() {
         data: $('#usLogin').serialize(),
         success: function(result) {
             try {
-                var resultJson = JSON.parse(result.trim()); // Intenta parsear el JSON de la respuesta
+                var resultJson = JSON.parse(result.trim()); 
                 if (resultJson.respuesta) {
                     // Si la respuesta es exitosa (login correcto)
-                    window.location.href = "../../privado/index.php"; // Redirige al usuario a la página privada
-                } else {
-                    // Si la respuesta es falsa (login incorrecto)
-                    $.messager.show({
-                        title: 'Error',
-                        msg: resultJson.msg  // Muestra el mensaje de error
+                    Swal.fire({
+                        title: "Bienvenido",
+                        text: "Redirigiendo...",
+                        icon: "success",
+                        timer: 1000,  
+                        showConfirmButton: false,
+                    }).then(() => {
+                        window.location.href = "../../privado/index.php";
                     });
+                    
+                } else {
+                    $('#alerta-error').removeClass('d-none').text(resultJson.msg);
                      // Limpiar el campo de contraseña
                      $('#uspass').val('');
                 }
@@ -157,13 +157,24 @@ function EnviarRegistro() {
                 var resultJson = JSON.parse(result.trim()); // Intenta parsear el JSON de la respuesta
                 if (resultJson.respuesta) {
                     // Si la respuesta es exitosa (login correcto)
-                    alert("Usuario registrado correctamente");
-                    window.location.href = "../../publico/login/login.php"; // Redirige al usuario a la página privada
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Registro exitoso!',
+                        text: 'Usuario registrado correctamente.',
+                        confirmButtonText: 'Aceptar',
+                        timer: 4000  // Desaparece después de 4 segundos
+                    }).then(() => {
+                        window.location.href = "../../publico/login/login.php";
+                    });
+
                 } else {
                     // Si la respuesta es falsa (login incorrecto)
-                    $.messager.show({
-                        title: 'Error',
-                        msg: resultJson.msg  // Muestra el mensaje de error
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Error!',
+                        text: 'El usuario ya existe.',
+                        confirmButtonText: 'Aceptar',
+                        timer: 4000  // Desaparece después de 4 segundos
                     });
                      // Limpiar el campo de contraseña
                      $('#uspass').val('');
@@ -182,11 +193,9 @@ function EnviarRegistro() {
 ////////////////////////////MODIFICAR USUARIO/////////////////////////////////////
 $(document).ready(function() {
     var form = document.getElementById("formUsuario");
-    
     if (form) {
         $('#formUsuario').on('submit', function(event) {
-            event.preventDefault(); // Evita el envío del formulario inicialmente
-            
+            event.preventDefault(); 
             let isValid = true;
             
             // Validar el campo "usuario"
@@ -223,23 +232,43 @@ $(document).ready(function() {
     });
 });
 
-///Usuario
 function saveUsuario() {
-    // Envío del formulario con AJAX
-    $.ajax({
-        url: "accion/accionEditar.php",
-        method: "POST",
-        data: $('#formUsuario').serialize(), // Serializa los datos del formulario
-        success: function(result){
-        var result = eval('('+result+')');
-        if (result){
-            alert("Cambios Realizados");  
-            location.reload(); // Recarga la página después de la actualización 
-        }
-
-    }
+    // Mostrar la alerta de confirmación primero
+    Swal.fire({
+        title: "¿Está seguro?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Guardar",
+        denyButtonText: "No guardar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Si el usuario confirma, enviamos el formulario con AJAX
+            $.ajax({
+                url: "accion/accionEditar.php",
+                method: "POST",
+                data: $('#formUsuario').serialize(), 
+                success: function(result) {
+                    var resultJson = eval('(' + result + ')');  // Evaluamos la respuesta JSON del servidor
+                    if (!resultJson.respuesta) { 
+                        Swal.fire("Error", "El nombre de usuario ya existe o no se pudo guardar la información.", "error");
+                    } else {
+                        Swal.fire("¡Cambios guardados!", "", "success").then(() => {
+                        location.reload();
+                        });
+                    }
+                },
+                error: function() {
+                    // En caso de error con la solicitud AJAX
+                    Swal.fire("Error", "Hubo un problema al procesar la solicitud.", "error");
+                }
+            });
+        } 
     });
 }
+
+
+
+
 
 ////////////////////////////MODIFICAR CONTRASEÑA/////////////////////////////////////
 
@@ -250,8 +279,6 @@ $(document).ready(function() {
         $('#formPass').on('submit', function(event) {
             event.preventDefault(); // Evita el envío del formulario inicialmente
             let isValid = true;
-            
-            // Validar el campo "pass"
             let pass = $('#passNew').val().trim();
             if (pass === '' || pass.length < 8) {
                 $('#passNew').addClass('is-invalid');
@@ -260,7 +287,6 @@ $(document).ready(function() {
                 $('#passNew').removeClass('is-invalid');
             }
 
-            // Si todo es válido, enviar el formulario
             if (isValid) {
                 // Opcional: encriptar la contraseña antes de enviarla
                 var passhash = CryptoJS.SHA256(pass).toString();
@@ -276,21 +302,36 @@ $(document).ready(function() {
         $(this).removeClass('is-invalid');
     });
 });
-function savePass() {
-    // Envío del formulario con AJAX
-    $.ajax({
-        url: "accion/accionPass.php",
-        method: "POST",
-        data: $('#formPass').serialize(), // Serializa los datos del formulario
-        success: function(result){
-        var result = eval('('+result+')');
-        if (result){
-              // Limpiar el campo de contraseña
-              $('#passNew').val('');
-            alert("Cambios Realizados");  
-           
-        }
 
-    }
+function savePass() {
+    Swal.fire({
+        title: "¿Está seguro?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Guardar",
+        denyButtonText: "No guardar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Envío del formulario con AJAX
+            $.ajax({
+                url: "accion/accionPass.php",
+                method: "POST",
+                data: $('#formPass').serialize(), 
+                success: function(response){
+                    var result = JSON.parse(response);  // Evaluamos la respuesta JSON del servidor
+                    if (result.respuesta) {
+                        $('#passNew').val('');
+                        Swal.fire("¡Cambios guardados!", "", "success").then(() => {
+                            location.reload();  // Recargamos la página después de guardar
+                        });
+                    } else {
+                        // Si hubo un error, mostrar mensaje de error
+                        Swal.fire("Error", "No se pudo cambiar la contraseña.", "error");
+                    }
+                },
+            });
+        } else if (result.isDenied) {
+            $('#passNew').val('');
+        }
     });
 }
