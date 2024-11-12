@@ -145,9 +145,17 @@ $(document).ready(function() {
     });
 });
 
-
-// Función de envío AJAX
 function EnviarRegistro() {
+    // Mostrar el alert de "Cargando"
+    const loadingSwal = Swal.fire({
+        title: 'Cargando...',
+        text: 'Por favor, espera mientras procesamos tu registro.',
+        allowOutsideClick: false,  // Impide que el usuario cierre el alert mientras está mostrando
+        didOpen: () => {
+            Swal.showLoading();  // Muestra el ícono de carga
+        }
+    });
+
     $.ajax({
         url: 'accion/accionRegistro.php',
         type: 'POST',
@@ -156,28 +164,28 @@ function EnviarRegistro() {
             try {
                 var resultJson = JSON.parse(result.trim()); // Intenta parsear el JSON de la respuesta
                 if (resultJson.respuesta) {
-                    // Si la respuesta es exitosa (login correcto)
+                    // Si el registro fue exitoso, se cierra el "Cargando" y luego mostramos el mensaje de éxito
+                    loadingSwal.close();  
                     Swal.fire({
                         icon: 'success',
                         title: '¡Registro exitoso!',
                         text: 'Usuario registrado correctamente.',
                         confirmButtonText: 'Aceptar',
-                        timer: 4000  // Desaparece después de 4 segundos
+                        timer: 4000  
                     }).then(() => {
-                        window.location.href = "../../publico/login/login.php";
+                        window.location.href = "../../publico/login/login.php";  // Redirige al login
                     });
 
                 } else {
-                    // Si la respuesta es falsa (login incorrecto)
+                    loadingSwal.close(); 
+                    $('#usPass').val('');  // Limpiar el campo de contraseña
                     Swal.fire({
                         icon: 'error',
                         title: '¡Error!',
                         text: 'El usuario ya existe.',
                         confirmButtonText: 'Aceptar',
-                        timer: 4000  // Desaparece después de 4 segundos
+                        timer: 4000  
                     });
-                     // Limpiar el campo de contraseña
-                     $('#uspass').val('');
                 }
             } catch (e) {
                 $.messager.show({
@@ -186,8 +194,12 @@ function EnviarRegistro() {
                 });
             }
         },
+        complete: function() {
+            loadingSwal.close();
+        },
     });
 }
+
 
 
 ////////////////////////////MODIFICAR USUARIO/////////////////////////////////////
