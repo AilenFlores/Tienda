@@ -130,7 +130,9 @@
             $compraCancelada = false;
             $i = 0;
             while(!$compraCancelada && $i < count($listaCompraEstadoConId)){
-                if($listaCompraEstadoConId[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() == 4){
+                $idcompra = $listaCompraEstadoConId[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo();
+                error_log($idcompra);
+                if($idcompra == 4){
                     $compraCancelada = true;
                 } else {
                     $i++;
@@ -171,7 +173,7 @@
                                         $arregloParaModificar["pronombre"] = $objProducto->getPronombre();
                                         $arregloParaModificar["prodetalle"] = $objProducto->getProdetalle();
                                         $arregloParaModificar["procantstock"] = $nuevoStock;
-                                        $arregloParaModificar["proprecio"] = $objProducto->getProprecio();
+                                        $arregloParaModificar["proimporte"] = $objProducto->getProprecio();
                                         $arregloParaModificar["prodeshabilitado"] = $objProducto->getProdeshabilitado();
                                         if ($objAbmProducto->modificacion($arregloParaModificar)){
                                             $respuesta["respuesta"] = "Se canceló la compra y se actualizó el stock correctamente";
@@ -246,7 +248,7 @@
                                         $arregloParaModificar["pronombre"] = $objProducto->getPronombre();
                                         $arregloParaModificar["prodetalle"] = $objProducto->getProdetalle();
                                         $arregloParaModificar["procantstock"] = $nuevoStock;
-                                        $arregloParaModificar["proprecio"] = $objProducto->getProprecio();
+                                        $arregloParaModificar["proimporte"] = $objProducto->getProprecio();
                                         $arregloParaModificar["prodeshabilitado"] = $objProducto->getProdeshabilitado();
                                         if ($objAbmProducto->modificacion($arregloParaModificar)){
                                             $respuesta["respuesta"] = "Se canceló la compra y se actualizó el stock correctamente";

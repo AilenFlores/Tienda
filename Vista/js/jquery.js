@@ -1,4 +1,67 @@
-//////////////////////////////////////////////////////////////////////////////////////// Productos
+////////////////////////////////////////////////////////////////////////////////////////Funciones para cancelar compra y ver detalles en MIS COMPRAS del cliente.
+function cancelarCompraCliente(){
+    var row = $('#dgSeg').datagrid('getSelected');
+    if (row){
+        let r = window.confirm('¿Seguro que desea cancelar la CompraEstado?');
+        if (r){
+            console.log('Confirmación recibida');
+            // Cargar los datos seleccionados en el formulario manualmente
+            var formData = $('#fmSeg').serialize();  // Serializa los datos del formulario
+
+            // Realizar la solicitud AJAX
+            $.ajax({
+                url: 'accion/cancelarCompraCliente.php',
+                type: 'POST',
+                data: formData,
+                success: function(result){
+                    try {
+                        var result = JSON.parse(result);  // Parseamos el resultado
+                        if (result.errorMsg){
+                            $.messager.show({
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        } else {
+                            $.messager.show({
+                                title: 'Operación exitosa',
+                                msg: result.respuesta
+                            });
+                            $('#dgSeg').datagrid('reload');    // Recargar los datos del datagrid
+                        }
+                    } catch (e) {
+                        console.error("Error al parsear el resultado:", e);
+                        console.log("Respuesta del servidor:", result);
+                        $.messager.show({
+                            title: 'Error',
+                            msg: 'Ocurrió un problema con la respuesta del servidor.'
+                        });
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error("Error en la solicitud AJAX:", error);
+                    $.messager.show({
+                        title: 'Error',
+                        msg: 'No se pudo procesar la solicitud. Error en la conexión.'
+                    });
+                }
+            });
+        } else {
+            console.log('Cancelación recibida');
+        }
+    }
+}
+
+
+
+function verDetalleCliente(){
+    var row = $('#dgSeg').datagrid('getSelected');
+    if (row){
+        window.location.href = "detalleCompra.php?idcompra="+row.idcompra;    
+    }                       
+}
+
+
+// Productos
 
 //Funcion para abrir el dialogo de editar productos
 function editarProductos(){

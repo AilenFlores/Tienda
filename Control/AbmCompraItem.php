@@ -1,5 +1,4 @@
 <?php
-
     class AbmCompraItem {
 
         /**
@@ -121,6 +120,7 @@
             return $arreglo;
         }
 
+        //Elimina un item de la compra y si no quedan mas items en la compra, elimina la compra.
         public function eliminarItemDeCompra($param) {
             $arregloObjCompraItem = $this -> buscar(['idcompraitem' => $param['idcompraitem']]);
             $idCompraActual = $arregloObjCompraItem[0] -> getObjCompra() -> getIdcompra();
@@ -132,6 +132,7 @@
             }
         }
 
+        //Elimina la compra.
         public function eliminarCompraItem($param) {
             $arreglo["idcompra"] = $param["idcompra"];
             $arreglo1["idcompraitem"] = $param["idcompraitem"];
