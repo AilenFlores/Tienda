@@ -130,7 +130,9 @@
             $compraCancelada = false;
             $i = 0;
             while(!$compraCancelada && $i < count($listaCompraEstadoConId)){
-                if($listaCompraEstadoConId[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() == 4){
+                $idcompra = $listaCompraEstadoConId[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo();
+                error_log($idcompra);
+                if($idcompra == 4){
                     $compraCancelada = true;
                 } else {
                     $i++;

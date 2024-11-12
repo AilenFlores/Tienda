@@ -6,7 +6,7 @@ include_once("../../Estructura/CabeceraSegura.php");
         <div class="card shadow-sm">
             <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center"> 
                 <h1 class="display-5 pb-3 fw-bold">Detalle compra</h1>
-                <a href="tienda.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
+                <a href="misCompras.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
             </div>
 
             <div class="d-flex justify-content-center">
@@ -23,6 +23,7 @@ include_once("../../Estructura/CabeceraSegura.php");
                     </thead>
                     <tbody>
                 <?php
+                    $datos = data_submitted();
                     $arreglo["idcompra"] = $datos["idcompra"];
                     $objAbmCompraItem = new AbmCompraItem();
                     $arregloItems = $objAbmCompraItem->buscar($arreglo);
