@@ -1,3 +1,47 @@
+//Funciones para cancelar compra y ver detalles en MIS COMPRAS del cliente.
+function cancelarCompraCliente(){
+    var row = $('#dgSeg').datagrid('getSelected');
+    if (row){
+        $.messager.confirm('Confirmar','Seguro que desea cancelar la CompraEstado?',function(r){
+            if (r){
+                $('#fmSeg').form('load',row);
+                url = '../privado/usuario/accion/cancelarCompraCliente.php';
+                $('#fmSeg').form('submit',{
+                    url: url,
+                    iframe: false,
+                    onSubmit: function(){
+                        return $(this).form('validate');
+                    },
+                    success: function(result){
+                        var result = eval('('+result+')');
+                        if (result.errorMsg){
+                            $.messager.show({
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        } else {
+                            $.messager.show({
+                                title: 'Operacion exitosa',
+                                msg: result.respuesta
+                            });
+                            $('#dgSeg').datagrid('reload');    // reload the menu data
+                        }
+                    }
+                });
+            }
+        });
+    }
+}
+
+
+function verDetalleCliente(){
+    var row = $('#dgSeg').datagrid('getSelected');
+    if (row){
+        window.location.href = "detalleCompra.php?idcompra="+row.idcompra;    
+    }                       
+}
+
+
 // Productos
 
 function editarProductos(){

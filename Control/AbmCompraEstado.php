@@ -171,7 +171,7 @@
                                         $arregloParaModificar["pronombre"] = $objProducto->getPronombre();
                                         $arregloParaModificar["prodetalle"] = $objProducto->getProdetalle();
                                         $arregloParaModificar["procantstock"] = $nuevoStock;
-                                        $arregloParaModificar["proprecio"] = $objProducto->getProprecio();
+                                        $arregloParaModificar["proimporte"] = $objProducto->getProprecio();
                                         $arregloParaModificar["prodeshabilitado"] = $objProducto->getProdeshabilitado();
                                         if ($objAbmProducto->modificacion($arregloParaModificar)){
                                             $respuesta["respuesta"] = "Se canceló la compra y se actualizó el stock correctamente";
@@ -246,7 +246,7 @@
                                         $arregloParaModificar["pronombre"] = $objProducto->getPronombre();
                                         $arregloParaModificar["prodetalle"] = $objProducto->getProdetalle();
                                         $arregloParaModificar["procantstock"] = $nuevoStock;
-                                        $arregloParaModificar["proprecio"] = $objProducto->getProprecio();
+                                        $arregloParaModificar["proimporte"] = $objProducto->getProprecio();
                                         $arregloParaModificar["prodeshabilitado"] = $objProducto->getProdeshabilitado();
                                         if ($objAbmProducto->modificacion($arregloParaModificar)){
                                             $respuesta["respuesta"] = "Se canceló la compra y se actualizó el stock correctamente";

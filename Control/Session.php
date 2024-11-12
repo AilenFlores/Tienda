@@ -114,4 +114,3 @@ class Session {
 }
 ob_end_flush(); // Limpiar el búfer de salida
 ?>
-

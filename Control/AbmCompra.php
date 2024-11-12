@@ -1,5 +1,4 @@
 <?php
-
     class AbmCompra{
 
         /**
@@ -122,7 +121,7 @@
         public function agregarProductoACarrito($param) {
             if (isset($param['compra'])){
                 $sesionActual = new Session();
-                $objUsuario = $sesionActual -> getUsuario();
+                $objUsuario = $sesionActual->getUsuario();
                 //Busco compras agregadas al carrito por el usuario activo
                 $arregloObjCompra = $this -> buscar(['idusuario' => $objUsuario->getIdusuario(),'metodo' => 'carrito']);
                 if (!empty($arregloObjCompra)){
@@ -141,12 +140,13 @@
                                         $objAbmCompraItem = new AbmCompraItem();
                                         $cantidadFinal = $objAbmCompraItem -> modificacion(['idcompraitem' => $item -> getIdcompraitem(), 'idproducto' => $param['idproducto'], 'idcompra' => $arregloObjCompra[0] -> getIdcompra(), 'cicantidad' => $cantidadSuma]);
                                         if ($cantidadFinal){
-                                            $redireccion = 'Location:../../paginas/carrito.php';
+                                            $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/carrito.php";
                                         }else{
-                                            $redireccion = "Location:../../paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
+                                            $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
                                         }
                                     }else{
-                                        $redireccion = "Location:../../paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=2";
+                                        //BASE_URL . '/vista/privado/usuario/productos.php';
+                                        $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/productos.php?idproducto=" . $param['idproducto'] . "&error=2";
                                     }
                                 }
                             }
@@ -154,15 +154,15 @@
                         if (!$carritoEncontrado){
                             $itemAgregado = $objAbmCompraItem -> alta(['idproducto' => $param['idproducto'], 'idcompra' => $arregloObjCompra[0] -> getIdcompra(),'cicantidad' => $param['cantidad']]);
                             if ($itemAgregado){
-                                $redireccion = 'Location:../../paginas/carrito.php';
+                                $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/carrito.php";
                             }else{
     
-                                $redireccion = "Location:../../paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
+                                $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
                             }
                         }
                         
                     }else{
-                        $redireccion = "Location:../../paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
+                        $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
                     }
                 }else{  //Si no hay carritos activos inicio uno.
                     $compraAgregada = $this -> alta(['idusuario' => $objUsuario->getIdusuario(), 'cofecha' => $date = date('Y-m-d H:i:s'),  'metodo' => 'carrito']);
@@ -171,12 +171,12 @@
                         $objAbmCompraItem = new AbmCompraItem();
                         $itemAgregado = $objAbmCompraItem -> alta(['idproducto' => $param['idproducto'], 'idcompra' => $arregloObjCompra[0] -> getIdcompra(), 'cicantidad' => $param['cantidad']]);
                         if ($itemAgregado){
-                            $redireccion = 'Location:../../paginas/carrito.php';
+                            $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/carrito.php";
                         }else{
-                            $redireccion = "Location:../../paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
+                            $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
                         }
                     }else{
-                        $redireccion = "Location:../../paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
+                        $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
                     }
                 }
             }
@@ -210,14 +210,15 @@
                     foreach($arregloItemsCargar as $item){
                         $productoCarga = $item -> getObjProducto();
                         $cantidadFinal = ($productoCarga -> getProcantstock()) - ($item -> getCicantidad());
-                        $objAbmProducto -> modificacion(['idproducto' => $productoCarga -> getIdproducto(), 'pronombre' => $productoCarga -> getPronombre(), 'prodetalle' => $productoCarga -> getProdetalle(), 'proprecio' => $productoCarga -> getProprecio(), 'prodeshabilitado' => $productoCarga -> getProdeshabilitado(), 'procantstock' => $cantidadFinal]);
+                        var_dump($cantidadFinal);
+                        $objAbmProducto -> modificacion(['idproducto' => $productoCarga -> getIdproducto(), 'pronombre' => $productoCarga -> getPronombre(), 'prodetalle' => $productoCarga -> getProdetalle(), 'proprecio' => $productoCarga -> getProimporte(), 'prodeshabilitado' => $productoCarga -> getProdeshabilitado(), 'procantstock' => $cantidadFinal]);
                     }
-                    $redireccion="Location:../../paginas/tiendaFinalizar.php?transaccion=exito";
+                    $redireccion="Location:" . BASE_URL . "/vista/privado/usuario/tiendaFinalizar.php?transaccion=exito";
                 }else{
-                    $redireccion="Location:../../paginas/tiendaFinalizar.php?transaccion=fallo";
+                    $redireccion="Location:". BASE_URL . "/Vista/privado/usuario/tiendaFinalizar.php?transaccion=fallo";
                 }
             }else{
-                $redireccion = "Location:../../paginas/tiendaFinalizar.php?transaccion=stock";
+                $redireccion="Location:". BASE_URL . "/Vista/privado/usuario/tiendaFinalizar.php?transaccion=stock";
             }
             return $redireccion;    
         }

@@ -30,7 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `compra` (
   `idcompra` bigint(20) NOT NULL,
   `cofecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `idusuario` bigint(20) NOT NULL
+  `idusuario` bigint(20) NOT NULL,
+  `metodo` varchar(15) COLLATE latin1_swedish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
