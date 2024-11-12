@@ -5,7 +5,6 @@ include_once("../../Estructura/Cabecera.php");
 <main class="flex-fill bg-light">
 
 <div id="alerta-error" class="alert alert-danger d-none text-center" role="alert">
-  <!-- se mostrará el mensaje de error -->
 </div>
 
 <!--  Formulario de login -->

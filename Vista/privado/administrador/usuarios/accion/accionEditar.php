@@ -1,27 +1,30 @@
-
 <?php
 include_once "../../../../../configuracion.php";
 $data = data_submitted();
-$respuesta = false;
-$data["accion"]="editar";
-if (isset($data['idUsuario'])){
-    $data["idUsuario"] = intval($data["idUsuario"]); 
+$retorno = ['respuesta' => false]; 
+
+$data["accion"] = "editar";
+
+if (isset($data['idUsuario'])) {
+    $data["idUsuario"] = intval($data["idUsuario"]);
     $objC = new AbmUsuarioLogin();
-    $respuesta = $objC->abm($data);
-    if (!$respuesta){
-
-        $sms_error = " La accion  MODIFICACION No pudo concretarse";
-        
-    }else $respuesta =true;
-    
+    // Verifica si el nombre de usuario ya existe
+    $objUsuarioExiste = $objC->buscar(['usnombre' => $data['usNombre']]);
+    if ($objUsuarioExiste) {
+        $sms_error = "El nombre de usuario ya existe";
+    } else {
+        $respuesta = $objC->abm($data);
+        if (!$respuesta) {
+            $sms_error = "La acción MODIFICACIÓN no pudo concretarse";
+        } else {
+            $retorno['respuesta'] = true;
+        }
+    }
 }
-// Agregar los datos al retorno para ver en la consola
 
-$retorno['respuesta'] = $respuesta;
-if (isset($mensaje)){
-    
-    $retorno['errorMsg']=$sms_error;
-    
+if (isset($sms_error)) {
+    $retorno['errorMsg'] = $sms_error;
 }
+
 echo json_encode($retorno);
 ?>
