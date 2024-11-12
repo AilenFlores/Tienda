@@ -32,14 +32,14 @@ if (isset($data['usNombre'])) {
             $mail->isSMTP();                                      // Usar SMTP
             $mail->Host = 'smtp.gmail.com';                         // Establecer el servidor SMTP
             $mail->SMTPAuth = true;                                 // Habilitar autenticación SMTP
-            $mail->Username = 'agustinaafff@gmail.com';             // Usuario SMTP
-            $mail->Password = 'uxkk aswh yoje iwpu';                // Contraseña de la aplicación (asegúrate de que es la correcta)
+            $mail->Username = 'mail';             // Usuario SMTP
+            $mail->Password = 'contraseña';                // Contraseña de la aplicación (asegúrate de que es la correcta)
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     // Encriptación TLS
             $mail->Port = 587;                                      // Puerto SMTP (587 para TLS)
         
             // Remitente y destinatario
-            $mail->setFrom('agustinaafff@gmail.com', 'Amor');
-            $mail->addAddress('juangabriel.ramos13@gmail.com', 'Amorcito'); // Agregar destinatario
+            $mail->setFrom('original', 'nombre');
+            $mail->addAddress('destinatario', ''); // Agregar destinatario
         
             // Contenido del correo
             $mail->isHTML(true);                                    // Establecer formato de correo HTML
