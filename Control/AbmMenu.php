@@ -1,16 +1,14 @@
 <?php
 class AbmMenu{
-    //Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
 
     public function abm($datos) {
         $resp = false;
         if ($datos['accion'] == 'editar') {
             $this->modificacion($datos);
-                if (isset($datos['meRol'])) { // Verifica si se enviaron roles
-                    $resp= $this->actualizarRoles($datos);
-                    } else {
-                        $resp = false;
-                    }
+                if (isset($datos['meRol'])) { 
+                     $this->actualizarRoles($datos);
+                     $resp = true;
+                    } 
                 }
             
         if ($datos['accion'] == 'borrar') {
@@ -20,9 +18,9 @@ class AbmMenu{
         }
         if ($datos['accion'] == 'nuevo') {
             $ultimoId= $this->alta($datos);
-            $objMenu = convert_array($this->buscar(['idmenu' => $ultimoId])); // Obtener el objeto recién creado
+            $objMenu = convert_array($this->buscar(['idmenu' => $ultimoId])); 
                 if (isset($objMenu)) { 
-                    $resp = $this->agregarRoles($datos, $objMenu); // Agregar roles
+                    $resp = $this->agregarRoles($datos, $objMenu); 
                 }
         
         }
@@ -55,7 +53,7 @@ class AbmMenu{
             $roles = $datos["meRol"] ?? [];
             $rolActual = convert_array($menuRol->buscar(['idmenu' => $datos['idmenu']]));
             // Extraer solo los IDs de los roles actuales
-            $rolActualIds = array_column($rolActual, 'objrol'); // Cambia 'objrol' si es necesario
+            $rolActualIds = array_column($rolActual, 'objrol'); 
             // Eliminar roles que ya no están seleccionados en `$roles`
             foreach ($rolActualIds as $rolActualId) {
                 if (!in_array($rolActualId, $roles)) {
@@ -106,7 +104,7 @@ class AbmMenu{
   /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
      * @param array $param
-     * @return Tabla
+     * @return Objeto
      */
     private function cargarObjeto($param){
         $obj = null;
@@ -127,11 +125,10 @@ class AbmMenu{
     /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto que son claves
      * @param array $param
-     * @return Tabla
+     * @return Objeto
      */
     private function cargarObjetoConClave($param){
         $obj = null;
-        
         if( isset($param['idmenu']) ){
             $obj = new Menu();
             $obj->setIdmenu($param['idmenu']);
@@ -154,15 +151,15 @@ class AbmMenu{
     }
     
     /**
-     * 
+     * Permite cargar un objeto
      * @param array $param
+     * @return boolean
      */
     public function alta($param){
         $resp = false;
         $param['idmenu'] =null;
         $param['medeshabilitado'] = null;
         $elObjtTabla = $this->cargarObjeto($param);
-//        verEstructura($elObjtTabla);
         if ($elObjtTabla!=null ){
             $resp = $elObjtTabla->insertar();
         }
@@ -176,14 +173,12 @@ class AbmMenu{
      */
     public function baja($param){
         $resp = false;
-      
         if ($this->seteadosCamposClaves($param)){
             $elObjtTabla = $this->cargarObjetoConClave($param);
             if ($elObjtTabla!=null and $elObjtTabla->eliminar()){
                 $resp = true;
             }
         }
-        
         return $resp;
     }
     
@@ -219,10 +214,6 @@ class AbmMenu{
         }
         $arreglo = Menu::listar($where);  
         return $arreglo;
-            
-            
-      
-        
     }
    
 }

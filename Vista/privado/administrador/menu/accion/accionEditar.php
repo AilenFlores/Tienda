@@ -17,5 +17,7 @@ $retorno['respuesta'] = $respuesta;
 if (isset($mensaje)){
      $retorno['errorMsg']=$sms_error;   
 }
+
+
 echo json_encode($retorno);
 ?>

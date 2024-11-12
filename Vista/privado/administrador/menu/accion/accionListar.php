@@ -3,7 +3,7 @@ include_once "../../../../../configuracion.php";
 $data = data_submitted();
 $objControl = new AbmMenu();
 $objMenuRol = new AbmMenuRol();
-$objRol = new AbmRol(); // Instanciar solo una vez
+$objRol = new AbmRol();
 $list = convert_array($objControl->buscar($data));
 
 foreach ($list as $key => $menuObj) {
@@ -12,8 +12,8 @@ foreach ($list as $key => $menuObj) {
     foreach ($roles as $rol) {
         $rolActual = convert_array($objRol->buscar(["idRol" => $rol["objrol"]]));
         if (!empty($rolActual)) { // Verificar si se encontró el rol
-            $list[$key]['meRol'][] = $rolActual[0]["roDescripcion"]; // Agregar la descripción del rol
-            $list[$key]['idRol'][] = $rolActual[0]["idRol"]; // Agregar la descripción del rol
+            $list[$key]['meRol'][] = $rolActual[0]["roDescripcion"]; 
+            $list[$key]['idRol'][] = $rolActual[0]["idRol"];
         }
     }
 }

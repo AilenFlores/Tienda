@@ -25,12 +25,11 @@ include_once("../../../Estructura/CabeceraSegura.php");
         <input type="hidden" name="idRol" id="idRol">
         <div style="margin-bottom:10px; display: flex; align-items: center;">
             <label for="usNombre" style="margin-right: 10px;">Nombre Rol:</label>
-            <input name="roDescripcion" id="usNombre" class="easyui-textbox" required="true" style="width:200px;"> <!-- Ajusta el ancho aquí -->
+            <input name="roDescripcion" id="roDescripcion" class="easyui-textbox" required="true" style="width:200px;">
         </div>
     
     </form>
 </div>
-
 
 
 <div id="dlg-buttons">

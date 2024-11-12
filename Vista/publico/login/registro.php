@@ -2,10 +2,10 @@
 
 <main class="flex-fill bg-light">
     <div class="container my-4">
-        <div class="card shadow-sm" style="max-width: 420px; margin: auto; border: solid #ced4da ">
+        <div class="card shadow-sm" style="max-width: 420px; margin: auto;">
             <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center"> 
                 <h6 class="mb-0 text-black">Registrar Usuario</h6>
-                <a href="index.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
+                <a href="../login/login.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
             </div>
             <div class="card-body">
                 <form  method="post" id="formRegistro" name="formRegistro" novalidate >
@@ -34,7 +34,7 @@
                         </div>
                     </div>
 
-                    <!-- Botones "Borrar" y "Enviar" juntos -->
+                
                     <div class="d-flex justify-content-end gap-2 mt-4">
                         <button type="reset" class="btn btn-outline-danger">Borrar</button>
                         <button type="submit" class="btn btn-primary" >Registrar</button>

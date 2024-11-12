@@ -38,12 +38,12 @@ include_once("../../../Estructura/CabeceraSegura.php");
         <div style="margin-bottom:10px">
             <h5>Roles:</h5>
             <div style="display: flex; flex-wrap: wrap; gap: 15px;"> 
-                <?php foreach ($roles as $rol): ?>
+            
                     <div style="display: flex; align-items: center; margin-right: 15px;">
                         <input  type="checkbox" name="meRol[]" id="rol_<?php echo $rol['idRol']; ?>" value="<?php echo $rol['idRol']; ?>" style="margin-right: 5px;">
                         <label for="rol_<?php echo $rol['idRol']; ?>"><?php echo $rol['roDescripcion']; ?></label>
                     </div>
-                <?php endforeach; ?>
+              
             </div>
         </div>
     
