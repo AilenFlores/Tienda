@@ -7,7 +7,6 @@ class Producto {
     private $procantstock;
     private $proimporte;
     private $prodeshabilitado;
-    private $proimg;
     private $mensajeoperacion;
     
     public function __construct(){
@@ -18,18 +17,16 @@ class Producto {
         $this->procantstock="";
         $this->proimporte="";
         $this->prodeshabilitado= NULL;
-        $this->proimg="";
         $this->mensajeoperacion="";
         
     }
     
-    public function setear($idproducto, $pronombre, $prodetalle, $procantstock, $proimporte, $proimg,$prodeshabilitado){
+    public function setear($idproducto, $pronombre, $prodetalle, $procantstock, $proimporte,$prodeshabilitado){
         $this->setIdproducto($idproducto);
         $this->setPronombre($pronombre);
         $this->setProdetalle($prodetalle);
         $this->setProcantstock($procantstock);
         $this->setProimporte($proimporte);
-        $this->setProimg($proimg);
         $this->setProdeshabilitado($prodeshabilitado);
         
     }
@@ -57,9 +54,6 @@ class Producto {
         return $this->proimporte;
     }
     
-    public function getProimg(){
-        return $this->proimg;
-    }
 
     public function getmensajeoperacion(){
         return $this->mensajeoperacion;
@@ -93,9 +87,6 @@ class Producto {
         $this->proimporte= $valor;
     }
 
-    public function setProimg($valor){
-        $this->proimg = $valor;
-    }
 
     public function setProdeshabilitado($valor){
         $this->prodeshabilitado=$valor;
@@ -136,7 +127,7 @@ class Producto {
             if($res>-1){
                 if($res>0){
                     $row = $base->Registro();
-                    $this->setear($row['idproducto'], $row['pronombre'], $row['prodetalle'], $row['procantstock'],$row['proimporte'],$row["proimg"] ,$row["prodeshabilitado"]);     
+                    $this->setear($row['idproducto'], $row['pronombre'], $row['prodetalle'], $row['procantstock'],$row['proimporte'] ,$row["prodeshabilitado"]);     
                 }
             }
         } else {
@@ -148,13 +139,12 @@ class Producto {
     public function insertar() {
         $resp = false;
         $base = new bdcarritocompras();
-        $sql = "INSERT INTO producto (pronombre, prodetalle, procantstock, proimporte, proimg ,prodeshabilitado)  
+        $sql = "INSERT INTO producto (pronombre, prodetalle, procantstock, proimporte ,prodeshabilitado)  
                 VALUES (
                     '" . $this->getPronombre() . "', 
                     '" . $this->getProdetalle() . "', 
                     '" . $this->getProcantstock() . "', 
                     '" . $this->getProimporte() . "', 
-                    '" . $this->getProimg() . "',
                     NULL
                 );";
     
@@ -180,8 +170,7 @@ class Producto {
         pronombre = '" . $this->getPronombre() . "',
        prodetalle = '" . $this->getProdetalle() . "',
        procantstock = '" . $this->getProcantstock() . "',
-       proimporte = '" . $this->getProimporte() . "',  -- Agregar coma aquí
-       proimg = '" . $this->getProimg() . "' 
+       proimporte = '" . $this->getProimporte() . "', 
        WHERE idproducto = " . $this->getIdproducto();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {
@@ -232,12 +221,12 @@ class Producto {
                 while ($row = $base->Registro()){
                     
                     $obj = new Producto();
-                    $obj->setear($row['idproducto'], $row['pronombre'], $row['prodetalle'], $row['procantstock'], $row['proimporte'], $row["proimg"], $row["prodeshabilitado"]);
+                    $obj->setear($row['idproducto'], $row['pronombre'], $row['prodetalle'], $row['procantstock'], $row['proimporte'], $row["prodeshabilitado"]);
                     array_push($arreglo, $obj);
                 }
             }
         } else {
-                $this->setmensajeoperacion("persona->listar: ".$base->getError());
+                $this->setmensajeoperacion("producto->listar: ".$base->getError());
         }
         return $arreglo;
     }
