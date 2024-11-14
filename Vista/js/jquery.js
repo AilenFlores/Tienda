@@ -1,4 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////Funciones para cancelar compra y ver detalles en MIS COMPRAS del cliente.
+//Funciones para la gestion de compras del Cliente
 function cancelarCompraCliente(){
     var row = $('#dgSeg').datagrid('getSelected');
     if (row){
@@ -77,6 +78,81 @@ function verDetalleCliente(){
     }                       
 }
 
+///Funciones para la gestion de compras del Administrador
+function siguienteEstado(){
+    var row = $('#dgCompraEstado').datagrid('getSelected');
+    if (row){
+        $.messager.confirm('Confirmar','Seguro que desea avanzar la CompraEstado?',function(r){
+            if (r){
+                $('#fmCompraEstado').form('load',row);
+                url = '../privado/administrador/compras/accion/siguienteEstadoCompra.php';
+                $('#fmCompraEstado').form('submit',{
+                    url: url,
+                    iframe: false,
+                    onSubmit: function(){
+                        return $(this).form('validate');
+                    },
+                    success: function(result){
+                        var result = eval('('+result+')');
+                        if (result.errorMsg){
+                            $.messager.show({
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        } else {
+                            $.messager.show({
+                                title: 'Operacion exitosa',
+                                msg: result.respuesta
+                            });
+                            $('#dgCompraEstado').datagrid('reload');    // reload the menu data
+                        }
+                    }
+                });
+            }
+        });
+    }
+}
+
+function cancelarCompraEstado(){
+    var row = $('#dgCompraEstado').datagrid('getSelected');
+    if (row){
+        $.messager.confirm('Confirmar','Seguro que desea cancelar la CompraEstado?',function(r){
+            if (r){
+                $('#fmCompraEstado').form('load',row);
+                url = '../privado/administrador/compras/accion/cancelarCompraEstado.php';
+                $('#fmCompraEstado').form('submit',{
+                    url: url,
+                    iframe: false,
+                    onSubmit: function(){
+                        return $(this).form('validate');
+                    },
+                    success: function(result){
+                        var result = eval('('+result+')');
+                        if (result.errorMsg){
+                            $.messager.show({
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        } else {
+                            $.messager.show({
+                                title: 'Operacion exitosa',
+                                msg: result.respuesta
+                            });
+                            $('#dgCompraEstado').datagrid('reload');    // reload the menu data
+                        }
+                    }
+                });
+            }
+        });
+    }
+}
+
+function muestraDetalleCompra(){
+    var row = $('#dgCompraEstado').datagrid('getSelected');
+    if (row){
+        window.location.href = "detalleCompra.php?idcompra="+row.idcompra;    
+    }
+}
 
 // Productos
 

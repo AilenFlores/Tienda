@@ -15,7 +15,7 @@ class AbmProducto {
             }
         }
         if($datos['accion']=='nuevo'){
-             if($this->alta($datos)){
+            if($this->alta($datos)){
             $resp =true;}
         }
         if ($datos['accion'] == 'habilitar') {
@@ -39,7 +39,6 @@ class AbmProducto {
                 $resp = true;
             }
         }
-        
         return $resp;
     }
 
@@ -56,7 +55,8 @@ class AbmProducto {
             $obj = new Producto();
             $param["idproducto"] = array_key_exists('idproducto', $param) ? $param['idproducto'] : NULL;
             $obj->setear($param['idproducto'],$param['pronombre'], $param['prodetalle'], $param['procantstock'], $param['proimporte'],$param["proimg"], NULL);
-        }
+                    }
+                    
         return $obj;
     }
     
@@ -70,7 +70,6 @@ class AbmProducto {
         if( isset($param['idproducto']) ){
             $obj = new Producto();
             $obj->setear($param['idproducto'],null, null, null, null,null, null);
-            
         }
         return $obj;
     }
@@ -84,8 +83,9 @@ class AbmProducto {
     
     private function seteadosCamposClaves($param){
         $resp = false;
-        if (isset($param['idproducto']))
+        if (isset($param['idproducto'])) {
             $resp = true;
+        }
             return $resp;
     }
     
@@ -126,11 +126,9 @@ class AbmProducto {
      */
     public function modificacion($param){
         $resp = false;
-        if ($this->seteadosCamposClaves($param)){
+            if ($this->seteadosCamposClaves($param)){
             $elObjtProducto = $this->cargarObjeto($param);
             if($elObjtProducto !=null and $elObjtProducto->modificar()){
-                $resp = true;
-                
             }
         }
         return $resp;
