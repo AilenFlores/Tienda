@@ -147,7 +147,7 @@ class Producto {
                     '" . $this->getProimporte() . "', 
                     NULL
                 );";
-    
+
         if ($base->Iniciar()) {
             if ($elid = $base->Ejecutar($sql)) {
                 $this->setIdProducto($elid);
@@ -165,9 +165,8 @@ class Producto {
     public function modificar(){
         $resp = false;
         $base = new bdcarritocompras();
-    
        $sql = "UPDATE producto SET 
-        pronombre = '" . $this->getPronombre() . "',
+       pronombre = '" . $this->getPronombre() . "',
        prodetalle = '" . $this->getProdetalle() . "',
        procantstock = '" . $this->getProcantstock() . "',
        proimporte = '" . $this->getProimporte() . "', 

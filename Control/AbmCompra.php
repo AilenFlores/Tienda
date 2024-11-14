@@ -177,7 +177,7 @@
                         }
                     }else{
                         $redireccion = "Location: ". BASE_URL . "/vista/privado/usuario/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
-                    }
+                    }   
                 }
             }
             return $redireccion;
@@ -209,9 +209,8 @@
                     //Resto los items comprados del stock
                     foreach($arregloItemsCargar as $item){
                         $productoCarga = $item -> getObjProducto();
-                        $cantidadFinal = ($productoCarga -> getProcantstock()) - ($item -> getCicantidad());
-                        var_dump($cantidadFinal);
-                        $objAbmProducto -> modificacion(['idproducto' => $productoCarga -> getIdproducto(), 'pronombre' => $productoCarga -> getPronombre(), 'prodetalle' => $productoCarga -> getProdetalle(), 'proprecio' => $productoCarga -> getProimporte(), 'prodeshabilitado' => $productoCarga -> getProdeshabilitado(), 'procantstock' => $cantidadFinal]);
+                    $cantidadFinal = ($productoCarga -> getProcantstock()) - ($item -> getCicantidad());
+                    $objAbmProducto -> modificacion(['idproducto' => $productoCarga -> getIdproducto(), 'pronombre' => $productoCarga -> getPronombre(), 'prodetalle' => $productoCarga -> getProdetalle(), 'procantstock' => $cantidadFinal, 'proimporte' => $productoCarga -> getProimporte(), 'proimg' => $productoCarga -> getProimg(), 'prodeshabilitado' => $productoCarga -> getProdeshabilitado()]);
                     }
                     $redireccion="Location:" . BASE_URL . "/vista/privado/usuario/tiendaFinalizar.php?transaccion=exito";
                 }else{
