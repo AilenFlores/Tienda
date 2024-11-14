@@ -143,6 +143,8 @@ class AbmMenuRol {
      */
     public function menuesByIdRol($rol) {
         $menues = []; // Lista de menús final a devolver
+        $respuesta = [];
+    
         $param['idrol'] = $rol;
     
         // Buscar menús asociados al rol
@@ -163,9 +165,35 @@ class AbmMenuRol {
                     }
                 }
             }
+    
+            // Filtrar menús habilitados
+            foreach ($menues as $objMenu) {
+                if ($objMenu["medeshabilitado"] == NULL) {
+                    $respuesta[] = [
+                        "url" => BASE_URL . "/vista/" . $objMenu["medescripcion"],
+                        "nombre" => $objMenu["menombre"]
+                    ];
+                }
+            }
         }
     
-        return $menues; // Retorna array con todos los menús asociados al rol
+        return $respuesta; 
+    }
+    
+    public function tienePermiso($rol){
+        $rol=$rol[0];
+        $tienePermiso=false;
+        $menus=$this->menuesByIdRol($rol);
+        $url= "http://localhost";
+        $url.=$_SERVER['REQUEST_URI']; // Obtiene la URL actual
+        foreach($menus as $menu){
+            $menu["url"]=trim($menu["url"]);
+            if($menu['url']==$url){
+                $tienePermiso=true;
+            }
+        }
+        return $tienePermiso;
+
     }
 }
 ?>

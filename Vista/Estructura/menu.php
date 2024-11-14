@@ -56,7 +56,7 @@ ob_start(); //
 <script>
  $(document).ready(function() {
     $.ajax({
-        url: '<?= BASE_URL ?>/vista/estructura/accion/accionListarMenu.php',
+        url: '<?= BASE_URL ?>/vista/accion/accionListarMenu.php',
         method: 'GET',
         dataType: 'json',
         success: function(data) {

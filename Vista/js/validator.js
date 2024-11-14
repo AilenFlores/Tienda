@@ -61,7 +61,7 @@ function enviarLogin() {
                         timer: 1000,  
                         showConfirmButton: false,
                     }).then(() => {
-                        window.location.href = "../../privado/index.php";
+                        window.location.href = "../../home/index.php";  // Redirige al index
                     });
                     
                 } else {
