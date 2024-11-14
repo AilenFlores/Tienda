@@ -6,28 +6,22 @@ $mensaje = '';
 
 if (isset($data['pronombre'])) {
     $objC = new AbmProducto();
+    $data["accion"] = "nuevo";
+    $respuesta = $objC->abm($data);
+    $nuevo=convert_array($objC->buscar(null));
+    $ultimoID=end($nuevo);
+    $idProducto=($ultimoID['idproducto']);
 
     // Manejo de la carga de la imagen
     if (isset($_FILES['proimg']) && $_FILES['proimg']['error'] == 0) {
         // Establece la carpeta donde se guardarán las imágenes
-        $carpetaDestino = '../img/'; // Asegúrate de que esta ruta es correcta y existe
-        $nombreArchivo = $data['pronombre'].".jpg"; // Cambiar a .png si se requiere
+        $carpetaDestino = "../../../../img/productos/";
+        $nombreArchivo = $idProducto.".jpg"; // El nombre del archivo será el ID del producto
         $rutaTemporal = $_FILES['proimg']['tmp_name'];
         $rutaImagen = $carpetaDestino . basename($nombreArchivo);
-        
-        // Mueve el archivo cargado a la carpeta de destino
-        if (move_uploaded_file($rutaTemporal, $rutaImagen)) {
-            // Aquí se puede almacenar la URL de la imagen en $data
-            $data['proimg'] = 'http://localhost/tienda/vista/privado/deposito/productos/img/' . basename($nombreArchivo); // URL absoluta
-        } else {
-            $mensaje = "Error al mover la imagen a la carpeta de destino.";
-        }
+        move_uploaded_file($rutaTemporal, $rutaImagen);
     }        
-
-    // Continuar con el proceso de alta
-    $data["accion"] = "nuevo";
-    $respuesta = $objC->abm($data);
-
+    
     if (!$respuesta) {
         $mensaje = "La acción ALTA no pudo concretarse.";
     }

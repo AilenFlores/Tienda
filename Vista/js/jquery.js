@@ -143,7 +143,7 @@ function muestraDetalleCompra(){
     }
 }
 
-// Productos
+////////////////////////////////////////////////////////////////////////////// Productos
 
 //Funcion para abrir el dialogo de editar productos
 function editarProductos(){
@@ -165,27 +165,86 @@ function nuevoProductos(){
     url = 'accion/accionAlta.php';
 }
 
-//Funcion para guardar los productos
+// Función para guardar los productos
 function saveProductos(){
+    let nombre = $('#pronombre').val();
+    if (nombre === '') {
+        $.messager.show({
+            title: "Nombre inválido",
+            msg: 'Ingrese un nombre válido.',
+            showType: 'show'
+        });
+        return false; 
+    }
+
+    let detalle = $('#prodetalle').val();
+    if (detalle === '') {
+        $.messager.show({
+            title: "Detalle inválido",
+            msg: 'Ingrese un detalle válido.',
+            showType: 'show',
+        });
+        return false;
+    }
+    
+
+    let stock = $('#prostock').val();
+    if (stock === '' || parseInt(stock) <= 0) {
+        $.messager.show({
+            title: "Stock inválido",
+            msg: 'Ingrese un stock válido (número positivo).',
+            showType: 'show'
+        });
+        return false;
+    }
+
+    let precio = $('#proimporte').val();
+    if (precio === '' || isNaN(precio) || parseFloat(precio) <= 0) {
+        $.messager.show({
+            title: "Precio inválido",
+            msg: 'Ingrese un precio válido (número positivo).',
+            showType: 'show'
+        });
+        return false;
+    }
+
+    let imagen = $('#proimg').val();
+    if (imagen === '' || !imagen.match(/\.(jpg)$/)) {
+        $.messager.show({
+            title: "Imagen inválida",
+            msg: 'Ingrese una imagen válida formato jpg.',
+            showType: 'show'
+        });
+        return false
+    }
+
     $('#fm').form('submit',{
         url: url,
         onSubmit: function(){
             return $(this).form('validate');
         },
         success: function(result){
-            var result = eval('('+result+')');   
-            if (!result.respuesta){
+            try {
+                let resultObj = JSON.parse(result);
+                if (!resultObj.respuesta){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: resultObj.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close');       
+                    $('#dg').datagrid('reload');    
+                }
+            } catch (e) {
                 $.messager.show({
                     title: 'Error',
-                    msg: result.errorMsg
+                    msg: 'Error al procesar la respuesta del servidor.'
                 });
-            } else {
-                $('#dlg').dialog('close');       
-                $('#dg').datagrid('reload');    
             }
         }
     });
 }
+
 
 //Funcion para habilitar O deshabilitar productos
 function bajaProductos(){

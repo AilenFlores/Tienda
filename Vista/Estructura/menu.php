@@ -4,17 +4,11 @@ ob_start(); //
 <!-- Main Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="<?php echo BASE_URL; ?>/index.php">PONER LOGO</a>
-        <!-- Buscar form TODAVIA NO FUNCIONA -->
-        <form class="d-flex ms-auto me-4">
-            <div class="input-group">
-                <input class="form-control search-bar" type="search" placeholder="¿Qué estás buscando?" aria-label="Buscar">
-                <button class="btn btn-outline-secondary" type="submit">
-                    <i class="bi bi-search"></i>
-                </button>
-            </div>
-        </form>
-        <!-- Navbar Toggler -->
+    <a class="navbar-brand" href="<?php echo BASE_URL; ?>/index.php">
+    <img src="<?php echo BASE_URL; ?>/Vista/img/logo.png" alt="SafeZone Logo" style="height: 40px;"></a>
+
+        
+        <!-- Menu -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,7 +29,7 @@ ob_start(); //
 
                                <!-- Menu Dinamico -->
                             <ul class="dropdown-menu" id="menuDinamico" aria-labelledby="userDropdown">
-                                 <div id="menuItems">    <!-- Aquí se cargarán los elementos del menú dinámico --> </div>
+                                 <div id="menuItems">    <!-- aca se cargarán los elementos del menú dinámico --> </div>
                                  <li><hr class="dropdown-divider"></li>
                                  <li><a class="dropdown-item" href="/Tienda/Vista/privado/sesion/logout.php">Cerrar Sesión</a></li>
                             </ul>
