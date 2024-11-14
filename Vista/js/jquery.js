@@ -16,6 +16,23 @@ function cancelarCompraCliente(){
                 success: function(result){
                     try {
                         var result = JSON.parse(result);  // Parseamos el resultado
+                        
+                        /*Swal.fire({
+                            icon: 'error',
+                            title: '¡Error!',
+                            text: 'Hubo un error al cancelar la compra.',
+                            confirmButtonText: 'Aceptar',
+                            timer: 4000  // Desaparece después de 4 segundos
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Operación exitosa!',
+                            text: 'La compra fue cancelada correctamente.',
+                            confirmButtonText: 'Aceptar',
+                            timer: 4000  // Desaparece después de 4 segundos
+                        });
+*/
                         if (result.errorMsg){
                             $.messager.show({
                                 title: 'Error',
