@@ -1,21 +1,29 @@
 <footer class="bg-primary text-white py-3 mt-auto">
-    <div class="container d-flex flex-wrap justify-content-between align-items-center">
-        <div class="col-md-4 d-flex align-items-center">
-            <span class="mb-3 mb-md-0">&copy; Copyright Tienda - 2024. Todos los derechos reservados.</span>
+    <div class="container d-flex flex-column align-items-center">
+        <!-- Sección sobre nosotros y GitHub con separador -->
+        <div class="d-flex align-items-center mb-3">
+        <a href="<?php echo BASE_URL . '/Vista/Paginas/nosotros.php'; ?>" class="text-white text-decoration-none mx-2">Sobre Nosotros</a>
+
+            <span class="text-white mx-2">|</span>
+            <a href="https://github.com/ailenFlores/tienda" class="text-white text-decoration-none mx-2">GitHub</a>
+            <span class="text-white mx-2">|</span>
+            <a href="<?php echo BASE_URL . '/Vista/Paginas/sobreEmpresa.php'; ?>" class="text-white text-decoration-none mx-2">Sobre Empresa</a>
         </div>
-        <div class="col-md-4 d-flex justify-content-center">
-            <a class="btn btn-outline-light btn-floating m-1" href="https://www.facebook.com/tu_pagina" role="button" aria-label="Facebook">
+
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-outline-light btn-floating m-1" href="#" role="button" aria-label="Facebook">
                 <i class="bi bi-facebook"></i>
             </a>
-            <a class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/tu_pagina" role="button" aria-label="Instagram">
+            <a class="btn btn-outline-light btn-floating m-1" href="#" role="button" aria-label="Instagram">
                 <i class="bi bi-instagram"></i>
             </a>
-            <a class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/tu_pagina" role="button" aria-label="Instagram">
+            <a class="btn btn-outline-light btn-floating m-1" href="#" role="button" aria-label="WhatsApp">
                 <i class="bi bi-whatsapp"></i>
             </a>
         </div>
     </div>
 </footer>
+
 
 <?php include (INCLUDES_PATH."scripts.php"); ?>
 

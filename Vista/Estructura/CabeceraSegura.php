@@ -16,7 +16,7 @@ include_once("/xampp/htdocs/tienda/configuracion.php");
 <header>
      <!-- Top Notification -->
 <div class="text-center py-2 bg-primary text-white">
-    Envío gratis por compras iguales o superiores a $120.000 
+   Tienda de Equipo de Proteccion Personal.
 </div>
     <?php 
     // Incluir el menú de navegación desde el archivo "menu.php"
