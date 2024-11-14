@@ -139,7 +139,7 @@ class Producto {
     public function insertar() {
         $resp = false;
         $base = new bdcarritocompras();
-        $sql = "INSERT INTO producto (pronombre, prodetalle, procantstock, proimporte ,prodeshabilitado)  
+        $sql = "INSERT INTO producto (pronombre, prodetalle, procantstock, proimporte, prodeshabilitado)  
                 VALUES (
                     '" . $this->getPronombre() . "', 
                     '" . $this->getProdetalle() . "', 
@@ -169,7 +169,7 @@ class Producto {
        pronombre = '" . $this->getPronombre() . "',
        prodetalle = '" . $this->getProdetalle() . "',
        procantstock = '" . $this->getProcantstock() . "',
-       proimporte = '" . $this->getProimporte() . "', 
+       proimporte = '" . $this->getProimporte() . "'
        WHERE idproducto = " . $this->getIdproducto();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {

@@ -210,7 +210,7 @@
                     foreach($arregloItemsCargar as $item){
                         $productoCarga = $item -> getObjProducto();
                     $cantidadFinal = ($productoCarga -> getProcantstock()) - ($item -> getCicantidad());
-                    $objAbmProducto -> modificacion(['idproducto' => $productoCarga -> getIdproducto(), 'pronombre' => $productoCarga -> getPronombre(), 'prodetalle' => $productoCarga -> getProdetalle(), 'procantstock' => $cantidadFinal, 'proimporte' => $productoCarga -> getProimporte(), 'proimg' => $productoCarga -> getProimg(), 'prodeshabilitado' => $productoCarga -> getProdeshabilitado()]);
+                    $objAbmProducto -> modificacion(['idproducto' => $productoCarga -> getIdproducto(), 'pronombre' => $productoCarga -> getPronombre(), 'prodetalle' => $productoCarga -> getProdetalle(), 'procantstock' => $cantidadFinal, 'proimporte' => $productoCarga -> getProimporte(), 'prodeshabilitado' => $productoCarga -> getProdeshabilitado()]);
                     }
                     $redireccion="Location:" . BASE_URL . "/vista/privado/usuario/tiendaFinalizar.php?transaccion=exito";
                 }else{

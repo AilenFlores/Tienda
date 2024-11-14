@@ -68,7 +68,7 @@ class AbmProducto {
         $obj = null;
         if( isset($param['idproducto']) ){
             $obj = new Producto();
-            $obj->setear($param['idproducto'],null, null, null, null,null);
+            $obj->setear($param['idproducto'],null, null, null, null, null);
             
         }
         return $obj;
