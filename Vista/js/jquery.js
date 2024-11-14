@@ -6,9 +6,13 @@ function cancelarCompraCliente(){
         let r = window.confirm('¿Seguro que desea cancelar la CompraEstado?');
         if (r){
             console.log('Confirmación recibida');
-            // Cargar los datos seleccionados en el formulario manualmente
-            var formData = $('#fmSeg').serialize();  // Serializa los datos del formulario
-
+            
+            // Serializa los datos del formulario
+            var formData = $('#fmSeg').serialize();
+            
+            // Muestra los datos serializados en la consola
+            console.log("Datos en formData:", formData);
+            
             // Realizar la solicitud AJAX
             $.ajax({
                 url: 'accion/cancelarCompraCliente.php',
@@ -18,22 +22,6 @@ function cancelarCompraCliente(){
                     try {
                         var result = JSON.parse(result);  // Parseamos el resultado
                         
-                        /*Swal.fire({
-                            icon: 'error',
-                            title: '¡Error!',
-                            text: 'Hubo un error al cancelar la compra.',
-                            confirmButtonText: 'Aceptar',
-                            timer: 4000  // Desaparece después de 4 segundos
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Operación exitosa!',
-                            text: 'La compra fue cancelada correctamente.',
-                            confirmButtonText: 'Aceptar',
-                            timer: 4000  // Desaparece después de 4 segundos
-                        });
-*/
                         if (result.errorMsg){
                             $.messager.show({
                                 title: 'Error',
@@ -68,6 +56,7 @@ function cancelarCompraCliente(){
         }
     }
 }
+
 
 
 

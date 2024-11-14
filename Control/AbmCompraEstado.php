@@ -125,13 +125,15 @@
         }
 
         public function cancelarCompraCliente($param) {
+            var_dump($param);
             $arreglo["idcompra"] = $param["idcompra"];
             $listaCompraEstadoConId = $this->buscar($arreglo);
             $compraCancelada = false;
             $i = 0;
             while(!$compraCancelada && $i < count($listaCompraEstadoConId)){
+                
                 $idcompra = $listaCompraEstadoConId[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo();
-                error_log($idcompra);
+                
                 if($idcompra == 4){
                     $compraCancelada = true;
                 } else {
@@ -139,18 +141,20 @@
                 }
             }
             $arregloCompraEstado = $this->buscar(null);
+            
             $compraAvanzada2 = false;
             $i = 0;
             while ((!$compraAvanzada2) && ($i < count($arregloCompraEstado))){
                 if ($arregloCompraEstado[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() > $param["idcompraestadotipo"] 
                 && $arregloCompraEstado[$i]->getObjCompra()->getIdcompra() == $param["idcompra"]){
+                    
                     $compraAvanzada2 = true;
                 } else {
                     $i++;
                 }
             }
-
             if ($param["idcompraestadotipo"] == 1){
+                
                 if (!$compraCancelada){
                     if (!$compraAvanzada2){
                         $fechaActual = date('Y-m-d H:i:s');
