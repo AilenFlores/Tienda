@@ -846,7 +846,7 @@ $(document).ready(function() {
 
 function cargarDatosUsuario() {
     $.ajax({
-        url: 'accion/accionListar.php',
+        url: '../accion/accionListarUsuario.php',
         method: 'POST',
         dataType: 'json',
         success: function(data) {
@@ -855,6 +855,33 @@ function cargarDatosUsuario() {
                 $('#idUsuario').val(data[0].idUsuario);
                 $('#usNombre').val(data[0].usNombre);
                 $('#usMail').val(data[0].usMail);
+            } else {
+                console.log("Datos incompletos o nulos.");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log("Error en la petición AJAX: " + error);
+        }
+    });
+}
+
+// funcion para cargar los datos del usuario en el formulario de editar perfil dinamicamente
+$(document).ready(function() {
+    if ($('#formPass').length) {
+        cargarPass(); // Llamar a la función cargarDatosUsuario() cuando el formulario esté presente
+    }
+});
+
+function cargarPass() {
+    $.ajax({
+        url: '../accion/accionListarUsuario.php',
+        method: 'POST',
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);  // Verifica la respuesta
+            if (data) {
+                $('#idUsuarioPass').val(data[0].idUsuario);
+                console.log(data[0].idUsuario);
             } else {
                 console.log("Datos incompletos o nulos.");
             }

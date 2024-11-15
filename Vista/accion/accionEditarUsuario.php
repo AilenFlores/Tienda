@@ -1,5 +1,5 @@
 <?php
-include_once "../../../../configuracion.php";
+include_once "../../configuracion.php";
 $data = data_submitted();
 $retorno = ['respuesta' => false];
 $data["accion"] = "editarActual";
@@ -8,10 +8,11 @@ $data["accion"] = "editarActual";
 if (isset($data['idUsuario'])) {
     $data["idUsuario"] = intval($data["idUsuario"]);
     $objC = new AbmUsuarioLogin();
-    $objUsuarioExiste = convert_array($objC->buscar(['usnombre' => $data['usNombre']]));
-    if ($objUsuarioExiste && $objUsuarioExiste[0]['idUsuario'] != $data['idUsuario']) {
-        $sms_error = "El nombre de usuario ya existe";
-    } else {
+    $estado=$objC->existe($data);
+    if (!$estado) {
+        $sms_error = "El usuario ya existe en la base de datos";
+    }
+    else {
         $respuesta = $objC->abm($data);
         if (!$respuesta) {
             $sms_error = "La acción de MODIFICACIÓN no pudo concretarse";

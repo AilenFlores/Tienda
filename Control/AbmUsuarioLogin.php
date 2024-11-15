@@ -1,6 +1,19 @@
 <?php 
 class AbmUsuarioLogin {
 
+    public function existe($data){
+        $resp = true;  
+        // Buscamos si ya existe un usuario con el mismo nombre
+        $objUsuarioExiste = convert_array($this->buscar(['usnombre' => $data['usNombre']]));
+        if (!empty($objUsuarioExiste) && $objUsuarioExiste[0]['idUsuario'] != $data['idUsuario']) {
+            // Si encontramos un usuario con el mismo nombre y un ID diferente, devolvemos false
+            $resp = false;
+        }
+    
+        return $resp;
+    }
+    
+
     /**
      * Método principal para manejar las acciones relacionadas con usuarios.
      * @param array $datos Arreglo de datos con la acción y parámetros necesarios.
@@ -25,23 +38,15 @@ class AbmUsuarioLogin {
         $datos["usPass"] = $objUsuario[0]["usPass"]; // Asigna la contraseña actual
         $this->modificacion($datos);  // Realiza la modificación
         $resp = true;
-        // Actualizar nombre de usuario en la sesión
-        session_start();
-        $_SESSION['usnombre'] = $datos['usNombre']; // Actualizar nombre de usuario en la sesión
          return $resp; }
         
         /* Edita el contraseña ya sea desde el usuario o desde el abm de administrador */
         if($datos['accion']=='editarPass'){
-            if(isset($datos["idUsuarioPass"])){
-                $idUsuario=$datos["idUsuarioPass"];
-            }
-            else{
-                $idUsuario=$datos["idUsuario"];
-            }
-            $objUsuario = convert_array($this->buscar(['idusuario' => $idUsuario]));
-            $objUsuario[0]["usPass"] = $datos["passNew"]; // Asigna la nueva contraseña
-            $this->modificacion($objUsuario[0]);
-            $resp = true;
+         $idUsuario=$datos["idUsuarioPass"];
+         $objUsuario = convert_array($this->buscar(['idusuario' => $idUsuario]));
+         $objUsuario[0]["usPass"] = $datos["passNew"]; // Asigna la nueva contraseña
+         $this->modificacion($objUsuario[0]);
+         $resp = true;
         }
 
         /* Registra un nuevo usuario verificando que no existe un usuario con el mismo nombre */

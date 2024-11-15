@@ -24,7 +24,7 @@ ob_start(); //
                         ?>
                         <div class="dropdown">
                             <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <?= "Usuario: " . $_SESSION["usnombre"] ?>
+                                <?= "Perfil" ;?>
                             </button>
 
                                <!-- Menu Dinamico -->

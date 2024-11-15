@@ -1,5 +1,5 @@
 <?php 
-include_once("../../Estructura/CabeceraSegura.php"); 
+include_once("../Estructura/CabeceraSegura.php"); 
 ?>
 <main class="flex-fill bg-light">
     <div class="container my-4">
@@ -51,6 +51,7 @@ include_once("../../Estructura/CabeceraSegura.php");
                     <div class="col-md-5">
                         <form method="post" id="formPass" name="formPass" novalidate>
                             <div class="mb-3">
+                                <input type="hidden" class="form-control bg-light" id="idUsuarioPass" name="idUsuarioPass" readonly>
                                 <label for="passNew" class="form-label"><strong>Cambiar Contraseña:</strong></label>
                                 <input type="password" class="form-control bg-light" id="passNew" name="passNew">
                                 <div class="invalid-feedback">

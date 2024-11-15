@@ -256,7 +256,7 @@ function saveUsuario() {
         if (result.isConfirmed) {
             // Si el usuario confirma, enviamos el formulario con AJAX
             $.ajax({
-                url: "accion/accionEditar.php",
+                url: "../accion/accionEditarUsuario.php",
                 method: "POST",
                 data: $('#formUsuario').serialize(), 
                 success: function(result) {
@@ -326,7 +326,7 @@ function savePass() {
         if (result.isConfirmed) {
             // Envío del formulario con AJAX
             $.ajax({
-                url: "accion/accionPass.php",
+                url: "../accion/accionPassUsuario.php",
                 method: "POST",
                 data: $('#formPass').serialize(), 
                 success: function(response){
