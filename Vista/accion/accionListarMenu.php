@@ -1,14 +1,25 @@
-<?php
+<?php 
 include_once "../../configuracion.php";
-session_start();
-$session = new Session();
-$respuesta = [];
+$data = data_submitted();
+$objControl = new AbmMenu();
+$objMenuRol = new AbmMenuRol();
+$objRol = new AbmRol();
+$list = convert_array($objControl->buscar($data));
 
-if ($session->validar()) { // Si la sesión está iniciada
-    $roles = $session->getRol();
-    $objMenuRol = new AbmMenuRol();
+foreach ($list as $key => $menuObj) {
+    $roles = convert_array($objMenuRol->buscar(['idmenu' => $menuObj['idmenu']]));
+    $list[$key]['meRol'] = [];
     foreach ($roles as $rol) {
-        $respuesta = $objMenuRol->menuesByIdRol($rol); 
+        $rolActual = convert_array($objRol->buscar(["idRol" => $rol["objrol"]]));
+        if (!empty($rolActual)) { // Verificar si se encontró el rol
+            $list[$key]['meRol'][] = $rolActual[0]["roDescripcion"]; 
+            $list[$key]['idRol'][] = $rolActual[0]["idRol"];
+        }
     }
 }
-echo json_encode($respuesta);
+echo json_encode($list);
+
+?>
+
+
+                                

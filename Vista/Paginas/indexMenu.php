@@ -1,11 +1,11 @@
 <?php 
-include_once("../../../Estructura/CabeceraSegura.php");
+include_once("../Estructura/CabeceraSegura.php");
 ?>
 <title>Basic CRUD  - Menu y Menu Rol </title>
 <h2 style="text-align: center; font-size: 24px; color: #333; margin-bottom: 20px; font-weight: bold;">Gestión - Menus</h2>
 <div style="display: flex; justify-content: center; margin-bottom: 20px;">
     <table id="dg" title="Administrador de Menues" class="easyui-datagrid" style="width:1200px;height:350px;"
-        url="accion/accionListar.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
+        url="../accion/accionListarMenu.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
                 <th field="idmenu" width="20">ID Menu</th>
