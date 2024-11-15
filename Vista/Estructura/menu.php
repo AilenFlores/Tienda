@@ -31,7 +31,7 @@ ob_start(); //
                             <ul class="dropdown-menu" id="menuDinamico" aria-labelledby="userDropdown">
                                  <div id="menuItems">    <!-- aca se cargarán los elementos del menú dinámico --> </div>
                                  <li><hr class="dropdown-divider"></li>
-                                 <li><a class="dropdown-item" href="/Tienda/Vista/privado/sesion/logout.php">Cerrar Sesión</a></li>
+                                 <li><a class="dropdown-item" href="/Tienda/Vista/paginas/logout.php">Cerrar Sesión</a></li>
                             </ul>
 
                        <!-- Menu Dinamico -->
@@ -41,8 +41,8 @@ ob_start(); //
                     Mi Cuenta
                 </a>
                 <ul class="dropdown-menu " aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="<?= BASE_URL; ?>/Vista/publico/login/login.php">Iniciar Sesión</a></li>
-                    <li><a class="dropdown-item" href="<?= BASE_URL; ?>/Vista/publico/login/registro.php">Registro</a></li>
+                    <li><a class="dropdown-item" href="<?= BASE_URL; ?>/Vista/paginas/login.php">Iniciar Sesión</a></li>
+                    <li><a class="dropdown-item" href="<?= BASE_URL; ?>/Vista/paginas/registro.php">Registro</a></li>
                 </ul> <?php } ?>
             </li>
 
@@ -56,7 +56,7 @@ ob_start(); //
 <script>
  $(document).ready(function() {
     $.ajax({
-        url: '<?= BASE_URL ?>/vista/accion/accionListarMenu.php',
+        url: '<?= BASE_URL ?>/vista/accion/accionListarMenuDinamico.php',
         method: 'GET',
         dataType: 'json',
         success: function(data) {

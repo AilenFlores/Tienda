@@ -154,13 +154,62 @@ function muestraDetalleCompra(){
 
 ////////////////////////////////////////////////////////////////////////////// Productos
 
+function editarImagen(){
+    var row = $('#dg').datagrid('getSelected');
+    if (row){
+        $('#dlgImg').dialog('open').dialog('center').dialog('setTitle','Editar Imagen');
+        $('#fmImg').form('load',row);
+        url = '../accion/accionEditarImagen.php';    
+    }
+    else {
+        $.messager.alert('Advertencia', 'Seleccione un producto primero.', 'warning');
+    }
+}
+
+function guardarImagen(){
+    $('#fmImg').form('submit', {
+        url: url,  
+        onSubmit: function(){
+            return $(this).form('validate');  
+        },
+        success: function(result){
+            try {
+                var result = JSON.parse(result);
+                // Verifica si hay un mensaje de error
+                if (result.errorMsg) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg  // Muestra el mensaje de error
+                    });
+                } else {
+                    $.messager.show({
+                        title: 'Operación exitosa',
+                        msg: "Imagen actualizada correctamente."
+                    });
+
+                    $('#dlgImg').dialog('close');
+                    $('#dgImg').datagrid('reload');  
+                }
+            } catch (e) {
+                $.messager.show({
+                    title: 'Error',
+                    msg: 'Error al procesar la respuesta del servidor.'
+                });
+            }
+        }
+    });
+}
+
+
 //Funcion para abrir el dialogo de editar productos
 function editarProductos(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Producto');
         $('#fm').form('load',row);
-        url = 'accion/accionEditar.php';    
+        // Ocultar el campo de la imagen
+        $('#fm').find('input[name="proimg"]').closest('div').hide();
+        url = '../accion/accionEditarProductos.php';    
     }
     else {
         $.messager.alert('Advertencia', 'Seleccione un producto primero.', 'warning');
@@ -171,7 +220,9 @@ function editarProductos(){
 function nuevoProductos(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Producto');
     $('#fm').form('clear');
-    url = 'accion/accionAlta.php';
+    // Mostrar el campo de la imagen
+    $('#fm').find('input[name="proimg"]').closest('div').show();
+    url = '../accion/accionAltaProductos.php';
 }
 
 // Función para guardar los productos
@@ -196,7 +247,6 @@ function saveProductos(){
         return false;
     }
     
-
     let stock = $('#prostock').val();
     if (stock === '' || parseInt(stock) <= 0) {
         $.messager.show({
@@ -217,16 +267,6 @@ function saveProductos(){
         return false;
     }
 
-    let imagen = $('#proimg').val();
-    if (imagen === '' || !imagen.match(/\.(jpg)$/)) {
-        $.messager.show({
-            title: "Imagen inválida",
-            msg: 'Ingrese una imagen válida formato jpg.',
-            showType: 'show'
-        });
-        return false
-    }
-
     $('#fm').form('submit',{
         url: url,
         onSubmit: function(){
@@ -235,6 +275,14 @@ function saveProductos(){
         success: function(result){
             try {
                 let resultObj = JSON.parse(result);
+                console.log(resultObj);
+                if (resultObj.respuesta){
+                    $.messager.show({
+                        title: 'Operacion exitosa',
+                        msg: "Los datos se enviaron correctamente."
+                    });
+                }
+
                 if (!resultObj.respuesta){
                     $.messager.show({
                         title: 'Error',
@@ -259,9 +307,9 @@ function saveProductos(){
 function bajaProductos(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
-        $.messager.confirm('Confirm', '¿Seguro que desea eliminar?', function(r){
+        $.messager.confirm('Confirm', '¿Seguro que desea cambiar el estado?', function(r){
             if (r){
-                $.post('accion/accionBaja.php', { idproducto: row.idproducto },
+                $.post('../accion/accionBajaProductos.php', { idproducto: row.idproducto },
                 function(result){
                     if (result.respuesta){
                         $('#dg').datagrid('reload'); // recargar los datos
@@ -290,7 +338,7 @@ function editarRol(){
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Rol');
         $('#fm').form('load',row);
-        url = 'accion/accionEditar.php';    
+        url = '../accion/accionEditarRol.php';    
     }
     else {
         $.messager.alert('Advertencia', 'Seleccione un rol primero.', 'warning');
@@ -301,7 +349,7 @@ function editarRol(){
 function nuevoRol(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Agregar nuevo Rol');
     $('#fm').form('clear');
-    url = 'accion/accionAlta.php';
+    url = '../accion/accionAltaRol.php';
 }
 
 //Funcion para guardar los roles
@@ -322,6 +370,13 @@ function saveRol(){
         },
         success: function(result){
             var result = eval('('+result+')');
+            if (result.respuesta){
+                $.messager.show({
+                    title: 'Operacion exitosa',
+                    msg: "Los datos se enviaron correctamente."
+                });
+            }
+          
             if (!result.respuesta){
                 $.messager.show({
                     title: 'Error',
@@ -339,9 +394,9 @@ function saveRol(){
 function bajaRol(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
-        $.messager.confirm('Confirm', '¿Seguro que desea eliminar?', function(r){
+        $.messager.confirm('Confirm', '¿Seguro que desea eliminar el rol?', function(r){
             if (r){
-                $.post('accion/accionBaja.php', { idRol: row.idRol },
+                $.post('../accion/accionBajaRol.php', { idRol: row.idRol },
                 function(result){
                     if (result.respuesta){
                         $('#dg').datagrid('reload'); // recargar los datos
@@ -353,7 +408,7 @@ function bajaRol(){
                             }}, 'json'
                          ).fail(function(jqXHR, textStatus, errorThrown) {
                             console.log("Error en la solicitud:", textStatus, errorThrown);
-                            $.messager.alert('Error', 'No se pudo conectar con el servidor.', 'error');
+                            $.messager.alert('Error', 'El rol esta asociado a un usuario.', 'error');
                         });
                     }
                 });
@@ -396,7 +451,7 @@ function savePassword() {
         return field;
     });
     $.ajax({
-        url: "accion/accionPass.php",
+        url: "../accion/accionPassUsuarios.php",
         method: "POST",
         data: $.param(formData), 
         success: function(result) {
@@ -405,7 +460,12 @@ function savePassword() {
                 $('#dlgPass').dialog('close');
                 // Recarga la tabla de datos
                 $('#dg').datagrid('reload');
-                alert("Cambios Realizados");
+                if (result.respuesta){
+                    $.messager.show({
+                        title: 'Operacion exitosa',
+                        msg: "Los datos se enviaron correctamente."
+                    });
+                }
             }
         }
     });
@@ -413,7 +473,7 @@ function savePassword() {
 // Funcion para abrir el dialogo de editar usuarios
 function cargarRolesUsuarios(callback) {
     $.ajax({
-        url: 'accion/accionRolesExist.php',
+        url: '../accion/accionRolesExistUsuarios.php',
         method: 'GET',
         dataType: 'json',
         success: function(roles) {
@@ -469,7 +529,7 @@ function editarUsuarios() {
         $('#fm').form('load', row);
         // Ocultar el campo de la contraseña
         $('#fm').find('input[name="usPass"]').closest('div').hide();
-        url = 'accion/accionEditar.php'; 
+        url = '../accion/accionEditarUsuarios.php'; 
         
         // Cargar los roles y luego marcar los seleccionados
         cargarRolesUsuarios(function(roles) {
@@ -487,7 +547,7 @@ function nuevoUsuarios(){
     $('#fm').form('clear');
     // Mostrar el campo de la contraseña
     $('#fm').find('input[name="usPass"]').closest('div').show();
-    url = 'accion/accionAlta.php';
+    url = '../accion/accionAltaUsuarios.php';
     //carga los roles en el formulario
     cargarRolesUsuarios(); }
 
@@ -583,7 +643,7 @@ function nuevoUsuarios(){
     if (row){
         $.messager.confirm('Confirm', '¿Seguro que desea cambiar el estado?', function(r){
             if (r){
-                $.post('accion/accionBaja.php', { idUsuario: row.idUsuario },
+                $.post('../accion/accionBajaUsuarios.php', { idUsuario: row.idUsuario },
                 function(result){
                     if (result.respuesta){
                      $('#dg').datagrid('reload'); 
@@ -605,7 +665,7 @@ function nuevoUsuarios(){
 // Función para cargar los roles en el formulario de menú
 function cargarRolesMenu(callback) {
     $.ajax({
-        url: 'accion/accionRolesExist.php',
+        url: '../accion/accionRolesExistMe.php',
         method: 'GET',
         dataType: 'json',
         success: function(roles) {
@@ -655,7 +715,7 @@ function editarMenu() {
     if (row) {
         $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Editar Menu');
         $('#fm').form('load', row);
-        url = 'accion/accionEditar.php'; 
+        url = '../accion/accionEditarMenu.php'; 
         
         // Cargar los roles y luego marcar los seleccionados
         cargarRolesMenu(function(roles) {
@@ -672,7 +732,7 @@ function nuevoMenu() {
     // Abrir el diálogo para nuevo menú
     $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Nuevo Menu');
     $('#fm').form('clear');
-    url = 'accion/accionAlta.php'; 
+    url = '../accion/accionAltaMenu.php'; 
 
     // Cargar los roles sin marcar ninguno (para nuevo menú)
     cargarRolesMenu();
@@ -683,8 +743,8 @@ function saveMenu(){
     var nombre = $('#menombre').val().trim();
     if (nombre === '') {
         $.messager.show({
-            title: 'Error',
-            msg: 'Por favor, ingrese un nombre.',
+            title: 'Nombre Invalido',
+            msg: 'Por favor, ingrese un nombre valido.',
             showType: 'show'
         });
         return false; 
@@ -692,8 +752,8 @@ function saveMenu(){
     var descripcion = $('#medescripcion').val().trim();
     if (descripcion === '') {
         $.messager.show({
-            title: 'Error',
-            msg: 'Por favor, ingrese una URL.',
+            title: 'URL Invalida',
+            msg: 'Por favor, ingrese una URL valida.',
             showType: 'show'
         });
         return false; 
@@ -704,7 +764,7 @@ function saveMenu(){
     // Verifica que solo uno esté seleccionado
     if (selectedCheckboxes.length === 0 || selectedCheckboxes.length > 1) {
         $.messager.show({
-            title: 'Error',
+            title: 'Advertencia',
             msg: 'Por favor, seleccione solo un rol.',
             showType: 'show'
         });
@@ -718,7 +778,13 @@ function saveMenu(){
         },
         success: function(result){
             var result = eval('('+result+')');
-            alert("Accion Correcta");   
+           // alert("Accion Correcta");   
+           if (result.respuesta){
+                $.messager.show({
+                    title: 'Operacion exitosa',
+                    msg: "Los datos se enviaron correctamente."
+                });
+            }
             if (!result.respuesta){
                 $.messager.show({
                     title: 'Error',
@@ -736,9 +802,9 @@ function saveMenu(){
 function bajaMenu(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
-        $.messager.confirm('Confirm', '¿Seguro que desea eliminar?', function(r){
+        $.messager.confirm('Confirm', '¿Seguro que desea cambiar el estado del menu?', function(r){
             if (r){
-                $.post('accion/accionBaja.php', { idmenu: row.idmenu },
+                $.post('../accion/accionBajaMenu.php', { idmenu: row.idmenu },
                 function(result){
                     if (result.respuesta){
                         $('#dg').datagrid('reload'); // recargar los datos
@@ -755,7 +821,7 @@ function bajaMenu(){
                     }
                 });
             } else {
-                $.messager.alert('Advertencia', 'Seleccione un usuario primero.', 'warning');
+                $.messager.alert('Advertencia', 'Seleccione un menu primero.', 'warning');
             }
         }
 

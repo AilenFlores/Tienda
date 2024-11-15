@@ -30,7 +30,8 @@ if(!$resp) {
     $mensaje ="Error, inicie sesion y vuelva a intentarlo";
    echo "<script>location.href = '".BASE_URL."/vista/publico/login/login.php?msg=".$mensaje."';</script>";
 }
-else{
+
+/**else{
     $abmMenu= new AbmMenuRol();
     $rol=$_SESSION["roles"];
     if(!$abmMenu->tienePermiso($rol)){
@@ -38,7 +39,7 @@ else{
         $mensaje ="Error, no tiene permisos para acceder a esta pagina";
         echo "<script>location.href = '".BASE_URL."/vista/publico/login/login.php?msg=".$mensaje."';</script>";
     }
-}
+}*/
 ?>
 </header>
 
