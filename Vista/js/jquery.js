@@ -461,7 +461,7 @@ function savePassword() {
         return field;
     });
     $.ajax({
-        url: "../accion/accionPassUsuarios.php",
+        url: "../accion/accionPassUsuario.php",
         method: "POST",
         data: $.param(formData), 
         success: function(result) {

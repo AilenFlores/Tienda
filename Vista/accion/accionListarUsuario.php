@@ -1,9 +1,11 @@
 <?php
-session_start(); 
 include_once "../../configuracion.php";
 $data = data_submitted();
 $objControl = new AbmUsuarioLogin();
-$list = convert_array($objControl->buscar(["idusuario" => $_SESSION['idusuario']]));
+$session = new Session();
+$usuario= $session->getUsuario();
+$idUsuario = $usuario->getIdUsuario();
+$list = convert_array($objControl->buscar(["idusuario" => $idUsuario]));
 echo json_encode($list);
 ?>
 

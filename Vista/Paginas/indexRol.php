@@ -5,7 +5,7 @@ include_once("../Estructura/CabeceraSegura.php");
 <h2 style="text-align: center; font-size: 24px; color: #333; margin-bottom: 20px; font-weight: bold;">Gestión - Roles</h2>
 <div style="display: flex; justify-content: center; margin-bottom: 20px;">
     <table id="dg" title="Administrador de Roles" class="easyui-datagrid" style="width:800px;height:300px;"
-        url="../accion/accionListarRol.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
+        url="../accion/accionRolesExist.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
                 <th field="idRol" width="50">ID Rol</th>

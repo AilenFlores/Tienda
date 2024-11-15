@@ -1,7 +1,6 @@
 
 <?php
 include_once "../../configuracion.php";
-session_start(); // Inicia o reanuda una sesión
 $data = data_submitted();
 $respuesta = false;
 $data["accion"]="editarPass";
