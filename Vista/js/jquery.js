@@ -1,28 +1,35 @@
 ////////////////////////////////////////////////////////////////////////////////////////Funciones para cancelar compra y ver detalles en MIS COMPRAS del cliente.
 //Funciones para la gestion de compras del Cliente
-function cancelarCompraCliente(){
+function cancelarCompraCliente() {
     var row = $('#dgSeg').datagrid('getSelected');
-    if (row){
+    if (row) {
         let r = window.confirm('¿Seguro que desea cancelar la CompraEstado?');
-        if (r){
+        if (r) {
             console.log('Confirmación recibida');
             
+            // Llenar el formulario con los datos de la fila seleccionada
+            $('#fmSeg [name="idcompraestado"]').val(row.idcompraestado || '');
+            $('#fmSeg [name="idcompra"]').val(row.idcompra || '');
+            $('#fmSeg [name="idcompraestadotipo"]').val(row.idcompraestadotipo || '');
+            $('#fmSeg [name="cefechaini"]').val(row.cefechaini || '');
+            $('#fmSeg [name="cefechafin"]').val(row.cefechafin || '');
+
             // Serializa los datos del formulario
             var formData = $('#fmSeg').serialize();
-            
+
             // Muestra los datos serializados en la consola
             console.log("Datos en formData:", formData);
-            
+
             // Realizar la solicitud AJAX
             $.ajax({
                 url: 'accion/cancelarCompraCliente.php',
                 type: 'POST',
                 data: formData,
-                success: function(result){
+                success: function(result) {
                     try {
-                        var result = JSON.parse(result);  // Parseamos el resultado
+                        var result = JSON.parse(result);
                         
-                        if (result.errorMsg){
+                        if (result.errorMsg) {
                             $.messager.show({
                                 title: 'Error',
                                 msg: result.errorMsg
@@ -32,7 +39,7 @@ function cancelarCompraCliente(){
                                 title: 'Operación exitosa',
                                 msg: result.respuesta
                             });
-                            $('#dgSeg').datagrid('reload');    // Recargar los datos del datagrid
+                            $('#dgSeg').datagrid('reload'); 
                         }
                     } catch (e) {
                         console.error("Error al parsear el resultado:", e);
@@ -43,7 +50,7 @@ function cancelarCompraCliente(){
                         });
                     }
                 },
-                error: function(xhr, status, error){
+                error: function(xhr, status, error) {
                     console.error("Error en la solicitud AJAX:", error);
                     $.messager.show({
                         title: 'Error',
@@ -56,6 +63,8 @@ function cancelarCompraCliente(){
         }
     }
 }
+
+
 
 
 

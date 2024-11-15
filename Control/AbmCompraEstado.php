@@ -177,9 +177,13 @@
                                         $arregloParaModificar["pronombre"] = $objProducto->getPronombre();
                                         $arregloParaModificar["prodetalle"] = $objProducto->getProdetalle();
                                         $arregloParaModificar["procantstock"] = $nuevoStock;
-                                        $arregloParaModificar["proimporte"] = $objProducto->getProprecio();
+                                        $arregloParaModificar["proimporte"] = $objProducto->getProimporte();
                                         $arregloParaModificar["prodeshabilitado"] = $objProducto->getProdeshabilitado();
-                                        if ($objAbmProducto->modificacion($arregloParaModificar)){
+                                        echo "<pre>";
+                                            var_dump($arregloParaModificar);
+                                            echo "</pre>";
+                                            die(); // Detenemos la ejecución para ver el resultado
+                                        if ($objAbmProducto->modificacion($arregloParaModificar)){   
                                             $respuesta["respuesta"] = "Se canceló la compra y se actualizó el stock correctamente";
                                         } else {
                                             $respuesta["errorMsg"] = "No se pudo actualizar el stock";    
