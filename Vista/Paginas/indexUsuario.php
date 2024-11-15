@@ -6,7 +6,7 @@ include_once("../Estructura/CabeceraSegura.php");
         <div class="card shadow-sm">
             <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center"> 
                 <h6 class="mb-0 text-black"> Editar usuario</h6>
-                <a href="../index.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
+                <a href="../home/index.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
             </div>
 
             <div class="card-body">
