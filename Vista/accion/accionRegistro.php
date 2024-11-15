@@ -1,5 +1,5 @@
 <?php
-include_once "../../../../configuracion.php";
+include_once "../../configuracion.php";
 require_once 'C:/xampp/htdocs/TIENDA/util/vendor/autoload.php';    
 
     $data = data_submitted();

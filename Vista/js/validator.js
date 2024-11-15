@@ -46,7 +46,7 @@ $(document).ready(function() {
 // Función de envío AJAX
 function enviarLogin() {
     $.ajax({
-        url: 'accion/accionAlta.php',
+        url: '../accion/accionAltaLogin.php',
         type: 'POST',
         data: $('#usLogin').serialize(),
         success: function(result) {
@@ -61,7 +61,7 @@ function enviarLogin() {
                         timer: 1000,  
                         showConfirmButton: false,
                     }).then(() => {
-                        window.location.href = "../../home/index.php";  // Redirige al index
+                        window.location.href = "../home/index.php";  // Redirige al index
                     });
                     
                 } else {
@@ -157,7 +157,7 @@ function EnviarRegistro() {
     });
 
     $.ajax({
-        url: 'accion/accionRegistro.php',
+        url: '../accion/accionRegistro.php',
         type: 'POST',
         data: $('#formRegistro').serialize(),
         success: function(result) {
@@ -173,7 +173,7 @@ function EnviarRegistro() {
                         confirmButtonText: 'Aceptar',
                         timer: 4000  
                     }).then(() => {
-                        window.location.href = "../../publico/login/login.php";  // Redirige al login
+                        window.location.href = "../paginas/login.php";  // Redirige al login
                     });
 
                 } else {

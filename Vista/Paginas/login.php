@@ -1,5 +1,5 @@
 <?php 
-include_once("../../Estructura/Cabecera.php"); 
+include_once("../Estructura/Cabecera.php"); 
 ?>
 
 <main class="flex-fill bg-light">

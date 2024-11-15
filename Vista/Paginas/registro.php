@@ -1,4 +1,4 @@
-<?php include ("../../Estructura/Cabecera.php"); ?>
+<?php include ("../Estructura/Cabecera.php"); ?>
 
 <main class="flex-fill bg-light">
     <div class="container my-4">

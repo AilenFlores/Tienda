@@ -41,8 +41,8 @@ ob_start(); //
                     Mi Cuenta
                 </a>
                 <ul class="dropdown-menu " aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="<?= BASE_URL; ?>/Vista/publico/login/login.php">Iniciar Sesión</a></li>
-                    <li><a class="dropdown-item" href="<?= BASE_URL; ?>/Vista/publico/login/registro.php">Registro</a></li>
+                    <li><a class="dropdown-item" href="<?= BASE_URL; ?>/Vista/paginas/login.php">Iniciar Sesión</a></li>
+                    <li><a class="dropdown-item" href="<?= BASE_URL; ?>/Vista/paginas/registro.php">Registro</a></li>
                 </ul> <?php } ?>
             </li>
 

@@ -1,5 +1,5 @@
 <?php
-include_once "../../../../configuracion.php";
+include_once "../../configuracion.php";
 ob_start();
 $data = data_submitted();
 $respuesta = ['respuesta' => false, 'msg' => ''];
