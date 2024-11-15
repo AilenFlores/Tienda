@@ -3,13 +3,11 @@
 include_once "../../configuracion.php";
 $data = data_submitted();
 $respuesta = false;
-$data["accion"]="editar";
+$data["accion"]="editarImagen";
 if (isset($data['idproducto'])){
     $data["idproducto"] = intval($data["idproducto"]); // Convertir a número entero
     $objC = new AbmProducto();
     $respuesta = $objC->abm($data);
-    
-
     if (!$respuesta){
 
         $sms_error = " La accion  MODIFICACION No pudo concretarse";

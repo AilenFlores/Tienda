@@ -24,13 +24,12 @@ include_once("../Estructura/CabeceraSegura.php");
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="nuevoProductos()">Nuevo</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editarProductos()">Editar</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="bajaProductos()">Habilitar/Deshabilitar</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editarImagen()">Cambiar Imagen</a>
 </div>
 
 <div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
 <form id="fm" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 50px">
     <input type="hidden" name="idproducto" id="idproducto">
-    
-    <input type="hidden" name="proimg" id="proimg">
     
     <div style="margin-bottom:10px">
         <input name="pronombre" id="pronombre" class="easyui-textbox" label="Nombre:" required="true" style="width:80%">
@@ -44,13 +43,30 @@ include_once("../Estructura/CabeceraSegura.php");
     <div style="margin-bottom:10px">
         <input name="proimporte" id="proimporte" class="easyui-textbox"  type="number" label="Importe:" required="true" style="width:50%">
     </div>
+    
     <!-- Campo para cargar la foto -->
     <div style="margin-bottom:10px">
-    <input name="proimg" id="proimg" accept=".jpg,.jpeg" required="true" class="easyui-filebox" label="Imagen jpg:" labelPosition="top" data-options="prompt:'Elige un archivo...'" style="width:100%">
-</div>
-
+        <input name="proimg" id="proimg"  required=true accept=".jpg,.jpeg" class="easyui-filebox" label="Imagen jpg:" labelPosition="top" data-options="prompt:'Elige un archivo...'" style="width:100%">
+    </div>
 
 </form>
+
+<!-- Diálogo para cambiar la imagen -->
+<div id="dlgImg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-img-buttons'">
+    <form id="fmImg" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 50px">
+        <!-- Campo para cargar la imagen -->
+        <input type="hidden" name="idproducto" id="idproducto">
+        <div style="margin-bottom:10px">
+            <input name="proimg" id="proimg" required="true" accept=".jpg,.jpeg" class="easyui-filebox" label="Imagen jpg:" labelPosition="top" data-options="prompt:'Elige un archivo...'" style="width:100%">
+        </div>
+    </form>
+
+    <!-- Botones del diálogo -->
+    <div id="dlg-img-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="guardarImagen()">Guardar</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlgImg').dialog('close')" style="width:90px">Cancelar</a>
+    </div>
+</div>
 
 </div>
 

@@ -5,6 +5,28 @@ class AbmProducto {
     
     public function abm($datos){
         $resp = false;
+        if($datos['accion'] == 'editarImagen'){
+            if(isset($datos['idproducto'])){
+                $carpetaDestino = "../img/productos/";
+                $nombreArchivo = $datos['idproducto'].".jpg";  // El nombre del archivo será el ID del producto
+                $rutaTemporal = $_FILES['proimg']['tmp_name'];
+                $rutaImagen = $carpetaDestino . basename($nombreArchivo);
+                
+                // Verifica si el archivo ya existe, si es así, lo elimina antes de subir el nuevo archivo
+                if(file_exists($rutaImagen)) {
+                    unlink($rutaImagen);  // Elimina la imagen anterior
+                }
+        
+                // Mueve la nueva imagen al directorio de destino
+                if(move_uploaded_file($rutaTemporal, $rutaImagen)){
+                    $resp = true;
+                } else {
+                    $resp = false;  // Si hay un error al mover el archivo
+                }
+            }
+        }
+        
+
         if($datos['accion']=='editar'){
             $this->modificacion($datos);
                 $resp = true;
@@ -16,8 +38,20 @@ class AbmProducto {
         }
         if($datos['accion']=='nuevo'){
             if($this->alta($datos)){
-            $resp =true;}
-        }
+            $nuevo=convert_array($this->buscar(null));
+            $ultimoID=end($nuevo);
+            $idProducto=($ultimoID['idproducto']);
+            // Manejo de la carga de la imagen
+            if (isset($datos['proimg']) && $datos['proimg']['error'] == 0) {
+                 // Establece la carpeta donde se guardarán las imágenes
+                 $carpetaDestino = "../img/productos/";
+                 $nombreArchivo = $idProducto.".jpg"; // El nombre del archivo será el ID del producto
+                 $rutaTemporal = $_FILES['proimg']['tmp_name'];
+                 $rutaImagen = $carpetaDestino . basename($nombreArchivo);
+                  move_uploaded_file($rutaTemporal, $rutaImagen);
+                }       
+                $resp =true;}}
+
         if ($datos['accion'] == 'habilitar') {
             $this->habilitar($datos) ;
             $resp = true;

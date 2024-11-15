@@ -145,12 +145,61 @@ function muestraDetalleCompra(){
 
 ////////////////////////////////////////////////////////////////////////////// Productos
 
+function editarImagen(){
+    var row = $('#dg').datagrid('getSelected');
+    if (row){
+        $('#dlgImg').dialog('open').dialog('center').dialog('setTitle','Editar Imagen');
+        $('#fmImg').form('load',row);
+        url = '../accion/accionEditarImagen.php';    
+    }
+    else {
+        $.messager.alert('Advertencia', 'Seleccione un producto primero.', 'warning');
+    }
+}
+
+function guardarImagen(){
+    $('#fmImg').form('submit', {
+        url: url,  
+        onSubmit: function(){
+            return $(this).form('validate');  
+        },
+        success: function(result){
+            try {
+                var result = JSON.parse(result);
+                // Verifica si hay un mensaje de error
+                if (result.errorMsg) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg  // Muestra el mensaje de error
+                    });
+                } else {
+                    $.messager.show({
+                        title: 'Operación exitosa',
+                        msg: "Imagen actualizada correctamente."
+                    });
+
+                    $('#dlgImg').dialog('close');
+                    $('#dgImg').datagrid('reload');  
+                }
+            } catch (e) {
+                $.messager.show({
+                    title: 'Error',
+                    msg: 'Error al procesar la respuesta del servidor.'
+                });
+            }
+        }
+    });
+}
+
+
 //Funcion para abrir el dialogo de editar productos
 function editarProductos(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Producto');
         $('#fm').form('load',row);
+        // Ocultar el campo de la imagen
+        $('#fm').find('input[name="proimg"]').closest('div').hide();
         url = '../accion/accionEditarProductos.php';    
     }
     else {
@@ -162,6 +211,8 @@ function editarProductos(){
 function nuevoProductos(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Producto');
     $('#fm').form('clear');
+    // Mostrar el campo de la imagen
+    $('#fm').find('input[name="proimg"]').closest('div').show();
     url = '../accion/accionAltaProductos.php';
 }
 
@@ -187,7 +238,6 @@ function saveProductos(){
         return false;
     }
     
-
     let stock = $('#prostock').val();
     if (stock === '' || parseInt(stock) <= 0) {
         $.messager.show({
@@ -216,6 +266,7 @@ function saveProductos(){
         success: function(result){
             try {
                 let resultObj = JSON.parse(result);
+                console.log(resultObj);
                 if (resultObj.respuesta){
                     $.messager.show({
                         title: 'Operacion exitosa',
