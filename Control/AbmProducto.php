@@ -9,7 +9,7 @@ class AbmProducto {
             if(isset($datos['idproducto'])){
                 $carpetaDestino = "../img/productos/";
                 $nombreArchivo = $datos['idproducto'].".jpg";  // El nombre del archivo será el ID del producto
-                $rutaTemporal = $_FILES['proimg']['tmp_name'];
+                $rutaTemporal = $_FILES['proimgNew']['tmp_name'];
                 $rutaImagen = $carpetaDestino . basename($nombreArchivo);
                 
                 // Verifica si el archivo ya existe, si es así, lo elimina antes de subir el nuevo archivo
