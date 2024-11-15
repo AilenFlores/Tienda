@@ -1,11 +1,11 @@
 <?php 
-include_once("../../../Estructura/CabeceraSegura.php"); 
+include_once("../Estructura/CabeceraSegura.php"); 
 ?>
 <title>Basic CRUD  - Usuarios </title>
 <h2 style="text-align: center; font-size: 24px; color: #333; margin-bottom: 20px; font-weight: bold;">Gestión - Usuarios y Roles</h2>
 <div class="container" style="display: flex; justify-content: center; margin-bottom: 20px;">
     <table id="dg" title="Administrador de usuarios" class="easyui-datagrid" style="width:1100px;height:350px;"
-        url="accion/accionListar.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
+        url="../accion/accionListarUsuarios.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
                 <th field="idUsuario" width="30">ID</th>

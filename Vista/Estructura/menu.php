@@ -31,7 +31,7 @@ ob_start(); //
                             <ul class="dropdown-menu" id="menuDinamico" aria-labelledby="userDropdown">
                                  <div id="menuItems">    <!-- aca se cargarán los elementos del menú dinámico --> </div>
                                  <li><hr class="dropdown-divider"></li>
-                                 <li><a class="dropdown-item" href="/Tienda/Vista/privado/sesion/logout.php">Cerrar Sesión</a></li>
+                                 <li><a class="dropdown-item" href="/Tienda/Vista/paginas/logout.php">Cerrar Sesión</a></li>
                             </ul>
 
                        <!-- Menu Dinamico -->

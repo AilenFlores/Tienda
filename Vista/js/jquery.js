@@ -394,7 +394,7 @@ function savePassword() {
         return field;
     });
     $.ajax({
-        url: "accion/accionPass.php",
+        url: "../accion/accionPassUsuarios.php",
         method: "POST",
         data: $.param(formData), 
         success: function(result) {
@@ -403,7 +403,12 @@ function savePassword() {
                 $('#dlgPass').dialog('close');
                 // Recarga la tabla de datos
                 $('#dg').datagrid('reload');
-                alert("Cambios Realizados");
+                if (result.respuesta){
+                    $.messager.show({
+                        title: 'Operacion exitosa',
+                        msg: "Los datos se enviaron correctamente."
+                    });
+                }
             }
         }
     });
@@ -411,7 +416,7 @@ function savePassword() {
 // Funcion para abrir el dialogo de editar usuarios
 function cargarRolesUsuarios(callback) {
     $.ajax({
-        url: 'accion/accionRolesExist.php',
+        url: '../accion/accionRolesExistUsuarios.php',
         method: 'GET',
         dataType: 'json',
         success: function(roles) {
@@ -467,7 +472,7 @@ function editarUsuarios() {
         $('#fm').form('load', row);
         // Ocultar el campo de la contraseña
         $('#fm').find('input[name="usPass"]').closest('div').hide();
-        url = 'accion/accionEditar.php'; 
+        url = '../accion/accionEditarUsuarios.php'; 
         
         // Cargar los roles y luego marcar los seleccionados
         cargarRolesUsuarios(function(roles) {
@@ -485,7 +490,7 @@ function nuevoUsuarios(){
     $('#fm').form('clear');
     // Mostrar el campo de la contraseña
     $('#fm').find('input[name="usPass"]').closest('div').show();
-    url = 'accion/accionAlta.php';
+    url = '../accion/accionAltaUsuarios.php';
     //carga los roles en el formulario
     cargarRolesUsuarios(); }
 
@@ -581,7 +586,7 @@ function nuevoUsuarios(){
     if (row){
         $.messager.confirm('Confirm', '¿Seguro que desea cambiar el estado?', function(r){
             if (r){
-                $.post('accion/accionBaja.php', { idUsuario: row.idUsuario },
+                $.post('../accion/accionBajaUsuarios.php', { idUsuario: row.idUsuario },
                 function(result){
                     if (result.respuesta){
                      $('#dg').datagrid('reload'); 

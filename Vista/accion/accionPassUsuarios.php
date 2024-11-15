@@ -1,6 +1,6 @@
 
 <?php
-include_once "../../../../../configuracion.php";
+include_once "../../configuracion.php";
 $data = data_submitted();
 $respuesta = false;
 $data["accion"]="editarPass";
