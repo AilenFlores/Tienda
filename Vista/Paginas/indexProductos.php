@@ -46,7 +46,7 @@ include_once("../Estructura/CabeceraSegura.php");
     
     <!-- Campo para cargar la foto -->
     <div style="margin-bottom:10px">
-        <input name="proimg" id="proimg"  required=true accept=".jpg,.jpeg" class="easyui-filebox" label="Imagen jpg:" labelPosition="top" data-options="prompt:'Elige un archivo...'" style="width:100%">
+        <input name="proimg" id="proimg"  accept=".jpg,.jpeg" class="easyui-filebox" label="Imagen jpg:" labelPosition="top" data-options="prompt:'Elige un archivo...'" style="width:100%" >
     </div>
 
 </form>
@@ -57,7 +57,7 @@ include_once("../Estructura/CabeceraSegura.php");
         <!-- Campo para cargar la imagen -->
         <input type="hidden" name="idproducto" id="idproducto">
         <div style="margin-bottom:10px">
-            <input name="proimg" id="proimg" required="true" accept=".jpg,.jpeg" class="easyui-filebox" label="Imagen jpg:" labelPosition="top" data-options="prompt:'Elige un archivo...'" style="width:100%">
+            <input name="proimgNew" id="proimgNew" required="true" accept=".jpg,.jpeg" class="easyui-filebox" label="Imagen jpg:" labelPosition="top" data-options="prompt:'Elige un archivo...'" style="width:100%">
         </div>
     </form>
 
