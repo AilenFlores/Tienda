@@ -483,7 +483,7 @@ function savePassword() {
 // Funcion para abrir el dialogo de editar usuarios
 function cargarRolesUsuarios(callback) {
     $.ajax({
-        url: '../accion/accionRolesExistUsuarios.php',
+        url: '../accion/accionRolesExist.php',
         method: 'GET',
         dataType: 'json',
         success: function(roles) {
@@ -675,7 +675,7 @@ function nuevoUsuarios(){
 // Función para cargar los roles en el formulario de menú
 function cargarRolesMenu(callback) {
     $.ajax({
-        url: '../accion/accionRolesExistMe.php',
+        url: '../accion/accionRolesExist.php',
         method: 'GET',
         dataType: 'json',
         success: function(roles) {
