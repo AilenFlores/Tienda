@@ -1,12 +1,12 @@
 <?php 
-include_once("../../../Estructura/CabeceraSegura.php"); 
+include_once("../Estructura/CabeceraSegura.php"); 
 ?>
 
 <title>Basic CRUD  - Productos </title>
 <h2 style="text-align: center; font-size: 24px; color: #333; margin-bottom: 20px; font-weight: bold;">Gestión - Productos</h2>
 <div style="display: flex; justify-content: center; margin-bottom: 20px;">
     <table id="dg" title="Administrador de Productos" class="easyui-datagrid" style="width:1200px;height:350px;"
-        url="accion/accionListar.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
+        url="../accion/accionListarProductos.php" toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
                 <th field="idproducto" width="20">ID</th>
@@ -46,8 +46,9 @@ include_once("../../../Estructura/CabeceraSegura.php");
     </div>
     <!-- Campo para cargar la foto -->
     <div style="margin-bottom:10px">
-         <input name="proimg" id="proimg" accept="jpg" required="true" class="easyui-filebox" label="Imagen jpg:" labelPosition="top" data-options="prompt:'Elige un archivo...'" style="width:100%">
-    </div>
+    <input name="proimg" id="proimg" accept=".jpg,.jpeg" required="true" class="easyui-filebox" label="Imagen jpg:" labelPosition="top" data-options="prompt:'Elige un archivo...'" style="width:100%">
+</div>
+
 
 </form>
 

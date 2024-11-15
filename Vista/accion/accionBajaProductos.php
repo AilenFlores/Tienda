@@ -1,5 +1,5 @@
 <?php
-include_once "../../../../../configuracion.php";
+include_once "../../configuracion.php";
 $data = data_submitted();
 $retorno = ['respuesta' => false]; // Inicializa la respuesta como false por defecto
 

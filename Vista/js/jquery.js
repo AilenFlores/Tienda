@@ -151,7 +151,7 @@ function editarProductos(){
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Producto');
         $('#fm').form('load',row);
-        url = 'accion/accionEditar.php';    
+        url = '../accion/accionEditarProductos.php';    
     }
     else {
         $.messager.alert('Advertencia', 'Seleccione un producto primero.', 'warning');
@@ -162,7 +162,7 @@ function editarProductos(){
 function nuevoProductos(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Producto');
     $('#fm').form('clear');
-    url = 'accion/accionAlta.php';
+    url = '../accion/accionAltaProductos.php';
 }
 
 // Función para guardar los productos
@@ -208,16 +208,6 @@ function saveProductos(){
         return false;
     }
 
-    let imagen = $('#proimg').val();
-    if (imagen === '' || !imagen.match(/\.(jpg)$/)) {
-        $.messager.show({
-            title: "Imagen inválida",
-            msg: 'Ingrese una imagen válida formato jpg.',
-            showType: 'show'
-        });
-        return false
-    }
-
     $('#fm').form('submit',{
         url: url,
         onSubmit: function(){
@@ -226,6 +216,13 @@ function saveProductos(){
         success: function(result){
             try {
                 let resultObj = JSON.parse(result);
+                if (resultObj.respuesta){
+                    $.messager.show({
+                        title: 'Operacion exitosa',
+                        msg: "Los datos se enviaron correctamente."
+                    });
+                }
+
                 if (!resultObj.respuesta){
                     $.messager.show({
                         title: 'Error',
@@ -250,9 +247,9 @@ function saveProductos(){
 function bajaProductos(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
-        $.messager.confirm('Confirm', '¿Seguro que desea eliminar?', function(r){
+        $.messager.confirm('Confirm', '¿Seguro que desea cambiar el estado?', function(r){
             if (r){
-                $.post('accion/accionBaja.php', { idproducto: row.idproducto },
+                $.post('../accion/accionBajaProductos.php', { idproducto: row.idproducto },
                 function(result){
                     if (result.respuesta){
                         $('#dg').datagrid('reload'); // recargar los datos

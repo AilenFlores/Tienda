@@ -1,5 +1,5 @@
 <?php 
-include_once "../../../../../configuracion.php";
+include_once "../../configuracion.php";
 $data = data_submitted();
 $respuesta = false;
 $mensaje = '';
@@ -15,7 +15,7 @@ if (isset($data['pronombre'])) {
     // Manejo de la carga de la imagen
     if (isset($_FILES['proimg']) && $_FILES['proimg']['error'] == 0) {
         // Establece la carpeta donde se guardarán las imágenes
-        $carpetaDestino = "../../../../img/productos/";
+        $carpetaDestino = "../img/productos/";
         $nombreArchivo = $idProducto.".jpg"; // El nombre del archivo será el ID del producto
         $rutaTemporal = $_FILES['proimg']['tmp_name'];
         $rutaImagen = $carpetaDestino . basename($nombreArchivo);
