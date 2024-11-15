@@ -281,7 +281,7 @@ function editarRol(){
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Rol');
         $('#fm').form('load',row);
-        url = 'accion/accionEditar.php';    
+        url = '../accion/accionEditarRol.php';    
     }
     else {
         $.messager.alert('Advertencia', 'Seleccione un rol primero.', 'warning');
@@ -292,7 +292,7 @@ function editarRol(){
 function nuevoRol(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Agregar nuevo Rol');
     $('#fm').form('clear');
-    url = 'accion/accionAlta.php';
+    url = '../accion/accionAltaRol.php';
 }
 
 //Funcion para guardar los roles
@@ -313,6 +313,13 @@ function saveRol(){
         },
         success: function(result){
             var result = eval('('+result+')');
+            if (result.respuesta){
+                $.messager.show({
+                    title: 'Operacion exitosa',
+                    msg: "Los datos se enviaron correctamente."
+                });
+            }
+          
             if (!result.respuesta){
                 $.messager.show({
                     title: 'Error',
@@ -330,9 +337,9 @@ function saveRol(){
 function bajaRol(){
     var row = $('#dg').datagrid('getSelected');
     if (row){
-        $.messager.confirm('Confirm', '¿Seguro que desea eliminar?', function(r){
+        $.messager.confirm('Confirm', '¿Seguro que desea eliminar el rol?', function(r){
             if (r){
-                $.post('accion/accionBaja.php', { idRol: row.idRol },
+                $.post('../accion/accionBajaRol.php', { idRol: row.idRol },
                 function(result){
                     if (result.respuesta){
                         $('#dg').datagrid('reload'); // recargar los datos
@@ -344,7 +351,7 @@ function bajaRol(){
                             }}, 'json'
                          ).fail(function(jqXHR, textStatus, errorThrown) {
                             console.log("Error en la solicitud:", textStatus, errorThrown);
-                            $.messager.alert('Error', 'No se pudo conectar con el servidor.', 'error');
+                            $.messager.alert('Error', 'El rol esta asociado a un usuario.', 'error');
                         });
                     }
                 });
