@@ -3,78 +3,201 @@
 function cancelarCompraCliente() {
     var row = $('#dgSeg').datagrid('getSelected');
     if (row) {
-        let r = window.confirm('¿Seguro que desea cancelar la CompraEstado?');
-        if (r) {
-            console.log('Confirmación recibida');
-            
-            // Llenar el formulario con los datos de la fila seleccionada
-            $('#fmSeg [name="idcompraestado"]').val(row.idcompraestado || '');
-            $('#fmSeg [name="idcompra"]').val(row.idcompra || '');
-            $('#fmSeg [name="idcompraestadotipo"]').val(row.idcompraestadotipo || '');
-            $('#fmSeg [name="cefechaini"]').val(row.cefechaini || '');
-            $('#fmSeg [name="cefechafin"]').val(row.cefechafin || '');
+        Swal.fire({
+            title: "Confirmación",
+            text: "¿Seguro que desea cancelar la CompraEstado?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, cancelar",
+            cancelButtonText: "No, volver"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('Confirmación recibida');
 
-            // Serializa los datos del formulario
-            var formData = $('#fmSeg').serialize();
+                // Llenar el formulario con los datos de la fila seleccionada
+                $('#fmSeg [name="idcompraestado"]').val(row.idcompraestado || '');
+                $('#fmSeg [name="idcompra"]').val(row.idcompra || '');
+                $('#fmSeg [name="idcompraestadotipo"]').val(row.idcompraestadotipo || '');
+                $('#fmSeg [name="cefechaini"]').val(row.cefechaini || '');
+                $('#fmSeg [name="cefechafin"]').val(row.cefechafin || '');
 
-            // Muestra los datos serializados en la consola
-            console.log("Datos en formData:", formData);
+                // Serializa los datos del formulario
+                var formData = $('#fmSeg').serialize();
 
-            // Realizar la solicitud AJAX
-            $.ajax({
-                url: 'accion/cancelarCompraCliente.php',
-                type: 'POST',
-                data: formData,
-                success: function(result) {
-                    try {
-                        var result = JSON.parse(result);
-                        
-                        if (result.errorMsg) {
-                            $.messager.show({
-                                title: 'Error',
-                                msg: result.errorMsg
+                // Muestra los datos serializados en la consola
+                console.log("Datos en formData:", formData);
+
+                // Realizar la solicitud AJAX
+                $.ajax({
+                    url: 'accion/cancelarCompraCliente.php',
+                    type: 'POST',
+                    data: formData,
+                    success: function(result) {
+                        try {
+                            var result = JSON.parse(result);
+
+                            if (result.errorMsg) {
+                                Swal.fire({
+                                    title: "Error",
+                                    text: result.errorMsg,
+                                    icon: "error",
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Operación exitosa",
+                                    text: result.respuesta,
+                                    icon: "success",
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                                $('#dgSeg').datagrid('reload'); 
+                            }
+                        } catch (e) {
+                            console.error("Error al parsear el resultado:", e);
+                            console.log("Respuesta del servidor:", result);
+                            Swal.fire({
+                                title: "Error",
+                                text: "Ocurrió un problema con la respuesta del servidor.",
+                                icon: "error",
+                                timer: 2000,
+                                showConfirmButton: false
                             });
-                        } else {
-                            $.messager.show({
-                                title: 'Operación exitosa',
-                                msg: result.respuesta
-                            });
-                            $('#dgSeg').datagrid('reload'); 
                         }
-                    } catch (e) {
-                        console.error("Error al parsear el resultado:", e);
-                        console.log("Respuesta del servidor:", result);
-                        $.messager.show({
-                            title: 'Error',
-                            msg: 'Ocurrió un problema con la respuesta del servidor.'
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud AJAX:", error);
+                        Swal.fire({
+                            title: "Error",
+                            text: "No se pudo procesar la solicitud. Error en la conexión.",
+                            icon: "error",
+                            timer: 2000,
+                            showConfirmButton: false
                         });
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error en la solicitud AJAX:", error);
-                    $.messager.show({
-                        title: 'Error',
-                        msg: 'No se pudo procesar la solicitud. Error en la conexión.'
-                    });
-                }
-            });
-        } else {
-            console.log('Cancelación recibida');
-        }
+                });
+            } else {
+                console.log('Cancelación recibida');
+            }
+        });
+    } else {
+        Swal.fire({
+            title: "Advertencia",
+            text: "Debe seleccionar una compra primero.",
+            icon: "warning",
+            timer: 2000,
+            showConfirmButton: false
+        });
     }
 }
 
-
-
-
-
-
-function verDetalleCliente(){
+function verDetalleCliente() {
     var row = $('#dgSeg').datagrid('getSelected');
-    if (row){
-        window.location.href = "detalleCompra.php?idcompra="+row.idcompra;    
-    }                       
+    if (row) {
+        Swal.fire({
+            title: "Confirmación",
+            text: "¿Seguro que desea ver los detalles de la compra?",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonText: "Sí, ver detalles",
+            cancelButtonText: "No, volver"
+        }).then((result) => {
+            if (result.isConfirmed) { // Cambié "isConfirmed" por "result.isConfirmed"
+                console.log('Confirmación recibida');
+                window.location.href = "detalleCompra.php?idcompra=" + row.idcompra;
+            } else {
+                console.log('Cancelación recibida');
+            }
+        });
+    } else {
+        Swal.fire({
+            title: "Advertencia",
+            text: "Debe seleccionar una compra primero.",
+            icon: "warning",
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
 }
+
+function descargarPdf() {
+    var row = $('#dgSeg').datagrid('getSelected');
+    if (row) {
+        Swal.fire({
+            title: "Confirmación",
+            text: "¿Seguro que desea generar el PDF de la CompraEstado?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, generar PDF",
+            cancelButtonText: "No, volver"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('Confirmación recibida');
+
+                // Llenar el formulario con los datos de la fila seleccionada
+                $('#fmSeg [name="idcompraestado"]').val(row.idcompraestado || '');
+                $('#fmSeg [name="idcompra"]').val(row.idcompra || '');
+                $('#fmSeg [name="idcompraestadotipo"]').val(row.idcompraestadotipo || '');
+                $('#fmSeg [name="cefechaini"]').val(row.cefechaini || '');
+                $('#fmSeg [name="cefechafin"]').val(row.cefechafin || '');
+
+                // Serializar los datos del formulario
+                var formData = $('#fmSeg').serialize();
+
+                console.log("Datos en formData:", formData);
+
+                // Realizar la solicitud AJAX
+                $.ajax({
+                    url: 'accion/generarPdfCliente.php', // Ruta al archivo PHP que genera el PDF
+                    type: 'POST',
+                    data: formData, // Datos del formulario
+                    dataType: 'json', // Esperamos un JSON como respuesta
+                    success: function(response) {
+                        if (response.success) {
+                            // Mostrar cuadro de diálogo con el enlace
+                            Swal.fire({
+                                title: 'PDF Generado',
+                                html: `<p>Tu PDF se ha generado correctamente. Puedes descargarlo desde el siguiente enlace:</p>
+                                       <a href="${response.url}" target="_blank" class="btn btn-primary">Descargar PDF</a>`,
+                                icon: 'success',
+                                showConfirmButton: false, // Ocultar el botón de confirmación
+                            });
+                        } else {
+                            // Mostrar mensaje de error
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message,
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar',
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error al generar el PDF:', error);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Ocurrió un problema al intentar generar el PDF.',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                        });
+                    }
+                });
+            } else {
+                console.log('Cancelación recibida');
+            }
+        });
+    } else {
+        Swal.fire({
+            title: "Advertencia",
+            text: "Debe seleccionar una compra primero.",
+            icon: "warning",
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
+}
+
 
 ///Funciones para la gestion de compras del Administrador
 function siguienteEstado(){
