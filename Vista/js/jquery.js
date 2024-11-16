@@ -38,7 +38,7 @@ function cancelarCompraCliente() {
 
                             if (result.errorMsg) {
                                 Swal.fire({
-                                    title: "Error",
+                                    title: "Error if",
                                     text: result.errorMsg,
                                     icon: "error",
                                     timer: 2000,
@@ -155,16 +155,14 @@ function descargarPdf() {
                     dataType: 'json', // Esperamos un JSON como respuesta
                     success: function(response) {
                         if (response.success) {
-                            // Mostrar cuadro de diálogo con el enlace
                             Swal.fire({
                                 title: 'PDF Generado',
                                 html: `<p>Tu PDF se ha generado correctamente. Puedes descargarlo desde el siguiente enlace:</p>
-                                       <a href="${response.url}" target="_blank" class="btn btn-primary">Descargar PDF</a>`,
+                                        <a href="${response.url}" target="_blank" class="btn btn-primary">Descargar PDF</a>`,
                                 icon: 'success',
                                 showConfirmButton: false, // Ocultar el botón de confirmación
                             });
                         } else {
-                            // Mostrar mensaje de error
                             Swal.fire({
                                 title: 'Error',
                                 text: response.message,
@@ -175,6 +173,7 @@ function descargarPdf() {
                     },
                     error: function(xhr, status, error) {
                         console.error('Error al generar el PDF:', error);
+                        console.log('Respuesta completa:', xhr.responseText);  // Ver la respuesta completa
                         Swal.fire({
                             title: 'Error',
                             text: 'Ocurrió un problema al intentar generar el PDF.',
@@ -183,6 +182,7 @@ function descargarPdf() {
                         });
                     }
                 });
+                
             } else {
                 console.log('Cancelación recibida');
             }

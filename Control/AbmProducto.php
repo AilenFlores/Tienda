@@ -163,6 +163,7 @@ class AbmProducto {
             if ($this->seteadosCamposClaves($param)){
             $elObjtProducto = $this->cargarObjeto($param);
             if($elObjtProducto !=null and $elObjtProducto->modificar()){
+                $resp = true;
             }
         }
         return $resp;
