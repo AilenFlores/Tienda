@@ -125,7 +125,6 @@
         }
 
         public function cancelarCompraCliente($param) {
-            var_dump($param);
             $arreglo["idcompra"] = $param["idcompra"];
             $listaCompraEstadoConId = $this->buscar($arreglo);
             $compraCancelada = false;
@@ -179,10 +178,7 @@
                                         $arregloParaModificar["procantstock"] = $nuevoStock;
                                         $arregloParaModificar["proimporte"] = $objProducto->getProimporte();
                                         $arregloParaModificar["prodeshabilitado"] = $objProducto->getProdeshabilitado();
-                                        echo "<pre>";
-                                            var_dump($arregloParaModificar);
-                                            echo "</pre>";
-                                            die(); // Detenemos la ejecución para ver el resultado
+                                        
                                         if ($objAbmProducto->modificacion($arregloParaModificar)){   
                                             $respuesta["respuesta"] = "Se canceló la compra y se actualizó el stock correctamente";
                                         } else {
