@@ -21,42 +21,28 @@ function cancelarCompraCliente() {
                 $('#fmSeg [name="cefechaini"]').val(row.cefechaini || '');
                 $('#fmSeg [name="cefechafin"]').val(row.cefechafin || '');
 
-                // Serializa los datos del formulario
                 var formData = $('#fmSeg').serialize();
-
-                // Muestra los datos serializados en la consola
                 console.log("Datos en formData:", formData);
 
-                // Realizar la solicitud AJAX
                 $.ajax({
-                    url: 'accion/cancelarCompraCliente.php',
+                    url: '../accion/cancelarCompraCliente.php',
                     type: 'POST',
                     data: formData,
                     success: function(result) {
                         try {
                             var result = JSON.parse(result);
-
-                            if (result.errorMsg) {
-                                Swal.fire({
-                                    title: "Error if",
-                                    text: result.errorMsg,
-                                    icon: "error",
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: "Operación exitosa",
-                                    text: result.respuesta,
-                                    icon: "success",
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                });
-                                $('#dgSeg').datagrid('reload'); 
+                            Swal.fire({
+                                title: result.success ? "Operación exitosa" : "Advertencia",
+                                text: result.msg,
+                                icon: result.success ? "success" : "warning",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            if (result.success) {
+                                $('#dgSeg').datagrid('reload');
                             }
                         } catch (e) {
                             console.error("Error al parsear el resultado:", e);
-                            console.log("Respuesta del servidor:", result);
                             Swal.fire({
                                 title: "Error",
                                 text: "Ocurrió un problema con la respuesta del servidor.",
@@ -105,7 +91,7 @@ function verDetalleCliente() {
         }).then((result) => {
             if (result.isConfirmed) { // Cambié "isConfirmed" por "result.isConfirmed"
                 console.log('Confirmación recibida');
-                window.location.href = "detalleCompra.php?idcompra=" + row.idcompra;
+                window.location.href = "../paginas/detalleCompra.php?idcompra=" + row.idcompra;
             } else {
                 console.log('Cancelación recibida');
             }
@@ -149,7 +135,7 @@ function descargarPdf() {
 
                 // Realizar la solicitud AJAX
                 $.ajax({
-                    url: 'accion/generarPdfCliente.php', // Ruta al archivo PHP que genera el PDF
+                    url: '../accion/generarPdfCliente.php', // Ruta al archivo PHP que genera el PDF
                     type: 'POST',
                     data: formData, // Datos del formulario
                     dataType: 'json', // Esperamos un JSON como respuesta

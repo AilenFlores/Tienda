@@ -102,14 +102,14 @@ CREATE TABLE `menu` (
 --
 
 INSERT INTO `menu` (`idmenu`, `menombre`, `medescripcion`, `idpadre`, `medeshabilitado`) VALUES
-(1, 'Editar Cuenta', 'privado/usuario/index.php', NULL, NULL),
-(2, 'Gestionar Usuarios', 'privado/administrador/usuarios/index.php', NULL, NULL),
-(3, 'Gestionar Menus', 'privado/administrador/menu/index.php\r\n', NULL, NULL),
-(4, 'Gestionar Roles', 'privado/administrador/rol/index.php\r\n', NULL, NULL),
-(5, 'Gestionar Productos', 'privado/deposito/productos/index.php\r\n', NULL, NULL),
-(6, 'Tienda', 'privado/usuario/tienda.php\r\n', NULL, NULL),
-(7, 'Carrito', 'privado/usuario/carrito.php\r\n', NULL, NULL),
-(8, 'Mis compras', 'privado/usuario/misCompras.php\r\n', NULL, NULL);
+(1, 'Editar Cuenta', 'paginas/indexUsuario.php', NULL, NULL),
+(2, 'Gestionar Usuarios', 'paginas/indexUsuarios.php', NULL, NULL),
+(3, 'Gestionar Menus', 'paginas/indexMenu.php\r\n', NULL, NULL),
+(4, 'Gestionar Roles', 'paginas/indexRol.php\r\n', NULL, NULL),
+(5, 'Gestionar Productos', 'paginas/indexProductos.php\r\n', NULL, NULL),
+(6, 'Tienda', 'pagina/tienda.php\r\n', NULL, NULL),
+(7, 'Carrito', 'pagina/carrito.php\r\n', NULL, NULL),
+(8, 'Mis compras', 'pagina/misCompras.php\r\n', NULL, NULL);
 
 -- --------------------------------------------------------
 

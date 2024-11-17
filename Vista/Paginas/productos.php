@@ -1,5 +1,5 @@
 <?php 
-include_once("../../Estructura/CabeceraSegura.php"); 
+include_once("../Estructura/CabeceraSegura.php"); 
 ?>
 <?php
     $datos = data_submitted();
@@ -26,11 +26,11 @@ include_once("../../Estructura/CabeceraSegura.php");
                 <div class="col">
                     <div class="card text-white bg-dark">
                         <?php
-                            $archivo = "../../img/productos/" . $objProducto->getIdproducto() . ".jpg";
+                            $archivo = "../img/productos/" . $objProducto->getIdproducto() . ".jpg";
                             if (file_exists($archivo)) {
                                 echo "<img src='" . $archivo . "' class='card-img-left rounded' alt='producto'>";
                             } else {
-                                echo "<img src='../../img/productos/0.jpg' class='card-img-left rounded' alt='producto'>";
+                                echo "<img src='../img/productos/0.jpg' class='card-img-left rounded' alt='producto'>";
                             }
                         ?>
                     </div>
@@ -45,7 +45,7 @@ include_once("../../Estructura/CabeceraSegura.php");
                                         echo '<div class="col-12 mt-5">
                                                     <p>Unidades disponibles: ' . $objProducto -> getProCantstock() . '</p>
                                                 </div>
-                                                <form method="post" action="accion/accionTienda.php">
+                                                <form method="post" action="../accion/accionTienda.php">
                                                 <div class="col-12 mt-5">
                                                     <small>Cantidad</small>
                                                     <input type="number" name="cantidad" id="cantidad" value="1" min="1" max="' . $objProducto -> getProcantstock() . '">';

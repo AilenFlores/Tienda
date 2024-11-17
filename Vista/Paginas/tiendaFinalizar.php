@@ -1,5 +1,5 @@
 <?php 
-include_once("../../Estructura/CabeceraSegura.php"); 
+include_once("../Estructura/CabeceraSegura.php"); 
 ?>
 <main class="flex-fill bg-light">
     <div class="container my-4">

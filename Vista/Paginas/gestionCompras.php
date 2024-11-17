@@ -1,5 +1,5 @@
 <?php 
-include_once("../../../Estructura/CabeceraSegura.php");
+include_once("../Estructura/CabeceraSegura.php");
 ?>
 <title>Basic CRUD  - Menu y Menu Rol </title>
 <h2 style="text-align: center; font-size: 24px; color: #333; margin-bottom: 20px; font-weight: bold;">Gestión - Compras</h2>

@@ -1,6 +1,6 @@
 <?php
-include_once "../../../../configuracion.php";
-require('../../../../Util/fpdf/fpdf.php');
+include_once "../../configuracion.php";
+require('../../Util/fpdf/fpdf.php');
 
 $datos = data_submitted();
 

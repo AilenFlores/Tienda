@@ -1,5 +1,5 @@
 <?php 
-include_once("../../Estructura/CabeceraSegura.php"); 
+include_once("../Estructura/CabeceraSegura.php"); 
 ?>
 <main class="flex-fill bg-light">
     <div class="container my-4">
@@ -22,7 +22,7 @@ include_once("../../Estructura/CabeceraSegura.php");
                         $totalPagar += ( $item -> getObjProducto() -> getProimporte()) * $item->getCicantidad();
                     }
                     echo '<div class="text-center mt-5"><b>Total a pagar: </b>$' . $totalPagar . '</div>';
-                    echo '<form method="post" action="accion/accionTiendaConfirmar.php" class="text-center">';
+                    echo '<form method="post" action="../accion/accionTiendaConfirmar.php" class="text-center">';
                     echo '<input type="hidden" name="idcompra" id="idcompra" value="' . $datos['idcompra'] . '">';
                     echo '<input type="submit" value="Comprar" class="btn btn-dark m-3"></form>';
                 }

@@ -1,5 +1,5 @@
 <?php 
-include_once("../../Estructura/CabeceraSegura.php"); 
+include_once("../Estructura/CabeceraSegura.php"); 
 ?>
 <main class="flex-fill bg-light">
     <div class="container my-4">
@@ -43,7 +43,7 @@ include_once("../../Estructura/CabeceraSegura.php");
                     echo "<td>".$compraItem->getObjProducto()->getProimporte()."</td>";
                     $precioTotalProducto = $compraItem->getCicantidad()*$compraItem->getObjProducto()->getProimporte();
                     echo "<td>" . $precioTotalProducto . "</td>";
-                    echo "<td><a href='accion/bajaCompraItem.php?idcompraitem=" . $compraItem -> getIdcompraitem() . "'>Eliminar</a></td></tr>";
+                    echo "<td><a href='../accion/bajaCompraItem.php?idcompraitem=" . $compraItem -> getIdcompraitem() . "'>Eliminar</a></td></tr>";
                     $totalCompra = $totalCompra + $precioTotalProducto;
                 }
                 echo "<tr><td></td><td></td><td>Precio Total de la Compra:</td>
@@ -52,7 +52,7 @@ include_once("../../Estructura/CabeceraSegura.php");
                 echo '<form method="post" action="tiendaConfirmar.php">';
                 echo '<input type="hidden" name="idcompra" id="idcompra" value="' . $listaComprasUsuarioAct[0] -> getIdcompra() . '"></div>';
                 echo '<div class="mt-5 text-center"><input type="submit" class="btn btn-dark" id="compra" name="compra" value="Comprar"></form>';
-                echo '<a href="accion/bajaCompra.php" class="btn btn-secondary" style="margin-left:20px;">Cancelar Compra</a>';
+                echo '<a href="../accion/bajaCompra.php" class="btn btn-secondary" style="margin-left:20px;">Cancelar Compra</a>';
             }
             ?>
         </div>

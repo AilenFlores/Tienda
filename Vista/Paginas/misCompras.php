@@ -1,5 +1,5 @@
 <?php 
-include_once("../../Estructura/CabeceraSegura.php"); 
+include_once("../Estructura/CabeceraSegura.php"); 
 ?>
 <main class="flex-fill bg-light">
     <div class="container my-4">
@@ -8,7 +8,7 @@ include_once("../../Estructura/CabeceraSegura.php");
             <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center"> 
                 <h1 class="display-5 pb-3 fw-bold">Mis compras</h1>
                 
-                <a href="../index.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
+                <a href="../home/index.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
             </div>
 
             <!-- Descripción -->
@@ -19,7 +19,7 @@ include_once("../../Estructura/CabeceraSegura.php");
             <!-- Contenedor para centrar la tabla -->
             <div class="d-flex justify-content-center mt-4">
                 <table id="dgSeg" class="easyui-datagrid" style="width:1000px; max-width: 100%;"
-                        url="accion/listarCompraEstadoCliente.php"
+                        url="../accion/listarCompraEstadoCliente.php"
                         toolbar="#toolbarSeg"
                         rownumbers="true" fitColumns="true" singleSelect="true">
                     <thead>
@@ -42,10 +42,6 @@ include_once("../../Estructura/CabeceraSegura.php");
                 <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="verDetalleCliente()">Detalles de la Compra</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="descargarPdf()">PDF</a>
             </div>
-
-            <!--<div class="d-flex justify-content-between align-items-center mb-3">
-                    <a class="btn btn-primary" role="button" href="../usuario/accion/generarPdfCliente.php">PDF</a>
-                </div>-->
 
             <!-- Diálogo de información -->
             <div id="dlgSeg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlgSeg-buttons'">
