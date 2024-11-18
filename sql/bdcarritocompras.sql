@@ -110,6 +110,8 @@ INSERT INTO `menu` (`idmenu`, `menombre`, `medescripcion`, `idpadre`, `medeshabi
 (6, 'Tienda', 'pagina/tienda.php\r\n', NULL, NULL),
 (7, 'Carrito', 'pagina/carrito.php\r\n', NULL, NULL),
 (8, 'Mis compras', 'pagina/misCompras.php\r\n', NULL, NULL);
+(9, 'Gestionar compras', 'pagina/gestionComprasDeposito.php\r\n', NULL, NULL);
+(10, 'Gestionar compras', 'pagina/gestionComprasAdmin.php\r\n', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -132,10 +134,12 @@ INSERT INTO `menurol` (`idmenu`, `idrol`) VALUES
 (2, 2),
 (3, 2),
 (4, 2),
-(5, 2),
+(5, 3),
 (6, 1),
 (7, 1),
 (8, 1);
+(9, 3);
+(10, 2);
 
 
 -- --------------------------------------------------------
@@ -184,6 +188,7 @@ CREATE TABLE `rol` (
 INSERT INTO `rol` (`idrol`, `rodescripcion`) VALUES
 (1, 'cliente'),
 (2, 'administrador');
+(3, 'deposito');
 
 -- --------------------------------------------------------
 
@@ -206,6 +211,7 @@ CREATE TABLE `usuario` (
 INSERT INTO `usuario` (`idusuario`, `usnombre`, `uspass`, `usmail`, `usdeshabilitado`) VALUES
 (1, 'admin', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'admin@mail.com', NULL),
 (2, 'usuario', 'dfa7a2273567dcd1efffb9a46308e91c20fa13c44c3441bc69cd6a7869b3f7fd', 'usuario@mail.com', NULL);
+(3, 'deposito', '381b41143187f979fa777b3f65f37a83efcffc8c1797868769faf54527498a7d',"deposito@mail.com", NULL);
 
 -- --------------------------------------------------------
 
@@ -225,6 +231,7 @@ CREATE TABLE `usuariorol` (
 INSERT INTO `usuariorol` (`idusuario`, `idrol`) VALUES
 (1, 2),
 (2, 1);
+(3, 3);
 
 --
 -- Índices para tablas volcadas
@@ -331,7 +338,7 @@ ALTER TABLE `compraitem`
 -- AUTO_INCREMENT de la tabla `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `idmenu` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idmenu` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
@@ -343,13 +350,13 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `rol`
 --
 ALTER TABLE `rol`
-  MODIFY `idrol` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idrol` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idusuario` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idusuario` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
