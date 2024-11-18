@@ -2,6 +2,7 @@
 // Incluir el archivo de configuración una sola vez
 include_once("/xampp/htdocs/tienda/configuracion.php");
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,7 +15,6 @@ include_once("/xampp/htdocs/tienda/configuracion.php");
     ?>
 <body class="d-flex flex-column min-vh-100">
 <header>
-     <!-- Top Notification -->
 <div class="text-center py-2 bg-primary text-white">
    Tienda de Equipo de Proteccion Personal.
 </div>
@@ -25,21 +25,20 @@ include_once("/xampp/htdocs/tienda/configuracion.php");
     </head>
 <?php
 $resp = $session->validar();
-
 if(!$resp) {
     $mensaje ="Error, inicie sesion y vuelva a intentarlo";
-   echo "<script>location.href = '".BASE_URL."/vista/publico/login/login.php?msg=".$mensaje."';</script>";
+   echo "<script>location.href = '".BASE_URL."/vista/paginas/login.php?msg=".$mensaje."';</script>";
 }
 
-/**else{
+else{
     $abmMenu= new AbmMenuRol();
-    $rol=$_SESSION["roles"];
+    $rol=$session->getRol();
     if(!$abmMenu->tienePermiso($rol)){
         $session->cerrar();
         $mensaje ="Error, no tiene permisos para acceder a esta pagina";
-        echo "<script>location.href = '".BASE_URL."/vista/publico/login/login.php?msg=".$mensaje."';</script>";
+        echo "<script>location.href = '".BASE_URL."/vista/paginas/login.php?msg=".$mensaje."';</script>";
     }
-}*/
+}
 ?>
 </header>
 

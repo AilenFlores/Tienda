@@ -107,11 +107,11 @@ INSERT INTO `menu` (`idmenu`, `menombre`, `medescripcion`, `idpadre`, `medeshabi
 (3, 'Gestionar Menus', 'paginas/indexMenu.php\r\n', NULL, NULL),
 (4, 'Gestionar Roles', 'paginas/indexRol.php\r\n', NULL, NULL),
 (5, 'Gestionar Productos', 'paginas/indexProductos.php\r\n', NULL, NULL),
-(6, 'Tienda', 'pagina/tienda.php\r\n', NULL, NULL),
-(7, 'Carrito', 'pagina/carrito.php\r\n', NULL, NULL),
-(8, 'Mis compras', 'pagina/misCompras.php\r\n', NULL, NULL),
-(9, 'Gestionar compras', 'pagina/gestionComprasDeposito.php\r\n', NULL, NULL),
-(10, 'Gestionar compras', 'pagina/gestionComprasAdmin.php\r\n', NULL, NULL);
+(6, 'Tienda', 'paginas/tienda.php\r\n', NULL, NULL),
+(7, 'Carrito', 'paginas/carrito.php\r\n', NULL, NULL),
+(8, 'Mis compras', 'paginas/misCompras.php\r\n', NULL, NULL),
+(9, 'Gestionar compras', 'paginas/gestionComprasDeposito.php\r\n', NULL, NULL),
+(10, 'Gestionar compras', 'paginas/gestionComprasAdmin.php\r\n', NULL, NULL);
 
 -- --------------------------------------------------------
 

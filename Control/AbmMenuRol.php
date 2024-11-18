@@ -147,7 +147,7 @@ class AbmMenuRol {
     
         $param['idrol'] = $rol;
     
-        // Buscar menús asociados al rol
+        // Buscar los objetos menús asociados al rol convertidos en arrays
         $objMenuObjRol = convert_array($this->buscar(['idrol' => $param['idrol']]));
     
         // Verifica si los resultados no son nulos y recorre el resultado
@@ -155,10 +155,8 @@ class AbmMenuRol {
             foreach ($objMenuObjRol as $objMenuRol) {
                 $objMenu = new AbmMenu();
                 $menu = convert_array($objMenu->buscar(['idmenu' => $objMenuRol['objmenu']]));
-    
                 if (!empty($menu)) {
                     foreach ($menu as $itemMenu) {
-                        // Verificar si el menú no está ya en el array de menús por su ID
                         if (!in_array($itemMenu["idmenu"], array_column($menues, 'idmenu'))) {
                             $menues[] = $itemMenu; // Agregar solo el menú que no está incluido
                         }
@@ -180,20 +178,27 @@ class AbmMenuRol {
         return $respuesta; 
     }
     
-    public function tienePermiso($rol){
-        $rol=$rol[0];
-        $tienePermiso=false;
-        $menus=$this->menuesByIdRol($rol);
-        $url= "http://localhost";
-        $url.=$_SERVER['REQUEST_URI']; // Obtiene la URL actual
-        foreach($menus as $menu){
-            $menu["url"]=trim($menu["url"]);
-            if($menu['url']==$url){
-                $tienePermiso=true;
+    public function tienePermiso($rol) {
+        $rol = $rol[0];
+        $tienePermiso = false;
+        // Obtener los menús del rol desde la base de datos
+        $menus = $this->menuesByIdRol($rol);
+        $menus[] = ["url" => "/vista/paginas/detalleCompra.php"]; 
+        // Obtener la URL actual completa
+        $url = "http://localhost" . $_SERVER['REQUEST_URI'];
+        foreach ($menus as $menu) {
+            $menu["url"] = trim($menu["url"]);
+            
+            // Verifica si la URL actual contiene el valor del menú
+            if (str_contains($url, $menu["url"])) { 
+                $tienePermiso = true;
+                break; // Detener la búsqueda si se encuentra coincidencia
             }
         }
+    
         return $tienePermiso;
-
     }
+    
+    
 }
 ?>
