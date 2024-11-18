@@ -1,4 +1,248 @@
-////////////////////////////////////////////////////////////////////////////////////////Funciones para cancelar compra y ver detalles en MIS COMPRAS del cliente.
+////////////////////////////////////////////////////////////////////////////////////////
+//Funciones para el carrito de compras (finalizar, eliminar y eliminar item)
+// Eliminar ítem del carrito
+function eliminarItemCarrito(idCompraItem) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción eliminará el ítem del carrito.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'No, cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '../accion/accionCarrito.php',
+                type: 'POST',
+                data: { action: 'eliminarItemCarrito', idcompraitem: idCompraItem },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Eliminado!',
+                            'El ítem ha sido eliminado correctamente.',
+                            'success'
+                        ).then(() => {;
+                            window.location.href = 'tienda.php'; // Redirigir a la tienda
+                    })
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            'Error al eliminar el ítem: ' + response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function () {
+                    Swal.fire(
+                        'Error',
+                        'Ocurrió un error en la solicitud.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+
+// Cancelar compra
+function cancelarCompra() {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción cancelará la compra y no podrás revertirla.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, cancelar compra',
+        cancelButtonText: 'No, regresar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '../accion/accionCarrito.php',
+                type: 'POST',
+                data: { action: 'cancelarCompra' },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Cancelada!',
+                            'La compra ha sido cancelada correctamente.',
+                            'success'
+                        ).then(() => {;
+                        window.location.href = 'tienda.php'; // Redirigir a la tienda
+                    })
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function () {
+                    Swal.fire(
+                        'Error',
+                        'Ocurrió un error en la solicitud.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+
+// Confirmar compra
+function confirmarCompra(idCompra) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción confirmará tu compra.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, confirmar compra',
+        cancelButtonText: 'No, revisar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '../accion/accionCarrito.php',
+                type: 'POST',
+                data: { action: 'confirmarCompra', idcompra: idCompra },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Confirmada!',
+                            'La compra ha sido confirmada correctamente.',
+                            'success'
+                        ).then(() => {
+                        window.location.href = 'tienda.php?transaccion=exito';
+                    });
+                    }else {
+                        Swal.fire(
+                            'Error',
+                            'Error al confirmar la compra: ' + response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function () {
+                    Swal.fire(
+                        'Error',
+                        'Ocurrió un error en la solicitud.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+
+//Funciones para el funcionamiento de la tienda junto al carrito.////
+function verProducto(idproducto) {
+    $.ajax({
+        url: '../accion/accionProductoTienda.php',
+        type: 'POST',
+        data: { idproducto: idproducto },
+        dataType: 'json',
+        success: function (response) {
+            if (response.status === 'success') {
+                // Verificar si la imagen existe
+                const imagen = `../img/productos/${idproducto}.jpg`;
+                const imagenPlaceholder = '../img/productos/0.jpg';
+
+                // Comprobar si la imagen existe antes de mostrarla
+                $.get(imagen)
+                    .done(function () {
+                        // Si la imagen existe, mostrarla
+                        mostrarDetalleProducto(imagen, response.data, idproducto);
+                    })
+                    .fail(function () {
+                        // Si no existe, usar el placeholder
+                        mostrarDetalleProducto(imagenPlaceholder, response.data, idproducto);
+                    });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message,
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo obtener la información del producto.',
+            });
+        }
+    });
+}
+
+function mostrarDetalleProducto(imagen, data, idproducto) {
+    const contenido = `
+        <div style="text-align: left;">
+            <img src="${imagen}" alt="Imagen del producto" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px;">
+            <h3>${data.pronombre}</h3>
+            <p><strong>Detalle:</strong> ${data.prodetalle}</p>
+            <p><strong>Precio:</strong> $${data.proimporte}</p>
+            <p><strong>Stock disponible:</strong> ${data.procantstock}</p>
+            <div>
+                <label for="cantidadProducto">Cantidad:</label>
+                <input type="number" id="cantidadProducto" min="1" max="${data.procantstock}" value="1" style="width: 60px; text-align: center;">
+            </div>
+        </div>
+    `;
+
+    Swal.fire({
+        title: 'Detalle del Producto',
+        html: contenido,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Agregar al carrito',
+        cancelButtonText: 'Cerrar',
+        customClass: {
+            popup: 'swal-wide' 
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const cantidad = document.getElementById('cantidadProducto').value;
+            agregarAlCarrito(idproducto, cantidad);
+        }
+    });
+}
+
+function agregarAlCarrito(idproducto, cantidad) {
+    $.ajax({
+        url: '../accion/accionTienda.php',
+        type: 'POST',
+        data: {
+            idproducto: idproducto,
+            cantidad: cantidad
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: response.message,
+                }).then(() => {
+                    // Redirigir al carrito después de agregar el producto
+                    window.location.href = '../paginas/carrito.php';  
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message,
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo agregar el producto al carrito. Inténtalo nuevamente.',
+            });
+        }
+    });
+}
+
 //Funciones para la gestion de compras del Cliente
 function cancelarCompraCliente() {
     var row = $('#dgSeg').datagrid('getSelected');

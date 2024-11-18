@@ -118,131 +118,216 @@
             return $arreglo;
         }
 
-        public function agregarProductoACarrito($param) {
-            if (isset($param['compra'])){
-                $sesionActual = new Session();
-                $objUsuario = $sesionActual->getUsuario();
-                //Busco compras agregadas al carrito por el usuario activo
-                $arregloObjCompra = $this -> buscar(['idusuario' => $objUsuario->getIdusuario(),'metodo' => 'carrito']);
-                if (!empty($arregloObjCompra)){
-                    if (count($arregloObjCompra) == 1){  //Solo puede haber 1 carrito activo
-                        $objAbmCompraItem = new AbmCompraItem();
-                        //Chequeo si en la compra ya se habia encargado el mismo producto
-                        $arregloCompraItem = $objAbmCompraItem -> buscar(['idcompra' => $arregloObjCompra[0] -> getIdcompra()]);
-                        $carritoEncontrado = false;
-                        if (!empty($arregloCompraItem)){
-                            foreach($arregloCompraItem as $item){
-                                if ($item -> getObjProducto() -> getIdproducto() == $param['idproducto']){
-                                    $carritoEncontrado = true;
-                                    //Controlo stock
-                                    $cantidadSuma = ($item -> getCicantidad()) + ($param['cantidad']);
-                                    if ($cantidadSuma <= ($item -> getObjProducto() -> getProcantstock())){
-                                        $objAbmCompraItem = new AbmCompraItem();
-                                        $cantidadFinal = $objAbmCompraItem -> modificacion(['idcompraitem' => $item -> getIdcompraitem(), 'idproducto' => $param['idproducto'], 'idcompra' => $arregloObjCompra[0] -> getIdcompra(), 'cicantidad' => $cantidadSuma]);
-                                        if ($cantidadFinal){
-                                            $redireccion = "Location: ". BASE_URL . "/vista/paginas/carrito.php";
-                                        }else{
-                                            $redireccion = "Location: ". BASE_URL . "/vista/paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
-                                        }
-                                    }else{
-                                        //BASE_URL . '/vista/privado/usuario/productos.php';
-                                        $redireccion = "Location: ". BASE_URL . "/vista/paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=2";
+    public function agregarProductoACarrito($param) {
+    $response = [];
+    
+    if (isset($param['idproducto']) && isset($param['cantidad'])) {
+        $cantidadSolicitada = $param['cantidad'];
+        // Obtener los datos del producto
+        $objProducto = new AbmProducto();
+        $producto = $objProducto->buscar(['idproducto' => $param['idproducto']])[0];
+        // Verificar si hay suficiente stock
+        if ($producto->getProcantstock() >= $cantidadSolicitada) {
+            // Actualizar el stock del producto
+            $nuevoStock = $producto->getProcantstock() - $cantidadSolicitada;
+            $objProducto->modificacion([
+                'idproducto' => $param['idproducto'],
+                'procantstock' => $nuevoStock
+            ]);
+            // Lógica para agregar el producto al carrito
+            $sesionActual = new Session();
+            $objUsuario = $sesionActual->getUsuario();
+            $arregloObjCompra = $this->buscar(['idusuario' => $objUsuario->getIdusuario(), 'metodo' => 'carrito']);
+            if (!empty($arregloObjCompra)) {
+                if (count($arregloObjCompra) == 1) { // Solo un carrito activo
+                    $objAbmCompraItem = new AbmCompraItem();
+                    $arregloCompraItem = $objAbmCompraItem->buscar(['idcompra' => $arregloObjCompra[0]->getIdcompra()]);
+                    $carritoEncontrado = false;
+                    if (!empty($arregloCompraItem)) {
+                        foreach ($arregloCompraItem as $item) {
+                            if ($item->getObjProducto()->getIdproducto() == $param['idproducto']) {
+                                $carritoEncontrado = true;
+                                $cantidadSuma = ($item->getCicantidad()) + ($param['cantidad']);
+                                if ($cantidadSuma <= ($item->getObjProducto()->getProcantstock())) {
+                                    $cantidadFinal = $objAbmCompraItem->modificacion([
+                                        'idcompraitem' => $item->getIdcompraitem(),
+                                        'idproducto' => $param['idproducto'],
+                                        'idcompra' => $arregloObjCompra[0]->getIdcompra(),
+                                        'cicantidad' => $cantidadSuma
+                                    ]);
+                                    if ($cantidadFinal) {
+                                        $response = [
+                                            'status' => 'success',
+                                            'message' => 'Cantidad actualizada en el carrito',
+                                            'newStock' => $nuevoStock // Agregar el stock actualizado
+                                        ];
+                                    } else {
+                                        $response = [
+                                            'status' => 'error',
+                                            'message' => 'Error al actualizar la cantidad del producto'
+                                        ];
                                     }
+                                } else {
+                                    $response = [
+                                        'status' => 'error',
+                                        'message' => 'Stock insuficiente, revisa el stock de tu carrito vigente'
+                                    ];
                                 }
                             }
                         }
-                        if (!$carritoEncontrado){
-                            $itemAgregado = $objAbmCompraItem -> alta(['idproducto' => $param['idproducto'], 'idcompra' => $arregloObjCompra[0] -> getIdcompra(),'cicantidad' => $param['cantidad']]);
-                            if ($itemAgregado){
-                                $redireccion = "Location: ". BASE_URL . "/vista/paginas/carrito.php";
-                            }else{
-    
-                                $redireccion = "Location: ". BASE_URL . "/vista/paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
-                            }
+                    }
+                    if (!$carritoEncontrado) {
+                        $itemAgregado = $objAbmCompraItem->alta([
+                            'idproducto' => $param['idproducto'],
+                            'idcompra' => $arregloObjCompra[0]->getIdcompra(),
+                            'cicantidad' => $param['cantidad']
+                        ]);
+                        if ($itemAgregado) {
+                            $response = [
+                                'status' => 'success',
+                                'message' => 'Producto agregado al carrito',
+                                'newStock' => $nuevoStock // Agregar el stock actualizado
+                            ];
+                        } else {
+                            $response = [
+                                'status' => 'error',
+                                'message' => 'Error al agregar el producto al carrito'
+                            ];
                         }
-                        
-                    }else{
-                        $redireccion = "Location: ". BASE_URL . "/vista/paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
                     }
-                }else{  //Si no hay carritos activos inicio uno.
-                    $compraAgregada = $this -> alta(['idusuario' => $objUsuario->getIdusuario(), 'cofecha' => $date = date('Y-m-d H:i:s'),  'metodo' => 'carrito']);
-                    $arregloObjCompra = $this -> buscar(['idusuario' => $objUsuario->getIdusuario(), 'cofecha' => $date = date('Y-m-d H:i:s'), 'metodo' => 'carrito']);
-                    if ($compraAgregada){
-                        $objAbmCompraItem = new AbmCompraItem();
-                        $itemAgregado = $objAbmCompraItem -> alta(['idproducto' => $param['idproducto'], 'idcompra' => $arregloObjCompra[0] -> getIdcompra(), 'cicantidad' => $param['cantidad']]);
-                        if ($itemAgregado){
-                            $redireccion = "Location: ". BASE_URL . "/vista/paginas/carrito.php";
-                        }else{
-                            $redireccion = "Location: ". BASE_URL . "/vista/paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
-                        }
-                    }else{
-                        $redireccion = "Location: ". BASE_URL . "/vista/paginas/productos.php?idproducto=" . $param['idproducto'] . "&error=1";
-                    }   
-                }
-            }
-            return $redireccion;
-        }
-
-        public function finalizarCompra($param) {
-            $compraCargar = $this -> buscar(['idcompra' => $param['idcompra']]);
-            $objAbmCompraItem = new AbmCompraitem();
-            $arregloItemsCargar = $objAbmCompraItem -> buscar(['idcompra' => $param['idcompra']]);
-            $objAbmProducto = new AbmProducto();
-            $sinStock = false;
-            foreach($arregloItemsCargar as $item){
-                $productoCarga = $item -> getObjProducto();
-                $cantidadDisponible = ($productoCarga -> getProcantstock())-($item -> getCicantidad());
-                if ($cantidadDisponible < 0){
-                    $sinStock = true;
-                    //Elimino el producto sin stock del carrito
-                    $objAbmCompraItem -> baja(['idcompraitem' => $item -> getIdcompraitem()]);
-                    $this -> baja(['idcompra' => $param['idcompra']]);
-                }
-            }
-            if (!$sinStock){
-                //Cambio el metodo de compra de 'carrito' a 'normal' para que no se cargue en la tabla de carrito.
-                $this -> modificacion(['idcompra' => $compraCargar[0] -> getIdcompra(),'cofecha' => $compraCargar[0] -> getCofecha(),'idusuario' => $compraCargar[0] -> getObjUsuario() -> getIdusuario(), 'metodo' => 'normal']);
-                //Pongo la compra en estado 'iniciada'
-                $objAbmCompraEstado = new AbmCompraestado();
-                $resultadoCompra = $objAbmCompraEstado -> alta(['idcompra' => $param['idcompra'], 'idcompraestadotipo' => 1,'cefechaini' => date('Y-m-d H:i:s'), 'cefechafin' => NULL]);
-                if ($resultadoCompra){
-                    //Resto los items comprados del stock
-                    foreach($arregloItemsCargar as $item){
-                        $productoCarga = $item -> getObjProducto();
-                    $cantidadFinal = ($productoCarga -> getProcantstock()) - ($item -> getCicantidad());
-                    $objAbmProducto -> modificacion(['idproducto' => $productoCarga -> getIdproducto(), 'pronombre' => $productoCarga -> getPronombre(), 'prodetalle' => $productoCarga -> getProdetalle(), 'procantstock' => $cantidadFinal, 'proimporte' => $productoCarga -> getProimporte(), 'prodeshabilitado' => $productoCarga -> getProdeshabilitado()]);
-                    }
-                    $redireccion="Location:" . BASE_URL . "/vista/paginas/tiendaFinalizar.php?transaccion=exito";
-                }else{
-                    $redireccion="Location:". BASE_URL . "/Vista/paginas/tiendaFinalizar.php?transaccion=fallo";
-                }
-            }else{
-                $redireccion="Location:". BASE_URL . "/Vista/paginas/tiendaFinalizar.php?transaccion=stock";
-            }
-            return $redireccion;    
-        }
-
-        public function cancelarCompra() {
-            $resp = false;
-            $sesionActual = new Session();
-            $objUsuario = $sesionActual -> getUsuario();
-            $arregloObjCompra = $this -> buscar(['idusuario' => $objUsuario -> getIdusuario(), 'metodo' => 'carrito']);
-            if (count($arregloObjCompra) == 1){
-                $objAbmCompraItem = new AbmCompraItem();
-                $items = $objAbmCompraItem -> buscar(['idcompra' => $arregloObjCompra[0] -> getIdcompra()]);
-                if (!empty($items)){
-                    foreach($items as $item){
-                        $objAbmCompraItem -> baja(['idcompraitem' => $item -> getIdcompraitem()]);
-                    }
-                    $this -> baja(['idcompra'=>$arregloObjCompra[0] -> getIdcompra()]);
-                    $resp = true;
                 } else {
-                    $this -> baja(['idcompra'=>$arregloObjCompra[0] -> getIdcompra()]);
-                    $resp = true;
+                    $response = [
+                        'status' => 'error',
+                        'message' => 'Carrito inconsistente'
+                    ];
+                }
+            } else { // Crear un nuevo carrito si no existe
+                $compraAgregada = $this->alta([
+                    'idusuario' => $objUsuario->getIdusuario(),
+                    'cofecha' => date('Y-m-d H:i:s'),
+                    'metodo' => 'carrito'
+                ]);
+                $arregloObjCompra = $this->buscar([
+                    'idusuario' => $objUsuario->getIdusuario(),
+                    'cofecha' => date('Y-m-d H:i:s'),
+                    'metodo' => 'carrito'
+                ]);
+                if ($compraAgregada) {
+                    $objAbmCompraItem = new AbmCompraItem();
+                    $itemAgregado = $objAbmCompraItem->alta([
+                        'idproducto' => $param['idproducto'],
+                        'idcompra' => $arregloObjCompra[0]->getIdcompra(),
+                        'cicantidad' => $param['cantidad']
+                    ]);
+                    if ($itemAgregado) {
+                        $response = [
+                            'status' => 'success',
+                            'message' => 'Producto agregado al carrito en un nuevo pedido',
+                            'newStock' => $nuevoStock // Agregar el stock actualizado
+                        ];
+                    } else {
+                        $response = [
+                            'status' => 'error',
+                            'message' => 'Error al agregar producto en un nuevo pedido'
+                        ];
+                    }
+                } else {
+                    $response = [
+                        'status' => 'error',
+                        'message' => 'Error al iniciar un nuevo carrito'
+                    ];
                 }
             }
-            return $resp;
+        } else {
+            $response = [
+                'status' => 'error',
+                'message' => 'Stock insuficiente para la cantidad solicitada'
+            ];
         }
+    } else {
+        $response = [
+            'status' => 'error',
+            'message' => 'Parámetros insuficientes para realizar la operación'
+        ];
+    }
+    return $response;
+}
+            
+public function finalizarCompra($param)
+{
+    $compraCargar = $this->buscar(['idcompra' => $param['idcompra']]);
+    $objAbmCompraItem = new AbmCompraitem();
+    $arregloItemsCargar = $objAbmCompraItem->buscar(['idcompra' => $param['idcompra']]);
+    $objAbmProducto = new AbmProducto();
+    $sinStock = false;
+
+    foreach ($arregloItemsCargar as $item) {
+        $productoCarga = $item->getObjProducto();
+        $cantidadDisponible = ($productoCarga->getProcantstock()) - ($item->getCicantidad());
+        if ($cantidadDisponible < 0) {
+            $sinStock = true;
+            // Elimino el producto sin stock del carrito
+            $objAbmCompraItem->baja(['idcompraitem' => $item->getIdcompraitem()]);
+            $this->baja(['idcompra' => $param['idcompra']]);
+        }
+    }
+
+    if (!$sinStock) {
+        // Cambio el método de compra de 'carrito' a 'normal'
+        $this->modificacion(['idcompra' => $compraCargar[0]->getIdcompra(), 'cofecha' => $compraCargar[0]->getCofecha(), 'idusuario' => $compraCargar[0]->getObjUsuario()->getIdusuario(), 'metodo' => 'normal']);
+        
+        // Pongo la compra en estado 'iniciada'
+        $objAbmCompraEstado = new AbmCompraestado();
+        $resultadoCompra = $objAbmCompraEstado->alta(['idcompra' => $param['idcompra'], 'idcompraestadotipo' => 1, 'cefechaini' => date('Y-m-d H:i:s'), 'cefechafin' => NULL]);
+        
+        if ($resultadoCompra) {
+            // Resto los items comprados del stock
+            foreach ($arregloItemsCargar as $item) {
+                $productoCarga = $item->getObjProducto();
+                $cantidadFinal = ($productoCarga->getProcantstock()) - ($item->getCicantidad());
+                $objAbmProducto->modificacion([
+                    'idproducto' => $productoCarga->getIdproducto(),
+                    'pronombre' => $productoCarga->getPronombre(),
+                    'prodetalle' => $productoCarga->getProdetalle(),
+                    'procantstock' => $cantidadFinal,
+                    'proimporte' => $productoCarga->getProimporte(),
+                    'prodeshabilitado' => $productoCarga->getProdeshabilitado()
+                ]);
+            }
+            return ['success' => true, 'message' => 'Compra finalizada exitosamente.'];
+        } else {
+            return ['success' => false, 'message' => 'Error al finalizar la compra.'];
+        }
+    } else {
+        return ['success' => false, 'message' => 'No hay suficiente stock de algunos productos.',];
+    }
+}
+
+public function cancelarCompra()
+{
+    $resp = false;
+    $sesionActual = new Session();
+    $objUsuario = $sesionActual->getUsuario();
+    $arregloObjCompra = $this->buscar(['idusuario' => $objUsuario->getIdusuario(), 'metodo' => 'carrito']);
+    
+    if (count($arregloObjCompra) == 1) {
+        $objAbmCompraItem = new AbmCompraItem();
+        $items = $objAbmCompraItem->buscar(['idcompra' => $arregloObjCompra[0]->getIdcompra()]);
+        
+        if (!empty($items)) {
+            foreach ($items as $item) {
+                $objAbmCompraItem->baja(['idcompraitem' => $item->getIdcompraitem()]);
+            }
+            $this->baja(['idcompra' => $arregloObjCompra[0]->getIdcompra()]);
+            $resp = true;
+        } else {
+            $this->baja(['idcompra' => $arregloObjCompra[0]->getIdcompra()]);
+            $resp = true;
+        }
+    }
+    
+    return $resp ? ['success' => true, 'message' => 'Compra cancelada exitosamente.'] : ['success' => false, 'message' => 'No se pudo cancelar la compra.'];
+}
 
     }
 

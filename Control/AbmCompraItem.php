@@ -121,16 +121,20 @@
         }
 
         //Elimina un item de la compra y si no quedan mas items en la compra, elimina la compra.
-        public function eliminarItemDeCompra($param) {
-            $arregloObjCompraItem = $this -> buscar(['idcompraitem' => $param['idcompraitem']]);
-            $idCompraActual = $arregloObjCompraItem[0] -> getObjCompra() -> getIdcompra();
-            $this -> baja(['idcompraitem' => $param['idcompraitem']]);
-            $arregloObjCompraItem = $this -> buscar(['idcompra' => $idCompraActual]);
-            if ($arregloObjCompraItem == []) {
-                $objAbmCompra = new AbmCompra();
-                $objAbmCompra -> baja(['idcompra' => $idCompraActual]);
-            }
-        }
+        public function eliminarItemDeCompra($param)
+{
+    $arregloObjCompraItem = $this->buscar(['idcompraitem' => $param['idcompraitem']]);
+    $idCompraActual = $arregloObjCompraItem[0]->getObjCompra()->getIdcompra();
+    $this->baja(['idcompraitem' => $param['idcompraitem']]);
+    $arregloObjCompraItem = $this->buscar(['idcompra' => $idCompraActual]);
+    
+    if ($arregloObjCompraItem == []) {
+        $objAbmCompra = new AbmCompra();
+        $objAbmCompra->baja(['idcompra' => $idCompraActual]);
+    }
+    
+    return ['success' => true, 'message' => 'Ítem eliminado exitosamente.'];
+}
 
         //Elimina la compra.
         public function eliminarCompraItem($param) {

@@ -12,16 +12,16 @@ include_once("../Estructura/CabeceraSegura.php");
             <?php
             $sesionActual = new Session();
             $objAbmUsuario = new AbmUsuarioLogin();
-            $usuarioActual = $objAbmUsuario -> buscar(['usnombre' => $sesionActual -> getUsuario() -> getUsnombre(), 'uspass' => $sesionActual -> getUsuario() -> getUspass()]);
+            $usuarioActual = $objAbmUsuario->buscar(['usnombre' => $sesionActual->getUsuario()->getUsnombre(), 'uspass' => $sesionActual->getUsuario()->getUspass()]);
             $idUsuario = $usuarioActual[0]->getIdUsuario();
             $arreglo["idusuario"] = $idUsuario;
             $arreglo["metodo"] = "carrito";
             $objAbmCompra = new AbmCompra();
             $listaComprasUsuarioAct = $objAbmCompra->buscar($arreglo);
-            echo '<div class="d-flex justify-content-center">
-            <table id="detalleCompra" class="easyui-datagrid" style="width:800px"
-                toolbar="#toolbarDetalleCompra"
-                rownumbers="true" fitColumns="true" singleSelect="true">
+
+            echo '<div class="d-flex justify-content-center">';
+            echo '<table id="detalleCompra" class="easyui-datagrid" style="width:800px" 
+                toolbar="#toolbarDetalleCompra" rownumbers="true" fitColumns="true" singleSelect="true">
             <thead>
                 <tr>
                     <th field="pronombre" width="85">Nombre del Producto</th>
@@ -31,28 +31,34 @@ include_once("../Estructura/CabeceraSegura.php");
                     <th field="eliminarCompraItem" width="90"></th>
                 </tr>
             </thead>
-            <tbody></div>';
-            if(count($listaComprasUsuarioAct) == 1){
+            <tbody>';
+
+            if (count($listaComprasUsuarioAct) == 1) {
                 $arreglo2["idcompra"] = $listaComprasUsuarioAct[0]->getIdcompra();
                 $objAbmCompraItem = new AbmCompraItem();
                 $listaObjCompraItem = $objAbmCompraItem->buscar($arreglo2);
                 $totalCompra = 0;
-                foreach($listaObjCompraItem as $compraItem){
-                    echo "<tr><td>".$compraItem->getObjProducto()->getPronombre()."</td>";
-                    echo "<td>".$compraItem->getCicantidad()."</td>";
-                    echo "<td>".$compraItem->getObjProducto()->getProimporte()."</td>";
-                    $precioTotalProducto = $compraItem->getCicantidad()*$compraItem->getObjProducto()->getProimporte();
+
+                foreach ($listaObjCompraItem as $compraItem) {
+                    echo "<tr><td>" . $compraItem->getObjProducto()->getPronombre() . "</td>";
+                    echo "<td>" . $compraItem->getCicantidad() . "</td>";
+                    echo "<td>" . $compraItem->getObjProducto()->getProimporte() . "</td>";
+                    $precioTotalProducto = $compraItem->getCicantidad() * $compraItem->getObjProducto()->getProimporte();
                     echo "<td>" . $precioTotalProducto . "</td>";
-                    echo "<td><a href='../accion/bajaCompraItem.php?idcompraitem=" . $compraItem -> getIdcompraitem() . "'>Eliminar</a></td></tr>";
-                    $totalCompra = $totalCompra + $precioTotalProducto;
+                    echo "<td><a class='btn btn-outline-secondary btn-sm' onclick='eliminarItemCarrito(" . $compraItem->getIdcompraitem() . ")'>Eliminar</a></td></tr>";
+                    $totalCompra += $precioTotalProducto;
                 }
+
                 echo "<tr><td></td><td></td><td>Precio Total de la Compra:</td>
-                <td>".$totalCompra."</td><td></td></tr>";
-                echo "</tbody></table>";
-                echo '<form method="post" action="tiendaConfirmar.php">';
-                echo '<input type="hidden" name="idcompra" id="idcompra" value="' . $listaComprasUsuarioAct[0] -> getIdcompra() . '"></div>';
-                echo '<div class="mt-5 text-center"><input type="submit" class="btn btn-dark" id="compra" name="compra" value="Comprar"></form>';
-                echo '<a href="../accion/bajaCompra.php" class="btn btn-secondary" style="margin-left:20px;">Cancelar Compra</a>';
+                <td>" . $totalCompra . "</td><td></td></tr>";
+
+                echo "</tbody></table></div>";
+
+                // Los botones "Confirmar Compra" y "Cancelar Compra" fuera de la tabla
+                echo '<div class="d-flex justify-content-center mt-3">';
+                echo '<a class="btn btn-dark" style="margin-right:20px;" onclick="confirmarCompra(' . $listaComprasUsuarioAct[0]->getIdcompra() . ')">Confirmar</a>';
+                echo '<a class="btn btn-secondary" style="margin-left:20px;" onclick="cancelarCompra()">Cancelar Compra</a>';
+                echo '</div>';
             }
             ?>
         </div>
@@ -60,4 +66,3 @@ include_once("../Estructura/CabeceraSegura.php");
 </main>
 
 <?php include(STRUCTURE_PATH . "pie.php"); ?>
-
