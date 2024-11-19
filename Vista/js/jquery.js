@@ -99,12 +99,22 @@ function confirmarCompra(idCompra) {
         cancelButtonText: 'No, revisar',
     }).then((result) => {
         if (result.isConfirmed) {
+            //cargando
+            const loadingSwal = Swal.fire({
+                title: 'Cargando...',
+                text: 'Por favor, espere mientras procesamos su compra.',
+                allowOutsideClick: false,  // Impide que el usuario cierre el alert mientras está mostrando
+                didOpen: () => {
+                    Swal.showLoading();  // Muestra el ícono de carga
+                }
+            });
             $.ajax({
                 url: '../accion/accionCarrito.php',
                 type: 'POST',
                 data: { action: 'confirmarCompra', idcompra: idCompra },
                 success: function (response) {
                     if (response.success) {
+                        loadingSwal.close();
                         Swal.fire(
                             'Confirmada!',
                             'La compra ha sido confirmada correctamente.',
@@ -268,42 +278,53 @@ function cancelarCompraCliente() {
                 var formData = $('#fmSeg').serialize();
                 console.log("Datos en formData:", formData);
 
+                // Mostrar cartel de carga
+                Swal.fire({
+                    title: 'Cargando...',
+                    text: 'Procesando su solicitud, por favor espere.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Realizar la solicitud AJAX
                 $.ajax({
                     url: '../accion/cancelarCompraCliente.php',
                     type: 'POST',
                     data: formData,
-                    success: function(result) {
+                    success: function (result) {
+                        Swal.close(); // Cerrar el cartel de carga
                         try {
                             var result = JSON.parse(result);
                             Swal.fire({
                                 title: result.success ? "Operación exitosa" : "Advertencia",
                                 text: result.msg,
                                 icon: result.success ? "success" : "warning",
-                                timer: 2000,
-                                showConfirmButton: false
+                                showConfirmButton: true // Mostrar botón "OK"
+                            }).then(() => {
+                                if (result.success) {
+                                    $('#dgSeg').datagrid('reload'); // Recargar la tabla
+                                }
                             });
-                            if (result.success) {
-                                $('#dgSeg').datagrid('reload');
-                            }
                         } catch (e) {
                             console.error("Error al parsear el resultado:", e);
                             Swal.fire({
                                 title: "Error",
                                 text: "Ocurrió un problema con la respuesta del servidor.",
                                 icon: "error",
-                                timer: 2000,
-                                showConfirmButton: false
+                                showConfirmButton: true
                             });
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
+                        Swal.close(); // Cerrar el cartel de carga en caso de error
                         console.error("Error en la solicitud AJAX:", error);
                         Swal.fire({
                             title: "Error",
                             text: "No se pudo procesar la solicitud. Error en la conexión.",
                             icon: "error",
-                            timer: 2000,
-                            showConfirmButton: false
+                            showConfirmButton: true
                         });
                     }
                 });
@@ -438,82 +459,296 @@ function descargarPdf() {
     }
 }
 
+///Funciones para la gestion de compras del Deposito
+function siguienteEstadoDeposito() {
+    var row = $('#dg').datagrid('getSelected');
+    if (row) {
+        // Mostrar mensaje de confirmación
+        $.messager.confirm('Confirmación', '¿Seguro que desea avanzar la CompraEstado?', function(result) {
+            if (result) {
+                // Llenar el formulario con los datos de la fila seleccionada
+                $('#fmCompraEstado [name="idcompraestado"]').val(row.idcompraestado);
+                $('#fmCompraEstado [name="idcompra"]').val(row.idcompra);
+                $('#fmCompraEstado [name="idcompraestadotipo"]').val(row.idcompraestadotipo);
+                $('#fmCompraEstado [name="cefechaini"]').val(row.cefechaini);
+                $('#fmCompraEstado [name="cefechafin"]').val(row.cefechafin);
+                $('#fmCompraEstado [name="usnombre"]').val(row.usnombre);
+
+                var formData = $('#fmCompraEstado').serialize();
+                // Agregar la nueva variable "accion" al array de datos
+                formData += '&accion=deposito';
+
+                // Verificar el estado antes de hacer la solicitud AJAX
+                if (row.idcompraestadotipo == 2 || row.idcompraestadotipo == 3 || row.idcompraestadotipo == 4) {
+                    // Realizar la solicitud AJAX
+                    $.ajax({
+                        url: '../accion/siguienteEstadoCompra.php',
+                        type: 'POST',
+                        data: formData,
+                        beforeSend: function() {
+                            $.messager.progress({
+                                text: 'Procesando...'
+                            });
+                        },
+                        success: function(result) {
+                            var response = result;
+                            $.messager.progress('close'); // Cerrar el mensaje de carga
+
+                            if (response.errorMsg) {
+                                // Mostrar el mensaje de error si existe
+                                $.messager.alert('Error', response.errorMsg,);
+                            } else {
+                                // Mostrar mensaje de éxito si no hay error
+                                $.messager.alert('Operación exitosa', response.respuesta, 'info', function() {
+                                    $('#dg').datagrid('reload'); // Recargar los datos de la tabla
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            $.messager.progress('close'); // Cerrar el mensaje de carga
+                            $.messager.alert('Error', 'No se pudo procesar la solicitud. Error en la conexión.',);
+                        }
+                    });
+                } else if (row.idcompraestadotipo == 1) {
+                    $.messager.alert('Error', 'La compra primero debe ser aceptada por el Administrador.');
+                }
+            }
+        });
+    } else {
+        $.messager.alert('Advertencia', 'Debe seleccionar una compra primero.', 'warning');
+    }
+}
+
+function cancelarCompraEstadoDeposito() {
+    var row = $('#dg').datagrid('getSelected');
+    if (row) {
+        // Mostrar mensaje de confirmación
+        $.messager.confirm('Confirmación', '¿Seguro que desea cancelar la CompraEstado?', function(result) {
+            if (result) {
+                // Llenar el formulario con los datos de la fila seleccionada
+                $('#fmCompraEstado [name="idcompraestado"]').val(row.idcompraestado);
+                $('#fmCompraEstado [name="idcompra"]').val(row.idcompra);
+                $('#fmCompraEstado [name="idcompraestadotipo"]').val(row.idcompraestadotipo);
+                $('#fmCompraEstado [name="cefechaini"]').val(row.cefechaini);
+                $('#fmCompraEstado [name="cefechafin"]').val(row.cefechafin);
+                $('#fmCompraEstado [name="usnombre"]').val(row.usnombre);
+
+                var formData = $('#fmCompraEstado').serialize();
+                // Agregar la nueva variable "accion" al array de datos
+                formData += '&accion=cancelar';
+
+                // Verificar el estado antes de hacer la solicitud AJAX
+                if (row.idcompraestadotipo == 2 || row.idcompraestadotipo == 4 || row.idcompraestadotipo == 3) {
+                    // Realizar la solicitud AJAX
+                    $.ajax({
+                        url: '../accion/siguienteEstadoCompra.php',
+                        type: 'POST',
+                        data: formData,
+                        beforeSend: function() {
+                            $.messager.progress({
+                                text: 'Procesando...'
+                            });
+                        },
+                        success: function(result) {
+                            var response = result;
+                            $.messager.progress('close'); // Cerrar el mensaje de carga
+
+                            if (response.errorMsg) {
+                                // Mostrar el mensaje de error si existe
+                                $.messager.alert('Error', response.errorMsg,);
+                            } else {
+                                // Mostrar mensaje de éxito si no hay error
+                                $.messager.alert('Operación exitosa', response.respuesta, 'info', function() {
+                                    $('#dgCompraEstado').datagrid('reload'); // Recargar los datos de la tabla
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            $.messager.progress('close'); // Cerrar el mensaje de carga
+                            $.messager.alert('Error', 'No se pudo procesar la solicitud. Error en la conexión.',);
+                        }
+                    });
+                } else if (row.idcompraestadotipo == 1) {
+                    $.messager.alert('Error', 'Las compras iniciadas son manejadas por el administrador.');
+                }
+            }
+        });
+    } else {
+        $.messager.alert('Advertencia', 'Debe seleccionar una compra primero.', 'warning');
+    }
+}
 
 ///Funciones para la gestion de compras del Administrador
-function siguienteEstado(){
-    var row = $('#dgCompraEstado').datagrid('getSelected');
-    if (row){
-        $.messager.confirm('Confirmar','Seguro que desea avanzar la CompraEstado?',function(r){
-            if (r){
-                $('#fmCompraEstado').form('load',row);
-                url = '../privado/administrador/compras/accion/siguienteEstadoCompra.php';
-                $('#fmCompraEstado').form('submit',{
-                    url: url,
-                    iframe: false,
-                    onSubmit: function(){
-                        return $(this).form('validate');
-                    },
-                    success: function(result){
-                        var result = eval('('+result+')');
-                        if (result.errorMsg){
-                            $.messager.show({
-                                title: 'Error',
-                                msg: result.errorMsg
+function siguienteEstadoAdmi() {
+    var row = $('#dg').datagrid('getSelected');
+    if (row) {
+        // Mostrar mensaje de confirmación
+        $.messager.confirm('Confirmación', '¿Seguro que desea avanzar la CompraEstado?', function(result) {
+            if (result) {
+                // Llenar el formulario con los datos de la fila seleccionada
+                $('#fmCompraEstado [name="idcompraestado"]').val(row.idcompraestado);
+                $('#fmCompraEstado [name="idcompra"]').val(row.idcompra);
+                $('#fmCompraEstado [name="idcompraestadotipo"]').val(row.idcompraestadotipo);
+                $('#fmCompraEstado [name="cefechaini"]').val(row.cefechaini);
+                $('#fmCompraEstado [name="cefechafin"]').val(row.cefechafin);
+                $('#fmCompraEstado [name="usnombre"]').val(row.usnombre);
+
+                var formData = $('#fmCompraEstado').serialize();
+                // Agregar la nueva variable "accion" al array de datos
+                formData += '&accion=administrador';
+
+                // Verificar el estado antes de hacer la solicitud AJAX
+                if (row.idcompraestadotipo == 1 || row.idcompraestadotipo == 3 || row.idcompraestadotipo == 4) {
+                    // Realizar la solicitud AJAX
+                    $.ajax({
+                        url: '../accion/siguienteEstadoCompra.php',
+                        type: 'POST',
+                        data: formData,
+                        beforeSend: function() {
+                            $.messager.progress({
+                                text: 'Procesando...'
                             });
-                        } else {
-                            $.messager.show({
-                                title: 'Operacion exitosa',
-                                msg: result.respuesta
-                            });
-                            $('#dgCompraEstado').datagrid('reload');    // reload the menu data
+                        },
+                        success: function(result) {
+                            var response = result;
+                            $.messager.progress('close'); // Cerrar el mensaje de carga
+
+                            if (response.errorMsg) {
+                                // Mostrar el mensaje de error si existe
+                                $.messager.alert('Error', response.errorMsg,);
+                            } else {
+                                // Mostrar mensaje de éxito si no hay error
+                                $.messager.alert('Operación exitosa', response.respuesta, 'info', function() {
+                                    $('#dg').datagrid('reload'); // Recargar los datos de la tabla
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            $.messager.progress('close'); // Cerrar el mensaje de carga
+                            $.messager.alert('Error', 'No se pudo procesar la solicitud. Error en la conexión.',);
                         }
-                    }
-                });
+                    });
+                } else if (row.idcompraestadotipo == 2) {
+                    $.messager.alert('Error', 'Ya se encuentra aceptada la compra, el siguiente paso le corresponde al deposito.');
+                }
             }
         });
+    } else {
+        $.messager.alert('Advertencia', 'Debe seleccionar una compra primero.', 'warning');
     }
 }
 
-function cancelarCompraEstado(){
-    var row = $('#dgCompraEstado').datagrid('getSelected');
-    if (row){
-        $.messager.confirm('Confirmar','Seguro que desea cancelar la CompraEstado?',function(r){
-            if (r){
-                $('#fmCompraEstado').form('load',row);
-                url = '../privado/administrador/compras/accion/cancelarCompraEstado.php';
-                $('#fmCompraEstado').form('submit',{
-                    url: url,
-                    iframe: false,
-                    onSubmit: function(){
-                        return $(this).form('validate');
-                    },
-                    success: function(result){
-                        var result = eval('('+result+')');
-                        if (result.errorMsg){
-                            $.messager.show({
-                                title: 'Error',
-                                msg: result.errorMsg
+function cancelarCompraEstadoAdmi() {
+    var row = $('#dg').datagrid('getSelected');
+    if (row) {
+        // Mostrar mensaje de confirmación
+        $.messager.confirm('Confirmación', '¿Seguro que desea cancelar la CompraEstado?', function(result) {
+            if (result) {
+                // Llenar el formulario con los datos de la fila seleccionada
+                $('#fmCompraEstado [name="idcompraestado"]').val(row.idcompraestado);
+                $('#fmCompraEstado [name="idcompra"]').val(row.idcompra);
+                $('#fmCompraEstado [name="idcompraestadotipo"]').val(row.idcompraestadotipo);
+                $('#fmCompraEstado [name="cefechaini"]').val(row.cefechaini);
+                $('#fmCompraEstado [name="cefechafin"]').val(row.cefechafin);
+                $('#fmCompraEstado [name="usnombre"]').val(row.usnombre);
+
+                var formData = $('#fmCompraEstado').serialize();
+                // Agregar la nueva variable "accion" al array de datos
+                formData += '&accion=cancelar';
+
+                // Verificar el estado antes de hacer la solicitud AJAX
+                if (row.idcompraestadotipo == 1 || row.idcompraestadotipo == 4 || row.idcompraestadotipo == 3) {
+                    // Realizar la solicitud AJAX
+                    $.ajax({
+                        url: '../accion/siguienteEstadoCompra.php',
+                        type: 'POST',
+                        data: formData,
+                        beforeSend: function() {
+                            $.messager.progress({
+                                text: 'Procesando...'
                             });
-                        } else {
-                            $.messager.show({
-                                title: 'Operacion exitosa',
-                                msg: result.respuesta
-                            });
-                            $('#dgCompraEstado').datagrid('reload');    // reload the menu data
+                        },
+                        success: function(result) {
+                            var response = result;
+                            $.messager.progress('close'); // Cerrar el mensaje de carga
+
+                            if (response.errorMsg) {
+                                // Mostrar el mensaje de error si existe
+                                $.messager.alert('Error', response.errorMsg,);
+                            } else {
+                                // Mostrar mensaje de éxito si no hay error
+                                $.messager.alert('Operación exitosa', response.respuesta, 'info', function() {
+                                    $('#dgCompraEstado').datagrid('reload'); // Recargar los datos de la tabla
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            $.messager.progress('close'); // Cerrar el mensaje de carga
+                            $.messager.alert('Error', 'No se pudo procesar la solicitud. Error en la conexión.',);
                         }
-                    }
-                });
+                    });
+                } else if (row.idcompraestadotipo == 2) {
+                    $.messager.alert('Error', 'Las compras aceptadas son manejadas por el deposito.');
+                }
             }
         });
+    } else {
+        $.messager.alert('Advertencia', 'Debe seleccionar una compra primero.', 'warning');
     }
 }
 
-function muestraDetalleCompra(){
-    var row = $('#dgCompraEstado').datagrid('getSelected');
-    if (row){
-        window.location.href = "detalleCompra.php?idcompra="+row.idcompra;    
+//Funcion utilizada por el deposito y administrador para ver los detalles de la compra
+function muestraDetalleCompra() {
+    var row = $('#dg').datagrid('getSelected'); // Obtener la fila seleccionada
+    if (row) {
+        // Solicitud AJAX para obtener los detalles de la compra
+        $.ajax({
+            url: '../accion/detallesCompra.php',
+            type: 'POST',
+            data: { idcompra: row.idcompra },
+            dataType: 'json',
+            beforeSend: function() {
+                console.log('Enviando solicitud AJAX');
+            },
+            success: function(data) {
+                console.log("Respuesta recibida:", data);
+                if (data.success) {
+                    var productos = data.productos;
+                    var totalCompra = 0;
+                    var tbody = $('#detalleCompraTable tbody');
+                    tbody.empty(); // Limpiar la tabla antes de llenarla
+
+                    // Agregar productos a la tabla
+                    productos.forEach(function(producto) {
+                        var precioTotalProducto = producto.cantidad * producto.precioUnitario;
+                        tbody.append('<tr>' +
+                            '<td style="border: 1px solid #ddd; padding: 8px;">' + producto.pronombre + '</td>' +
+                            '<td style="border: 1px solid #ddd; padding: 8px;">' + producto.cantidad + '</td>' +
+                            '<td style="border: 1px solid #ddd; padding: 8px;">' + producto.precioUnitario + '</td>' +
+                            '<td style="border: 1px solid #ddd; padding: 8px;">' + precioTotalProducto + '</td>' +
+                            '</tr>');
+                        totalCompra += precioTotalProducto;
+                    });
+
+                    // Mostrar el total de la compra
+                    $('#totalCompra').text('Total de la Compra: $' + totalCompra.toFixed(2));
+
+                    // Abrir el cuadro de diálogo con los detalles
+                    $('#dlgDetalleCompra').dialog('open');
+                } else {
+                    $.messager.alert('Error', 'No se pudo obtener los detalles de la compra.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Error en la solicitud AJAX:", error);
+                $.messager.alert('Error', 'Error en la solicitud AJAX.');
+            }
+        });
+    } else {
+        $.messager.alert('Advertencia', 'Por favor, seleccione una compra primero.');
     }
 }
+
 
 ////////////////////////////////////////////////////////////////////////////// Productos
 
