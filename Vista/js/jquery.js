@@ -333,11 +333,20 @@ function verDetalleCliente() {
             confirmButtonText: "Sí, ver detalles",
             cancelButtonText: "No, volver"
         }).then((result) => {
-            if (result.isConfirmed) { // Cambié "isConfirmed" por "result.isConfirmed"
-                console.log('Confirmación recibida');
-                window.location.href = "../paginas/detalleCompra.php?idcompra=" + row.idcompra;
-            } else {
-                console.log('Cancelación recibida');
+            if (result.isConfirmed) {
+                // Solicitar detalles vía AJAX
+                $.ajax({
+                    url: "../accion/accionDetalleCompraUsuario.php",
+                    method: "GET",
+                    data: { idcompra: row.idcompra },
+                    success: function (response) {
+                        $('#detalleCompraContent').html(response);
+                        $('#detalleCompraModal').modal('show');
+                    },
+                    error: function () {
+                        Swal.fire("Error", "Hubo un problema al cargar los detalles.", "error");
+                    }
+                });
             }
         });
     } else {
@@ -350,6 +359,7 @@ function verDetalleCliente() {
         });
     }
 }
+
 
 function descargarPdf() {
     var row = $('#dgSeg').datagrid('getSelected');

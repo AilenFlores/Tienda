@@ -1,6 +1,40 @@
 <?php
     class AbmCompraItem {
 
+
+        public function mostrarDetalles($idcompra) {
+            // Obtención de datos
+            $idcompra = $idcompra['idcompra'];
+            $arregloItems = $this->buscar(['idcompra' => $idcompra]);
+            // Preparación de la salida
+            if (!empty($arregloItems)) {
+                $totalCompra = 0;
+                echo "<table class='table table-striped'>";
+                echo "<thead><tr><th>Producto</th><th>Cantidad</th><th>Precio Unitario</th><th>Subtotal</th></tr></thead><tbody>";
+                foreach ($arregloItems as $compraItem) {
+                    $nombre = $compraItem->getObjProducto()->getPronombre();
+                    $cantidad = $compraItem->getCicantidad();
+                    $precioUnitario = $compraItem->getObjProducto()->getProimporte();
+                    $subtotal = $cantidad * $precioUnitario;
+                    $totalCompra += $subtotal;
+                    // Mostrar fila de la tabla
+                    echo "<tr>
+                            <td>{$nombre}</td>
+                            <td>{$cantidad}</td>
+                            <td>\${$precioUnitario}</td>
+                            <td>\${$subtotal}</td>
+                          </tr>";
+                }
+                // Mostrar total
+                echo "<tr class='fw-bold'><td colspan='3'>Total:</td><td>\${$totalCompra}</td></tr>";
+                echo "</tbody></table>";
+            } else {
+                // Si no hay detalles
+                echo "<p class='text-center'>No hay detalles disponibles para esta compra.</p>";
+            }
+        }
+        
+
         /**
          * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto.
          * @param array $param
