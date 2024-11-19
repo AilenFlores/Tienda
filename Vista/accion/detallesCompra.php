@@ -1,6 +1,7 @@
 <?php
 // detallesCompra.php
-include_once("../Estructura/CabeceraSegura.php"); // Incluir cabecera segura
+//include_once("../Estructura/CabeceraSegura.php"); // Incluir cabecera segura
+include_once("../../configuracion.php"); // Incluir configuración
 
 $datos = data_submitted(); // Obtener datos enviados desde la solicitud AJAX
 $idcompra = $datos["idcompra"]; // Obtener el ID de la compra
