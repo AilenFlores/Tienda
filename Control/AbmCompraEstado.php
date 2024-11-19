@@ -206,80 +206,101 @@
 
         public function cancelarCompraEstado($param) {
             $arreglo["idcompra"] = $param["idcompra"];
-
+        
             $listaCompraEstadoConId = $this->buscar($arreglo);
             $compraCancelada = false;
             $i = 0;
-            while(!$compraCancelada && $i < count($listaCompraEstadoConId)){
-                if($listaCompraEstadoConId[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() == 4){
+        
+            // Verificar si la compra ya está cancelada
+            while (!$compraCancelada && $i < count($listaCompraEstadoConId)) {
+                if ($listaCompraEstadoConId[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() == 4) {
                     $compraCancelada = true;
                 } else {
                     $i++;
                 }
             }
+        
             $arregloCompraEstado = $this->buscar(null);
             $compraAvanzada2 = false;
             $i = 0;
-            while ((!$compraAvanzada2) && ($i < count($arregloCompraEstado))){
+        
+            // Verificar si la compra ya está en un estado avanzado
+            while (!$compraAvanzada2 && $i < count($arregloCompraEstado)) {
                 if ($arregloCompraEstado[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() > $param["idcompraestadotipo"] 
-                && $arregloCompraEstado[$i]->getObjCompra()->getIdcompra() == $param["idcompra"]){
+                    && $arregloCompraEstado[$i]->getObjCompra()->getIdcompra() == $param["idcompra"]) {
                     $compraAvanzada2 = true;
                 } else {
                     $i++;
                 }
             }
-
-            if ($param["idcompraestadotipo"] <= 3 && $param["idcompraestadotipo"] > 0){
-                if (!$compraCancelada){
-                    if (!$compraAvanzada2){
+        
+            if ($param["idcompraestadotipo"] == 1 || $param["idcompraestadotipo"] == 2) {
+                if (!$compraCancelada) {
+                    if (!$compraAvanzada2) {
                         $fechaActual = date('Y-m-d H:i:s');
                         $param["cefechafin"] = $fechaActual;
-                        if ($this->modificacion($param)){
+        
+                        if ($this->modificacion($param)) {
                             $param["idcompraestado"] = null;
-                            $param["idcompraestadotipo"] = 4;
+                            $param["idcompraestadotipo"] = 4; // Estado de "Cancelada"
                             $param["cefechaini"] = $fechaActual;
                             $param["cefechafin"] = $fechaActual;
-                            if($this->alta($param)){
+        
+                            if ($this->alta($param)) {
                                 $objAbmCompraItem = new AbmCompraItem();
                                 $listaCompraItem = $objAbmCompraItem->buscar($arreglo);
-                                if ($listaCompraItem){
-                                    foreach($listaCompraItem as $compraItem){
+        
+                                if ($listaCompraItem) {
+                                    foreach ($listaCompraItem as $compraItem) {
                                         $cantidadItems = $compraItem->getCicantidad();
                                         $objProducto = $compraItem->getObjProducto();
                                         $nuevoStock = $cantidadItems + $objProducto->getProcantstock();
+        
                                         $objAbmProducto = new AbmProducto();
-                                        $arregloParaModificar["idproducto"] = $objProducto->getIdproducto();
-                                        $arregloParaModificar["pronombre"] = $objProducto->getPronombre();
-                                        $arregloParaModificar["prodetalle"] = $objProducto->getProdetalle();
-                                        $arregloParaModificar["procantstock"] = $nuevoStock;
-                                        $arregloParaModificar["proimporte"] = $objProducto->getProprecio();
-                                        $arregloParaModificar["prodeshabilitado"] = $objProducto->getProdeshabilitado();
-                                        if ($objAbmProducto->modificacion($arregloParaModificar)){
-                                            $respuesta["respuesta"] = "Se canceló la compra y se actualizó el stock correctamente";
+                                        $arregloParaModificar = [
+                                            "idproducto" => $objProducto->getIdproducto(),
+                                            "pronombre" => $objProducto->getPronombre(),
+                                            "prodetalle" => $objProducto->getProdetalle(),
+                                            "procantstock" => $nuevoStock,
+                                            "proimporte" => $objProducto->getProimporte(),
+                                            "prodeshabilitado" => $objProducto->getProdeshabilitado()
+                                        ];
+        
+                                        if ($objAbmProducto->modificacion($arregloParaModificar)) {
+                                            $respuesta["success"] = true;
+                                            $respuesta["respuesta"] = "Se canceló la compra y se actualizó el stock correctamente.";
                                         } else {
-                                            $respuesta["errorMsg"] = "No se pudo actualizar el stock";    
+                                            $respuesta["success"] = false;
+                                            $respuesta["errorMsg"] = "Se canceló la compra, pero no se pudo actualizar el stock.";
                                         }
                                     }
                                 } else {
-                                    $respuesta["respuesta"] = "Se canceló la compra pero no tenía items";
+                                    $respuesta["success"] = true;
+                                    $respuesta["respuesta"] = "Se canceló la compra, pero no tenía items.";
                                 }
                             } else {
-                                $respuesta["errorMsg"] = "No se pudo cancelar la compra";    
+                                $respuesta["success"] = false;
+                                $respuesta["errorMsg"] = "No se pudo registrar el estado de la cancelación.";
                             }
                         } else {
-                            $respuesta["errorMsg"] = "No se pudo cancelar la compra";
+                            $respuesta["success"] = false;
+                            $respuesta["errorMsg"] = "No se pudo finalizar el estado anterior.";
                         }
                     } else {
-                        $respuesta["errorMsg"] = "La compra ya está avanzada";
+                        $respuesta["success"] = false;
+                        $respuesta["errorMsg"] = "La compra ya está en un estado avanzado.";
                     }
                 } else {
-                    $respuesta["errorMsg"] = "La compra ya está cancelada";
+                    $respuesta["success"] = false;
+                    $respuesta["errorMsg"] = "La compra ya está cancelada.";
                 }
             } else {
-                $respuesta["errorMsg"] = "No se puede cancelar la compra al siguiente estado debido a que el estado 'enviada' o 'cancelada' es el último estado";
+                $respuesta["success"] = false;
+                $respuesta["errorMsg"] = "El estado actual no permite cancelar la compra.";
             }
+        
             return $respuesta;
-        }
+        }        
 
         public function listarCompraEstado() {
             $listaCompraEstado = $this->buscar(null);
@@ -302,8 +323,8 @@
             $listaCompraEstadoConId = $this->buscar($arreglo);
             $compraCancelada = false;
             $i = 0;
-            while(!$compraCancelada && $i < count($listaCompraEstadoConId)){
-                if($listaCompraEstadoConId[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() == 4){
+            while (!$compraCancelada && $i < count($listaCompraEstadoConId)) {
+                if ($listaCompraEstadoConId[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() == 4) {
                     $compraCancelada = true;
                 } else {
                     $i++;
@@ -312,44 +333,58 @@
             $arregloCompraEstado = $this->buscar(null);
             $compraAvanzada2 = false;
             $i = 0;
-            while ((!$compraAvanzada2) && ($i < count($arregloCompraEstado))){
-                if ($arregloCompraEstado[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() > $param["idcompraestadotipo"] 
-                && $arregloCompraEstado[$i]->getObjCompra()->getIdcompra() == $param["idcompra"]){
+            while ((!$compraAvanzada2) && ($i < count($arregloCompraEstado))) {
+                if ($arregloCompraEstado[$i]->getObjCompraEstadoTipo()->getIdcompraestadotipo() > $param["idcompraestadotipo"]
+                    && $arregloCompraEstado[$i]->getObjCompra()->getIdcompra() == $param["idcompra"]) {
                     $compraAvanzada2 = true;
                 } else {
                     $i++;
                 }
             }
-
-            if ($param["idcompraestadotipo"] < 3 && $param["idcompraestadotipo"] > 0){ // verifica que el id de compraestado tipo sea "iniciada" o "aceptada"
-                if(!$compraCancelada){ // verifica que la compra no haya sido cancelada
-                    if (!$compraAvanzada2){ // verifica que la compra no haya sido avanzada
+        
+            if ($param["idcompraestadotipo"] < 3 && $param["idcompraestadotipo"] > 0) { // verifica que el id de compraestado tipo sea "iniciada" o "aceptada"
+                if (!$compraCancelada) { // verifica que la compra no haya sido cancelada
+                    if (!$compraAvanzada2) { // verifica que la compra no haya sido avanzada
                         $fechaActual = date('Y-m-d H:i:s');
                         $param["cefechafin"] = $fechaActual;
-                        if ($this->modificacion($param)){
+                        if ($this->modificacion($param)) {
                             $param["idcompraestado"] = null;
-                            $param["idcompraestadotipo"] = $param["idcompraestadotipo"]+1;
+                            $param["idcompraestadotipo"] = $param["idcompraestadotipo"] + 1;
                             $param["cefechaini"] = $fechaActual;
                             $param["cefechafin"] = null;
-                            if($this->alta($param)){
+                            if ($this->alta($param)) {
+                                // Respuesta exitosa
+                                $respuesta["success"] = true;
                                 $respuesta["respuesta"] = "Se cambió el estado de la compra correctamente";
                             } else {
-                                $respuesta["errorMsg"] = "No se pudo cambiar el estado de la compra";    
+                                // Error en la alta
+                                $respuesta["success"] = false;
+                                $respuesta["errorMsg"] = "No se pudo cambiar el estado de la compra";
                             }
                         } else {
+                            // Error en la modificación
+                            $respuesta["success"] = false;
                             $respuesta["errorMsg"] = "No se pudo cambiar el estado de la compra";
                         }
                     } else {
+                        // Compra ya ha sido avanzada
+                        $respuesta["success"] = false;
                         $respuesta["errorMsg"] = "La compra ya ha sido avanzada";
                     }
                 } else {
+                    // Compra ya cancelada
+                    $respuesta["success"] = false;
                     $respuesta["errorMsg"] = "La compra ya ha sido cancelada";
                 }
             } else {
+                // El estado no puede avanzar más
+                $respuesta["success"] = false;
                 $respuesta["errorMsg"] = "No se puede pasar la compra al siguiente estado debido a que el estado 'enviada' o 'cancelada' es el último estado";
             }
+        
             return $respuesta;
         }
+        
     }
 
 ?>

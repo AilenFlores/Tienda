@@ -6,9 +6,6 @@ require_once 'C:/xampp/htdocs/TIENDA/util/vendor/autoload.php';
 $data = data_submitted();
 $action = $data['action'] ?? '';
 
-// Depuración: Imprimir datos recibidos
-error_log('Datos recibidos: ' . print_r($data, true));
-
 $resp = ['success' => false, 'message' => 'Acción no válida'];
 
 switch ($action) {
