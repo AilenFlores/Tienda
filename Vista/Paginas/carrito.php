@@ -4,9 +4,9 @@ include_once("../Estructura/CabeceraSegura.php");
 <main class="flex-fill bg-light">
     <div class="container my-4">
         <div class="card shadow-sm">
-            <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center"> 
-                <h1 class="display-5 pb-3 fw-bold">Carrito</h1>
-                <a href="tienda.php" class="btn btn-outline-secondary btn-sm">Volver</a> 
+        <div class="card-header bg-white border-bottom-0 text-center position-relative">
+                <h2 class="fw-bold text-dark text-uppercase" style="letter-spacing: 1px; font-size: 2.5rem;"> Carrito </h2>
+                <a href="../home/index.php" class="btn btn-outline-secondary btn-sm position-absolute" style="top: 10px; right: 10px;">Volver</a>
             </div>
 
             <?php
@@ -19,21 +19,21 @@ include_once("../Estructura/CabeceraSegura.php");
             $objAbmCompra = new AbmCompra();
             $listaComprasUsuarioAct = $objAbmCompra->buscar($arreglo);
 
-            echo '<div class="d-flex justify-content-center">';
-            echo '<table id="detalleCompra" class="easyui-datagrid" style="width:800px" 
-                toolbar="#toolbarDetalleCompra" rownumbers="true" fitColumns="true" singleSelect="true">
-            <thead>
-                <tr>
-                    <th field="pronombre" width="85">Nombre del Producto</th>
-                    <th field="cicantidad" width="50">Cantidad</th>
-                    <th field="proprecio" width="107">Precio Unitario</th>
-                    <th field="preciototal" width="90">Precio Total</th>
-                    <th field="eliminarCompraItem" width="90"></th>
-                </tr>
-            </thead>
-            <tbody>';
-
             if (count($listaComprasUsuarioAct) == 1) {
+                // Hay productos en el carrito
+                echo '<div class="table-responsive">';
+                echo '<table id="detalleCompra" class="table table-striped table-bordered shadow-sm ">';
+                echo '<thead class="bg-primary text-white">
+                        <tr>
+                            <th scope="col">Nombre del Producto</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Precio Unitario</th>
+                            <th scope="col">Precio Total</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+
                 $arreglo2["idcompra"] = $listaComprasUsuarioAct[0]->getIdcompra();
                 $objAbmCompraItem = new AbmCompraItem();
                 $listaObjCompraItem = $objAbmCompraItem->buscar($arreglo2);
@@ -42,22 +42,33 @@ include_once("../Estructura/CabeceraSegura.php");
                 foreach ($listaObjCompraItem as $compraItem) {
                     echo "<tr><td>" . $compraItem->getObjProducto()->getPronombre() . "</td>";
                     echo "<td>" . $compraItem->getCicantidad() . "</td>";
-                    echo "<td>" . $compraItem->getObjProducto()->getProimporte() . "</td>";
+                    echo "<td>$" . number_format($compraItem->getObjProducto()->getProimporte(), 2, ',', '.') . "</td>";
                     $precioTotalProducto = $compraItem->getCicantidad() * $compraItem->getObjProducto()->getProimporte();
-                    echo "<td>" . $precioTotalProducto . "</td>";
-                    echo "<td><a class='btn btn-outline-secondary btn-sm' onclick='eliminarItemCarrito(" . $compraItem->getIdcompraitem() . ")'>Eliminar</a></td></tr>";
+                    echo "<td>$" . number_format($precioTotalProducto, 2, ',', '.') . "</td>";
+                    echo "<td><button class='btn btn-outline-danger btn-sm' onclick='eliminarItemCarrito(" . $compraItem->getIdcompraitem() . ")'><i class='bi bi-trash'></i> Eliminar</button></td></tr>";
                     $totalCompra += $precioTotalProducto;
                 }
 
-                echo "<tr><td></td><td></td><td>Precio Total de la Compra:</td>
-                <td>" . $totalCompra . "</td><td></td></tr>";
+                echo "<tr class='table-secondary'>
+                        <td colspan='3' class='text-right'><strong>Precio Total de la Compra:</strong></td>
+                        <td><strong>$" . number_format($totalCompra, 2, ',', '.') . "</strong></td>
+                        <td></td>
+                    </tr>";
 
                 echo "</tbody></table></div>";
 
                 // Los botones "Confirmar Compra" y "Cancelar Compra" fuera de la tabla
-                echo '<div class="d-flex justify-content-center mt-3">';
-                echo '<a class="btn btn-dark" style="margin-right:20px;" onclick="confirmarCompra(' . $listaComprasUsuarioAct[0]->getIdcompra() . ')">Confirmar</a>';
-                echo '<a class="btn btn-secondary" style="margin-left:20px;" onclick="cancelarCompra()">Cancelar Compra</a>';
+                echo '<div class="d-flex justify-content-center mt-4">';
+                echo '<button class="btn btn-success btn-sm mx-3 mb-3" onclick="confirmarCompra(' . $listaComprasUsuarioAct[0]->getIdcompra() . ')"><i class="bi bi-check-circle"></i> Confirmar Compra</button>';
+                echo '<button class="btn btn-danger btn-sm mx-3 mb-3" onclick="cancelarCompra()"><i class="bi bi-x-circle"></i> Cancelar Compra</button>';
+                echo '</div>';
+            } else {
+                // El carrito está vacío
+                echo '<div class="text-center py-5">';
+                echo '<i class="bi bi-cart-x" style="font-size: 50px; color: #6c757d; margin-bottom:20px;"></i>';
+                echo '<h3 class="text-muted">Tu carrito está vacío</h3>';
+                echo '<p class="text-muted">Parece que no has agregado ningún producto a tu carrito todavía.</p>';
+                echo '<a href="tienda.php" class="btn btn-primary">Ir a la tienda</a>';
                 echo '</div>';
             }
             ?>
