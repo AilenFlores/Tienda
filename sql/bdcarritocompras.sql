@@ -164,7 +164,7 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`idproducto`, `pronombre`, `prodetalle`, `proimporte`, `prodeshabilitado`, `procantstock`) VALUES
-(1, 'Casco de Seguridad', 'Se distingue por su excelente y moderno diseño.', 30000, NULL, 10),
+(1, 'Casco de Seguridad', 'Se distingue por su excelente y moderno diseño.', 30000, NULL, 1),
 (2, 'Mameluco', 'Confeccionado con tela de algodón 100%.', 20000, NULL, 13),
 (3, 'Botas de Seguridad', 'Brindan una cobertura más extensa que los zapatos.', 25000, NULL, 20),
 (4, 'Camisa', 'Confeccionada con gabardina 100% algodón.', 28000, NULL, 6),
