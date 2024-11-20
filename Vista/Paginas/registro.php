@@ -1,4 +1,9 @@
-<?php include ("../Estructura/Cabecera.php"); ?>
+<?php include ("../Estructura/Cabecera.php");
+$resp = $session->validar();
+if($resp) {
+   echo "<script>location.href = '".BASE_URL."/vista/home/index.php';</script>";
+}
+?>
 
 <main class="flex-fill bg-light">
     <div class="container my-4">

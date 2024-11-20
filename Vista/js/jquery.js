@@ -88,8 +88,77 @@ function cancelarCompra() {
     });
 }
 
-// Confirmar compra
+
+function mostrarFormularioPago() {
+    $('#formularioPago').modal('show');
+}
+
+// Función para validar el formulario con Bootstrap
+function validarFormulario() {
+    let isValid = true;
+    const form = document.getElementById('formPago');
+    const inputs = form.querySelectorAll('input');
+    
+    // Validación del nombre del titular (solo letras y espacios)
+    const cardName = document.getElementById('card-name').value.trim();
+    const cardNameRegex = /^[A-Za-z\s]+$/;
+    if (!cardNameRegex.test(cardName)) {
+        document.getElementById('card-name').classList.add('is-invalid');
+        isValid = false;
+    } else {
+        document.getElementById('card-name').classList.remove('is-invalid');
+    }
+
+    // Validación de la dirección 
+    const address = document.getElementById('address').value.trim();
+    if (address === '') {
+        document.getElementById('address').classList.add('is-invalid');
+        isValid = false;
+    } else {
+        document.getElementById('address').classList.remove('is-invalid');
+    }
+
+    // Validación del número de tarjeta (solo números y exactamente 16 dígitos)
+    const cardNumber = document.getElementById('card-number').value.trim();
+    const cardNumberRegex = /^\d{16}$/;
+    if (!cardNumberRegex.test(cardNumber)) {
+        document.getElementById('card-number').classList.add('is-invalid');
+        isValid = false;
+    } else {
+        document.getElementById('card-number').classList.remove('is-invalid');
+    }
+
+    // Validación de la fecha de expiración (formato MM/AA) MM entre 1 12 y AA dos digitos
+    const expiryDate = document.getElementById('expiry-date').value.trim();
+    const expiryDateRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/; // Formato MM/AA
+    if (!expiryDateRegex.test(expiryDate)) {
+        document.getElementById('expiry-date').classList.add('is-invalid');
+        isValid = false;
+    } else {
+        document.getElementById('expiry-date').classList.remove('is-invalid');
+    }
+
+    // Validación del CVV (solo números y exactamente 3 dígitos)
+    const cvv = document.getElementById('cvv').value.trim();
+    const cvvRegex = /^\d{3}$/;
+    if (!cvvRegex.test(cvv)) {
+        document.getElementById('cvv').classList.add('is-invalid');
+        isValid = false;
+    } else {
+        document.getElementById('cvv').classList.remove('is-invalid');
+    }
+
+    return isValid; // Retorna el estado de validez del formulario
+}
+
+
+// Función para confirmar la compra
 function confirmarCompra(idCompra) {
+    // Primero validamos el formulario
+    if (!validarFormulario()) {
+        return; // Si la validación falla, no se procede con la compra
+    }
+
     Swal.fire({
         title: '¿Estás seguro?',
         text: "Esta acción confirmará tu compra.",
@@ -99,30 +168,32 @@ function confirmarCompra(idCompra) {
         cancelButtonText: 'No, revisar',
     }).then((result) => {
         if (result.isConfirmed) {
-            //cargando
+            // Mostramos un mensaje de carga mientras procesamos la compra
             const loadingSwal = Swal.fire({
                 title: 'Cargando...',
                 text: 'Por favor, espere mientras procesamos su compra.',
-                allowOutsideClick: false,  // Impide que el usuario cierre el alert mientras está mostrando
+                allowOutsideClick: false,
                 didOpen: () => {
-                    Swal.showLoading();  // Muestra el ícono de carga
+                    Swal.showLoading();
                 }
             });
+
+            // Hacemos la solicitud AJAX para confirmar la compra
             $.ajax({
                 url: '../accion/accionCarrito.php',
                 type: 'POST',
                 data: { action: 'confirmarCompra', idcompra: idCompra },
                 success: function (response) {
+                    loadingSwal.close(); 
                     if (response.success) {
-                        loadingSwal.close();
                         Swal.fire(
                             'Confirmada!',
                             'La compra ha sido confirmada correctamente.',
                             'success'
                         ).then(() => {
-                        window.location.href = 'tienda.php?transaccion=exito';
-                    });
-                    }else {
+                            window.location.href = 'tienda.php?transaccion=exito';
+                        });
+                    } else {
                         Swal.fire(
                             'Error',
                             'Error al confirmar la compra: ' + response.message,
@@ -131,6 +202,7 @@ function confirmarCompra(idCompra) {
                     }
                 },
                 error: function () {
+                    loadingSwal.close(); 
                     Swal.fire(
                         'Error',
                         'Ocurrió un error en la solicitud.',
@@ -141,6 +213,7 @@ function confirmarCompra(idCompra) {
         }
     });
 }
+
 
 //Funciones para el funcionamiento de la tienda junto al carrito.////
 function verProducto(idproducto) {
