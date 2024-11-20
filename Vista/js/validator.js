@@ -1,4 +1,4 @@
-
+////////////////////////////MENU DINAMICO/////////////////////////////////////
 $(document).ready(function() {
     $.ajax({
         url: '../accion/accionListarMenuDinamico.php',
