@@ -90,7 +90,7 @@ private function agregarDatosCliente($arrayFinal) {
         $this->SetTextColor(39, 39, 51);
         $this->Cell(150, 9, 'ID: ' . $idUsuario, 0, 0, 'L');
         $this->Ln(5);
-        $this->Cell(150, 9, 'Nombre: ' . $nombre, 0, 0, 'L');
+        $this->Cell(150, 9, iconv('UTF-8', 'ISO-8859-1//TRANSLIT', 'Nombre: ' . $nombre), 0, 0, 'L');
         $this->Ln(5);
         $this->Cell(150, 9, 'Email: ' . $email, 0, 0, 'L');
         $this->Ln(10);
@@ -168,8 +168,8 @@ private function agregarDatosCliente($arrayFinal) {
             // Acceder al producto dentro del item
             $producto = $compraItem->getObjProducto();
             $this->Cell(35, 10, $producto->getIdProducto(), 1, 0, 'C');
-            $this->Cell(60, 10, $producto->getPronombre(), 1, 0, 'C');
-            $this->Cell(100, 10, $producto->getProdetalle(), 1, 0, 'C');
+            $this->Cell(60, 10, iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $producto->getPronombre()), 1, 0, 'C');
+            $this->Cell(100, 10, iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $producto->getProdetalle()), 1, 0, 'C');
             $this->Cell(40, 10, $producto->getProcantstock(), 1, 0, 'C');
             $this->Cell(40, 10, $producto->getProimporte(), 1, 0, 'C');
             $this->Ln(10);

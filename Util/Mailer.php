@@ -66,6 +66,9 @@ class Mailer {
     }
 
     public function sendCambioEstadoCompraMail($direccionMail, $nombreUsuario, $idCompra, $estado) {
+        if($estado=="Cancelada"){
+            $estado="Cancelada, el dinero sera devuelto a su cuenta en los proximos dias.";
+        }
         try {
             $this->mail->setFrom('safezone.nqn@gmail.com', 'Safezone: Seguridad Industrial');
             $this->mail->addAddress($direccionMail, $nombreUsuario); // Agregar destinatario
