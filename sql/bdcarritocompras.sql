@@ -66,9 +66,9 @@ CREATE TABLE `compraestadotipo` (
 
 INSERT INTO `compraestadotipo` (`idcompraestadotipo`, `cetdescripcion`, `cetdetalle`) VALUES
 (1, 'iniciada', 'cuando el usuario : cliente inicia la compra de uno o mas productos del carrito'),
-(2, 'aceptada', 'cuando el usuario administrador da ingreso a uno de las compras en estado = 1 '),
-(3, 'enviada', 'cuando el usuario administrador envia a uno de las compras en estado =2 '),
-(4, 'cancelada', 'un usuario administrador podra cancelar una compra en cualquier estado y un usuario cliente solo en estado=1 ');
+(2, 'aceptada', 'cuando el usuario administrador da ingreso a uno de las compras en estado 1 '),
+(3, 'enviada', 'cuando el usuario deposito envia una de las compras en estado 2 '),
+(4, 'cancelada', 'un administrador podra cancelar una compra en estado 1, deposito podra cancelar una compra en estado 2 y un usuario cliente en estado 1');
 
 -- --------------------------------------------------------
 
@@ -164,10 +164,15 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`idproducto`, `pronombre`, `prodetalle`, `proimporte`, `prodeshabilitado`, `procantstock`) VALUES
-(1, 'Casco de Seguridad', '...', 15000, NULL, 62),
-(2, 'Mameluco', '...', 20000, NULL, 13),
-(3, 'Botas de Seguridad', '...', 25000, NULL, 28),
-(4, 'Camisa', '...', 30000, NULL, 6);
+(1, 'Casco de Seguridad', 'Se distingue por su excelente y moderno diseño.', 30000, NULL, 10),
+(2, 'Mameluco', 'Confeccionado con tela de algodón 100%.', 20000, NULL, 13),
+(3, 'Botas de Seguridad', 'Brindan una cobertura más extensa que los zapatos.', 25000, NULL, 20),
+(4, 'Camisa', 'Confeccionada con gabardina 100% algodón.', 28000, NULL, 6),
+(5, 'Guantes', 'Confeccionado con cuero descarne de color amarillo.', 14000, NULL, 16),
+(6, 'Protector Auditivo', 'Suministra protección de manera no invasiva.', 25500, NULL, 8),
+(7, 'Gafas de Seguridad', 'Protege los ojos de partículas voladoras.', 18000, NULL, 12),
+(8, 'Pantalon', 'Confeccionado con tela de algodón 100%.', 25000, NULL, 10),
+(9, 'Chaleco Reflectante', 'Confeccionado con tela de algodón 100%.', 15000, NULL, 10);
 
 -- --------------------------------------------------------
 

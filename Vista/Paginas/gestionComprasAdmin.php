@@ -9,10 +9,12 @@ include_once("../Estructura/CabeceraSegura.php");
 
 <!-- Tabla para gestionar CompraEstado -->
 <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+    <!-- Tabla para gestionar CompraEstado -->
+<div style="display: flex; justify-content: center; width: 100%; margin-bottom: 20px;">
     <table id="dg" title="Administrador de Compra-Estado" class="easyui-datagrid" style="width:1200px;height:350px;"
-            url="../accion/listarCompraEstado.php"
-            toolbar="#toolbar" pagination="true"
-            rownumbers="true" fitColumns="true" singleSelect="true">
+           url="../accion/listarCompraEstado.php"
+           toolbar="#toolbar" pagination="true"
+           rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
                 <th field="idcompraestado" width="50">Id Compra Estado</th>
@@ -25,6 +27,8 @@ include_once("../Estructura/CabeceraSegura.php");
             </tr>
         </thead>
     </table>
+</div>
+
 
     <div id="toolbar">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="siguienteEstadoAdmi()">Siguiente Estado</a>
@@ -63,7 +67,7 @@ include_once("../Estructura/CabeceraSegura.php");
 
 <!-- Tabla para mostrar el detalle de la compra -->
 
-<div id="dlgDetalleCompra" class="easyui-dialog" title="Detalles de la compra" style="width:600px;" data-options="closed:true,modal:true,border:'thin',buttons:'#dlgDetalleCompra-buttons'">
+<div id="dlgDetalleCompra" class="easyui-dialog" style="width:600px;" data-options="closed:true,modal:true,border:'thin',buttons:'#dlgDetalleCompra-buttons'">
     <table id="detalleCompraTable" style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
         <thead>
             <tr>
@@ -77,7 +81,7 @@ include_once("../Estructura/CabeceraSegura.php");
             <!-- Se llenará dinámicamente con JavaScript -->
         </tbody>
     </table>
-    <div id="totalCompra" style="text-align: left; font-weight: bold; margin-top: 10px;">Total de la Compra: 0</div>
+    <div id="totalCompra" style="text-align: right; font-weight: bold; margin-top: 10px;">Total de la Compra: 0</div>
 </div>
 
 
