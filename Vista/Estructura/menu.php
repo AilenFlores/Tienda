@@ -53,28 +53,3 @@ ob_start(); //
 <!-- Divider Line -->
 <hr class="my-0 border-secondary">
 
-<script>
- $(document).ready(function() {
-    $.ajax({
-        url: '<?= BASE_URL ?>/vista/accion/accionListarMenuDinamico.php',
-        method: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            $('#menuItems').empty();
-            if (data && data.length > 0) {
-                let menuHtml = '';
-                data.forEach(function(item) {
-                    if (!$('#menuItems').find('a[href="'+item.url+'"]').length) {
-                        menuHtml += '<li><a href="' + item.url + '" class="dropdown-item">' + item.nombre + '</a></li>';
-                    }
-                });
-                $('#menuItems').html(menuHtml);
-            } else {
-                console.error("No se encontraron menús.");
-                $('#menuItems').html('<li class="dropdown-item">No hay menús disponibles</li>');
-            }
-        },
-    });
-});
-
-</script>
