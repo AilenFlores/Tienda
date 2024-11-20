@@ -183,7 +183,6 @@ class AbmMenuRol {
         $tienePermiso = false;
         // Obtener los menús del rol desde la base de datos
         $menus = $this->menuesByIdRol($rol);
-        $menus[] = ["url" => "/vista/paginas/detalleCompra.php"]; 
         // Obtener la URL actual completa
         $url = "http://localhost" . $_SERVER['REQUEST_URI'];
         foreach ($menus as $menu) {
