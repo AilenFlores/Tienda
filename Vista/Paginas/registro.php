@@ -16,7 +16,7 @@ if($resp) {
                 <form  method="post" id="formRegistro" name="formRegistro" novalidate >
 
                     <div class="mb-3">
-                        <label for="usNombre" class="form-label text-secondary"><strong>Nombre:</strong></label>
+                        <label for="usNombre" class="form-label text-secondary"><strong>Nombre de usuario:</strong></label>
                         <input type="text" class="form-control" id="usNombre" name="usNombre" required>
                         <div class="invalid-feedback">
                             Ingrese un nombre válido.
@@ -27,7 +27,8 @@ if($resp) {
                         <label for="usPass" class="form-label text-secondary"><strong>Contraseña:</strong></label>
                         <input type="password" class="form-control" id="usPass" name="usPass" required>
                         <div class="invalid-feedback">
-                            Ingrese una contraseña válida. Debe tener al menos 8 caracteres.
+                            Ingrese una contraseña válida. Debe tener al menos 8 caracteres y contener al menos un número.
+                            La contraseña no puede ser igual al nombre de usuario.
                         </div>
                     </div>
                     
