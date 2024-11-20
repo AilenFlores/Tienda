@@ -1206,7 +1206,7 @@ function marcarRolesSeleccionados(row) {
 function editarUsuarios() {
     var row = $('#dg').datagrid('getSelected');
     if (row) {
-        $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Editar Menu');
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle', 'Editar Usuario');
         $('#fm').form('load', row);
         // Ocultar el campo de la contraseña
         $('#fm').find('input[name="usPass"]').closest('div').hide();
