@@ -7,7 +7,7 @@ if (isset($data['usNombre'])){
         $data["accion"]="nuevo";
         $respuesta = $objC->abm($data);
         if (!$respuesta){
-            $mensaje = " La accion ALTA No pudo concretarse";
+            $mensaje = " Nombre de usuario ya existente";
             
         }
 }

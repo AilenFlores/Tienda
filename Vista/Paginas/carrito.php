@@ -81,7 +81,8 @@ include_once("../Estructura/CabeceraSegura.php");
 
 </main>
 
-
+<?php if(!empty($listaComprasUsuarioAct)){ ?>
+  
 <!-- Modal para el formulario de pago -->
 <div class="modal fade" id="formularioPago" tabindex="-1" aria-labelledby="formularioPagoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -128,6 +129,6 @@ include_once("../Estructura/CabeceraSegura.php");
     </div>
 </div>
 </div>
-
+<?php } ?>
 
 <?php include(STRUCTURE_PATH . "pie.php"); ?>
