@@ -67,7 +67,7 @@ include_once("../Estructura/CabeceraSegura.php");
 
 <!-- Tabla para mostrar el detalle de la compra -->
 
-<div id="dlgDetalleCompra" class="easyui-dialog" style="width:600px;" data-options="closed:true,modal:true,border:'thin',buttons:'#dlgDetalleCompra-buttons'">
+<div id="dlgDetalleCompra" title="Detalles de la compra" class="easyui-dialog" style="width:600px;" data-options="closed:true,modal:true,border:'thin',buttons:'#dlgDetalleCompra-buttons'">
     <table id="detalleCompraTable" style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
         <thead>
             <tr>
@@ -81,7 +81,7 @@ include_once("../Estructura/CabeceraSegura.php");
             <!-- Se llenará dinámicamente con JavaScript -->
         </tbody>
     </table>
-    <div id="totalCompra" style="text-align: right; font-weight: bold; margin-top: 10px;">Total de la Compra: 0</div>
+    <div id="totalCompra" style="text-align: left; font-weight: bold; margin-top: 10px;">Total de la Compra: 0</div>
 </div>
 
 
