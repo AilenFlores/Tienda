@@ -72,8 +72,8 @@ $datos = data_submitted();
         <!-- Contact Us -->
         <div class="col-md-4 d-flex flex-column align-items-center">
             <i class="fab fa-whatsapp fa-3x mb-2 text-primary"></i>
-            <h5 class="fw-bold text-primary">¿Tienes alguna duda?</h5>
-            <p class="text-primary">Si tienes alguna duda, comunícate con nosotros vía WhatsApp.</p>
+            <h5 class="fw-bold text-primary">¿Tenes alguna duda?</h5>
+            <p class="text-primary">Si tenes alguna duda, comunícate con nosotros vía WhatsApp.</p>
         </div>
     </div>
 </div>
