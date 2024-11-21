@@ -43,6 +43,7 @@ class Session {
         $resp = false;
         $abmUsuario = new AbmUsuarioLogin();
         // Condición que asegura que el usuario esté habilitado
+        $pass = md5($pass); // Encriptamos la contraseña
         $where = ['usnombre' => $usu, 'uspass' => $pass, 'usdeshabilitado' => null];
         $listaUsuarios = $abmUsuario->buscar($where);
         if (count($listaUsuarios) > 0) {
