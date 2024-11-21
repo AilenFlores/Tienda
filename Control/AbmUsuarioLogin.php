@@ -251,7 +251,7 @@ class AbmUsuarioLogin {
             if  (isset($param['usnombre']))
                 $where .= " and usnombre = '" . $param['usnombre'] . "'";
             if  (isset($param['uspass']))
-                $where .= " and uspass = '" . $param['uspass'] . "'";
+                $where .= " and uspass = '" . md5($param['uspass']) . "'";
             if  (isset($param['usmail']))
                 $where .= " and usmail = '" . $param['usmail'] . "'";
             if  (isset($param['usdeshabilitado']))

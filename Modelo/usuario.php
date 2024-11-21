@@ -94,7 +94,7 @@ class Usuario {
     public function insertar(){
         $resp = false;
         $base = new bdcarritocompras();
-        $sql = "INSERT INTO usuario (usnombre, uspass, usmail) VALUES ('" . $this->getUsNombre() . "','" . $this->getUsPass() . "','" . $this->getUsMail() . "');";
+        $sql = "INSERT INTO usuario (usnombre, uspass, usmail) VALUES ('" . $this->getUsNombre() . "','" . md5($this->getUsPass()) . "','" . $this->getUsMail() . "');";
         //echo $sql;
         if ($base->Iniciar()) {
             if ($elid = $base->Ejecutar($sql)) {
@@ -115,7 +115,7 @@ class Usuario {
         $base = new bdcarritocompras();
         $sql = " UPDATE usuario SET 
         usnombre = '" . $this->getUsNombre() . "', 
-        uspass = '" .  $this->getUsPass() . "', 
+        uspass = '" .  md5($this->getUsPass()) . "', 
         usmail = '" . $this->getUsMail() . "' 
         WHERE 
         idusuario = " . $this->getIdUsuario();
