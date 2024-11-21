@@ -937,16 +937,7 @@ function saveProductos(){
         });
         return false;
     }
-   // console.log($('#fm').find('input[name="proimg"]')); 
-   if ($('#fm').find('input[name="proimg"]').val() === '') {
-    //alert('Seleccione una imagen');
-    $.messager.show({
-        title: 'Imagen',
-        msg: 'Seleccione una imagen formato jpeg o jpg.',
-        showType: 'show'
-    });
-    return false;
-}
+  
 
     $('#fm').form('submit',{
         url: url,
