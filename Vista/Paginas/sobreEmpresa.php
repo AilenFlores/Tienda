@@ -3,7 +3,7 @@ include_once("../Estructura/Cabecera.php");
 $datos = data_submitted();
 ?>
 <div class="container my-5">
-    <h2 class="text-center fw-bold text-primary">¡Sobre Nosotros!</h2>
+    <h2 class="text-center fw-bold text-primary">¡Nuestra Empresa!</h2>
     <p class="text-center mt-4 text-secondary">
         Somos una empresa comprometida con la fabricación y distribución de ropa de trabajo y equipos de protección personal para empresas en sectores de construcción, manufactura, y otros entornos de alto riesgo. 
         Nuestro objetivo es proporcionar productos de alta calidad que garanticen la seguridad y el confort de los trabajadores en sus jornadas laborales.

@@ -156,7 +156,7 @@ private function agregarDatosCliente($arrayFinal) {
         $this->Cell(35, 10, "ID Producto", 1, 0, 'C', true);
         $this->Cell(60, 10, "Nombre Producto", 1, 0, 'C', true);
         $this->Cell(100, 10, "Detalle Producto", 1, 0, 'C', true);
-        $this->Cell(40, 10, "Stock Producto", 1, 0, 'C', true);
+        $this->Cell(40, 10, "Cantidad", 1, 0, 'C', true);
         $this->Cell(40, 10, "Precio Producto", 1, 0, 'C', true);
         $this->Ln(10);
         $this->SetFont('Times', '', 12);
@@ -170,7 +170,7 @@ private function agregarDatosCliente($arrayFinal) {
             $this->Cell(35, 10, $producto->getIdProducto(), 1, 0, 'C');
             $this->Cell(60, 10, iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $producto->getPronombre()), 1, 0, 'C');
             $this->Cell(100, 10, iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $producto->getProdetalle()), 1, 0, 'C');
-            $this->Cell(40, 10, $producto->getProcantstock(), 1, 0, 'C');
+            $this->Cell(40, 10, $compraItem->getCicantidad(), 1, 0, 'C');
             $this->Cell(40, 10, $producto->getProimporte(), 1, 0, 'C');
             $this->Ln(10);
         }

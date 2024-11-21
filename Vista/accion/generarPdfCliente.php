@@ -15,8 +15,8 @@ $items = $compraItem->buscar(['idcompra' => $datos['idcompra']]);
 array_push($datos, $items);
 
 // Generar el PDF y guardar el archivo
-$objAbmCompraEstado = new PDF();
-$response = $objAbmCompraEstado->generarPdfCliente($datos);
+$pdf = new PDF();
+$response = $pdf->generarPdfCliente($datos);
 
 // Devolver la respuesta como JSON
 header('Content-Type: application/json');
