@@ -339,7 +339,6 @@ function cancelarCompraCliente() {
             cancelButtonText: "No, volver"
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log('Confirmación recibida');
 
                 // Llenar el formulario con los datos de la fila seleccionada
                 $('#fmSeg [name="idcompraestado"]').val(row.idcompraestado || '');
@@ -349,7 +348,6 @@ function cancelarCompraCliente() {
                 $('#fmSeg [name="cefechafin"]').val(row.cefechafin || '');
 
                 var formData = $('#fmSeg').serialize();
-                console.log("Datos en formData:", formData);
 
                 // Mostrar cartel de carga
                 Swal.fire({
@@ -381,7 +379,6 @@ function cancelarCompraCliente() {
                                 }
                             });
                         } catch (e) {
-                            console.error("Error al parsear el resultado:", e);
                             Swal.fire({
                                 title: "Error",
                                 text: "Ocurrió un problema con la respuesta del servidor.",
@@ -392,7 +389,6 @@ function cancelarCompraCliente() {
                     },
                     error: function (xhr, status, error) {
                         Swal.close(); // Cerrar el cartel de carga en caso de error
-                        console.error("Error en la solicitud AJAX:", error);
                         Swal.fire({
                             title: "Error",
                             text: "No se pudo procesar la solicitud. Error en la conexión.",
@@ -402,7 +398,6 @@ function cancelarCompraCliente() {
                     }
                 });
             } else {
-                console.log('Cancelación recibida');
             }
         });
     } else {
@@ -467,7 +462,6 @@ function descargarPdf() {
             cancelButtonText: "No, volver"
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log('Confirmación recibida');
 
                 // Llenar el formulario con los datos de la fila seleccionada
                 $('#fmSeg [name="idcompraestado"]').val(row.idcompraestado || '');
@@ -478,8 +472,6 @@ function descargarPdf() {
 
                 // Serializar los datos del formulario
                 var formData = $('#fmSeg').serialize();
-
-                console.log("Datos en formData:", formData);
 
                 // Realizar la solicitud AJAX
                 $.ajax({
@@ -506,8 +498,6 @@ function descargarPdf() {
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('Error al generar el PDF:', error);
-                        console.log('Respuesta completa:', xhr.responseText);  // Ver la respuesta completa
                         Swal.fire({
                             title: 'Error',
                             text: 'Ocurrió un problema al intentar generar el PDF.',
@@ -518,7 +508,6 @@ function descargarPdf() {
                 });
                 
             } else {
-                console.log('Cancelación recibida');
             }
         });
     } else {
@@ -784,7 +773,6 @@ function muestraDetalleCompra() {
                 console.log('Enviando solicitud AJAX');
             },
             success: function(data) {
-                console.log("Respuesta recibida:", data);
                 if (data.success) {
                     var productos = data.productos;
                     var totalCompra = 0;
@@ -813,7 +801,6 @@ function muestraDetalleCompra() {
                 }
             },
             error: function(xhr, status, error) {
-                console.log("Error en la solicitud AJAX:", error);
                 $.messager.alert('Error', 'Error en la solicitud AJAX.');
             }
         });
@@ -947,7 +934,6 @@ function saveProductos(){
         success: function(result){
             try {
                 let resultObj = JSON.parse(result);
-                console.log(resultObj);
                 if (resultObj.respuesta){
                     $.messager.show({
                         title: 'Operacion exitosa',
@@ -992,7 +978,6 @@ function bajaProductos(){
                                 });
                             }}, 'json'
                          ).fail(function(jqXHR, textStatus, errorThrown) {
-                            console.log("Error en la solicitud:", textStatus, errorThrown);
                             $.messager.alert('Error', 'No se pudo conectar con el servidor.', 'error');
                         });
                     }
@@ -1079,7 +1064,6 @@ function bajaRol(){
                                 });
                             }}, 'json'
                          ).fail(function(jqXHR, textStatus, errorThrown) {
-                            console.log("Error en la solicitud:", textStatus, errorThrown);
                             $.messager.alert('Error', 'El rol esta asociado a un usuario.', 'error');
                         });
                     }
@@ -1325,7 +1309,6 @@ function nuevoUsuarios(){
                             msg: result.errorMsg || 'Error al eliminar el usuario.'
                         });
                         }}, 'json').fail(function(jqXHR, textStatus, errorThrown) {
-                                console.log("Error en la solicitud:", textStatus, errorThrown);
                                 $.messager.alert('Error', 'No se pudo conectar con el servidor.', 'error');});}
                             });
                         } else {
@@ -1487,7 +1470,6 @@ function bajaMenu(){
                                 });
                             }}, 'json'
                          ).fail(function(jqXHR, textStatus, errorThrown) {
-                            console.log("Error en la solicitud:", textStatus, errorThrown);
                             $.messager.alert('Error', 'No se pudo conectar con el servidor.', 'error');
                         });
                     }
@@ -1512,7 +1494,6 @@ function cargarDatosUsuario() {
         method: 'POST',
         dataType: 'json',
         success: function(data) {
-            console.log(data);  // Verifica la respuesta
             if (data) {
                 $('#idUsuario').val(data[0].idUsuario);
                 $('#usNombre').val(data[0].usNombre);
@@ -1540,10 +1521,8 @@ function cargarPass() {
         method: 'POST',
         dataType: 'json',
         success: function(data) {
-            console.log(data);  // Verifica la respuesta
             if (data) {
                 $('#idUsuarioPass').val(data[0].idUsuario);
-                console.log(data[0].idUsuario);
             } else {
                 console.log("Datos incompletos o nulos.");
             }
