@@ -109,9 +109,9 @@ INSERT INTO `menu` (`idmenu`, `menombre`, `medescripcion`, `idpadre`, `medeshabi
 (5, 'Gestionar Productos', 'paginas/indexProductos.php\r\n', NULL, NULL),
 (6, 'Tienda', 'paginas/tienda.php\r\n', NULL, NULL),
 (7, 'Carrito', 'paginas/carrito.php\r\n', NULL, NULL),
-(8, 'Mis compras', 'paginas/misCompras.php\r\n', NULL, NULL),
-(9, 'Gestionar compras', 'paginas/gestionComprasDeposito.php\r\n', NULL, NULL),
-(10, 'Gestionar compras', 'paginas/gestionComprasAdmin.php\r\n', NULL, NULL);
+(8, 'Mis Compras', 'paginas/misCompras.php\r\n', NULL, NULL),
+(9, 'Gestionar Compras', 'paginas/gestionComprasDeposito.php\r\n', NULL, NULL),
+(10, 'Gestionar Compras', 'paginas/gestionComprasAdmin.php\r\n', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -215,9 +215,9 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idusuario`, `usnombre`, `uspass`, `usmail`, `usdeshabilitado`) VALUES
-(1, 'admin', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'admin@mail.com', NULL),
-(2, 'usuario', 'dfa7a2273567dcd1efffb9a46308e91c20fa13c44c3441bc69cd6a7869b3f7fd', 'usuario@mail.com', NULL),
-(3, 'deposito', '381b41143187f979fa777b3f65f37a83efcffc8c1797868769faf54527498a7d',"deposito@mail.com", NULL);
+(1, 'admin', '2b1af9bdd3a5e5b816fefe468d8dac82', 'admin@mail.com', NULL),
+(2, 'usuario', 'ebe28bf5f4f95790fed0f7ffb2886e98', 'usuario@mail.com', NULL),
+(3, 'deposito', '04ceb1742613c418ec51fb6c9ee54a2e',"deposito@mail.com", NULL);
 
 -- --------------------------------------------------------
 
