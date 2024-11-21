@@ -2,9 +2,7 @@
 Tienda con Carrito de Compras
 Proyecto Final - Programación Web Dinámica
 Universidad Nacional del Comahue
-Equipo 
-Jazmín Loureiro.
-Ailen Flores Montes.
+Equipo: Jazmín Loureiro y Ailen Flores Montes.
 -------------------------------------------------------
 Descripción del Proyecto:
 Este proyecto consiste en el desarrollo de una tienda en línea con funcionalidad de carrito de compras, gestion usuarios, menus, roles, productos, y compras. 
